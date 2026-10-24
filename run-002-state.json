@@ -3,8 +3,8 @@
  "seed": 865529296,
  "start_cash": 7500.0,
  "apy": 0.04,
- "week": 17,
- "phase": "mid",
+ "week": 18,
+ "phase": "open",
  "events": [
   {
    "w": 1,
@@ -770,6 +770,31 @@
    "fill": 0.7,
    "ask": 0.75,
    "spot": 71.26
+  },
+  {
+   "w": 17,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 17,
+   "ph": "fri",
+   "t": "expire",
+   "id": 28,
+   "k": 76.0,
+   "spot": 72.04
+  },
+  {
+   "w": 17,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 0.57,
+   "segs": [
+    [
+     742.82,
+     7
+    ]
+   ]
   }
  ]
 }
