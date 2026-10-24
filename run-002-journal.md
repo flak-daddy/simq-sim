@@ -114,3 +114,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W31 mid**: bought to close P73 at 1.42 (-$70.00)
 - **W31 mid**: sold P71 at 0.83 (SimQ 75.71)
 - **W31 fri**: P71 assigned, bought 100 at $71.00; SimQ 69.78
+- **W32 open**: sold C75 at 1.74 (SimQ 69.78)
+- **W32 mid**: bought to close C75 at 0.83 (+$91.00)
+- **W32 mid**: sold C73 at 1.31 (SimQ 68.44)
+- **W32 fri**: C73 expired worthless (+$131.00); SimQ 64.06
