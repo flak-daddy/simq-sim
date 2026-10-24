@@ -238,8 +238,15 @@ def print_chain(rows, S, always=(), n=15, half=False, all_=False):
         disp = [disp[i] for i in sorted(keep)]
     print("| Call bid / ask | Strike | Put bid / ask |")
     print("|---|:---:|---|")
+    marked = False
     for K, pb, pa, cb, ca in disp:
+        if not marked and K >= S:
+            # spot marker row: calls above it are out of the money, puts below it are out of the money
+            print(f"| ITM calls ▲ | **\\* SimQ {S:.2f} \\*** | ▼ ITM puts |")
+            marked = True
         print(f"| {fq(cb)} / {ca:.2f} | **{K:g}** | {fq(pb)} / {pa:.2f} |")
+    if not marked:
+        print(f"| ITM calls ▲ | **\\* SimQ {S:.2f} \\*** | ▼ ITM puts |")
     return disp
 
 
