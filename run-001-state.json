@@ -3,8 +3,8 @@
  "seed": 20261022,
  "start_cash": 7500.0,
  "apy": 0.04,
- "week": 23,
- "phase": "mid",
+ "week": 24,
+ "phase": "open",
  "events": [
   {
    "w": 1,
@@ -859,6 +859,29 @@
    "fill": 0.47,
    "ask": 0.52,
    "spot": 31.15
+  },
+  {
+   "w": 23,
+   "ph": "mid",
+   "t": "btc",
+   "id": 23,
+   "price": 0.03
+  },
+  {
+   "w": 23,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 2.82,
+   "segs": [
+    [
+     3684.27,
+     3
+    ],
+    [
+     3681.27,
+     4
+    ]
+   ]
   }
  ],
  "reseed": {
