@@ -1,0 +1,74 @@
+SIMQ RUN 2: WEEK 26 RESULTS (COMPARISON WINDOW)
+================================================
+Logged: Sat 2026-10-24, after sim Week 26
+Status: Run 2 CONTINUES to Week 52 ("full year"). These Week 26 figures are Run 2's
+official comparison result against other runs. Seed stays hidden until the run ends.
+Start: $7,500 paper cash, 4.00% APY on cash, SimQ at $63.80, pricing v2 from Week 1
+Rules: claude/csp-ledger-branch-cc.md | Full books: run-002-ledger.md, run-002-journal.md
+
+
+1. THE RESULT
+-------------
+Account value (Week 26 Friday):  $9,189.18   (+22.52%)   all cash, no shares, no open positions
+
+Benchmarks over the same 26 weeks:
+  Buy and hold SimQ ($63.80 -> $92.15):   $10,832.68  (+44.44%)
+  Leave it all in cash at 4.00%:           $7,649.59   (+1.99%)
+  Run 1 at Week 26 (different market):     $6,575.78   (-12.32%)
+
+Average gain: +0.78% per week compounded over 26 weeks; +$85.50 per week from
+Week 6 (after the first wheel cycle closed) through Week 26.
+
+Where the $1,689.18 gain came from:
+  Option premium collected (gross) ...... +$2,315.00  (puts $1,795, calls $520)
+  Buy-to-close costs ..................... -$1,212.00  (incl. -$709 on W1 P56, -$266 on W5 C43)
+  Options net ............................ +$1,103.00
+  Stock, lot 1 (bought $41.00 W1, sold $44.50 W5) ... +$350.00
+  Stock, lot 2 (bought $75.00 W16, sold $76.00 W18) . +$100.00
+  Interest on cash .......................   +$136.18
+                                           ----------
+                                           +$1,689.18
+
+Market regimes over the 26 weeks:
+  chop 8, selloff 8, rebound 4, crash 3, calm_up 3.
+  SimQ crashed -40% in Week 1, then climbed from $38 to $92 with sharp swings.
+
+
+2. THE TRADES
+-------------
+42 trades: 35 puts, 7 covered calls. 27 opened Monday, 15 opened midweek.
+  Expired worthless .............. 21
+  Bought to close for profit ..... 15
+  Bought to close at a loss ......  2   (W1 P56 -$656, W5 C43 -$190)
+  Puts assigned ..................  2   (W1 P41, W16 P75)
+  Calls called away ..............  2   (W5 C44.5, W18 C76)
+Win rate 50% (86% counting profitable closes).
+Average put premium 0.93% of collateral; average call premium 1.55% of share value.
+Wheel cycles completed: 2, both closed at a stock profit.
+
+How the run unfolded:
+  Week 1      P56 sold into a crash; bought back at 7.09 (-$656). Rolled to P41,
+              assigned at $41 with SimQ at $38.44. Account -11.6%.
+  Weeks 2-5   Covered calls on lot 1 plus small cash puts. Rolled C43 up to C44.5
+              midweek in W5; called away at $44.50. Account back to -1.4%.
+  Weeks 6-15  All cash, puts only, mostly Monday puts 12-22% below spot, often
+              rolled up at midweek. Account crossed back above $7,500 in W7.
+  Week 16     P75 sold midweek at 8% below spot; a -13.7% Thursday in a calm_up
+              week assigned it. Weeks 17-18 covered calls at/above cost; called
+              away at $76 for +$285 net on the lot.
+  Weeks 19-26 Puts only again, cushions 12-26% at Monday open, frequent midweek
+              rolls. Every put expired. Steady +$50 to +$110 per week.
+
+
+3. PATTERNS (as of Week 26)
+---------------------------
+- The midweek roll became your core routine: close the Monday put once most of
+  the premium is gone, then sell a closer strike for the last two days.
+- Monday cushions widened after Week 1: 12% in W1, then mostly 14-22% (up to 41%).
+- Both assignments came from strikes close to spot (W1 P41 after a -20% week,
+  W16 P75 at 8% below spot midweek), and both lots were later called away at
+  a profit by writing calls at or above cost.
+- You checked deep put strikes almost every week and asked for the full table;
+  it is now standard output.
+- Two midweek put positions showed a loss on Wednesday (W8, W25) and both
+  recovered by Friday when held.

@@ -99,4 +99,4 @@
 - Avg put premium: 0.93% of collateral
 - Avg call premium: 1.55% of share value at sale
 - Wheel cycles completed (shares called away): 2
-- Account value at week 26 (comparison metric): pending
+- Account value at week 26 (comparison metric): $9,189.18 (+22.52%) | buy-and-hold SimQ $10,832.68 (+44.44%) | cash only $7,649.59 (+1.99%)

@@ -615,7 +615,19 @@ def render_ledger(st):
     if sc["call_avg"] is not None:
         L.append(f"- Avg call premium: {sc['call_avg']:.2f}% of share value at sale")
     L.append(f"- Wheel cycles completed (shares called away): {sc['cld']}")
-    L.append("- Account value at week 26 (comparison metric): pending")
+    for mark in (26, 52):
+        if any(e["t"] == "interest" and e["w"] == mark for e in st["events"]):
+            rm = replay(st, upto_week=mark)
+            sm = wk(st, mark)[2][4]
+            vm = rm["cash"] + rm["shares"] * sm
+            bh = st["start_cash"] / simq.S_START * sm
+            cash_only = st["start_cash"] * (1 + st["apy"] * mark * 7 / 365)
+            tag = "comparison metric" if mark == 26 else "full year"
+            L.append(f"- Account value at week {mark} ({tag}): {money(vm)} ({(vm / st['start_cash'] - 1) * 100:+.2f}%) | "
+                     f"buy-and-hold SimQ {money(bh)} ({(sm / simq.S_START - 1) * 100:+.2f}%) | "
+                     f"cash only {money(cash_only)} ({(cash_only / st['start_cash'] - 1) * 100:+.2f}%)")
+        elif mark == 26:
+            L.append("- Account value at week 26 (comparison metric): pending")
     return "\n".join(L) + "\n"
 
 
