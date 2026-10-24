@@ -59,3 +59,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W15 mid**: sold P70 at 0.36 (SimQ 74.45)
 - **W15 fri**: P70 expired worthless (+$36.00); SimQ 78.18
 - **W16 open**: passed
+- **W16 mid**: sold P75 at 0.16 (SimQ 81.51)
+- **W16 fri**: P75 assigned, bought 100 at $75.00; SimQ 71.26
