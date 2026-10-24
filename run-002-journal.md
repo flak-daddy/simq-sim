@@ -61,3 +61,4 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W16 open**: passed
 - **W16 mid**: sold P75 at 0.16 (SimQ 81.51)
 - **W16 fri**: P75 assigned, bought 100 at $75.00; SimQ 71.26
+- **W17 open**: sold C70 at 3.16 (SimQ 71.26)
