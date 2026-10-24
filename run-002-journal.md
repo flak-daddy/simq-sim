@@ -67,3 +67,4 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W18 open**: sold C76 at 0.99 (SimQ 72.04)
 - **W18 mid**: held C76
 - **W18 fri**: C76 called away, sold 100 at $76.00; SimQ 76.41
+- **W19 open**: sold P67 at 0.65 (SimQ 76.41)
