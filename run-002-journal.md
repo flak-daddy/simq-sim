@@ -75,3 +75,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W20 mid**: held P69
 - **W20 fri**: P69 expired worthless (+$102.00); SimQ 75.32
 - **W21 open**: sold P56 at 0.66 (SimQ 75.32)
+- **W21 mid**: bought to close P56 at 0.01 (+$65.00)
+- **W21 mid**: sold P63 at 0.17 (SimQ 70.79)
+- **W21 fri**: P63 expired worthless (+$17.00); SimQ 74.38
