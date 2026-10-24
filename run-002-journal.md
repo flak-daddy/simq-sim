@@ -54,3 +54,4 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W14 mid**: bought to close P59.5 at 0.13 (+$48.00)
 - **W14 mid**: sold P64 at 0.50 (SimQ 69.96)
 - **W14 fri**: P64 expired worthless (+$50.00); SimQ 72.47
+- **W15 open**: sold P62 at 0.68 (SimQ 72.47)
