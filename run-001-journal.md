@@ -1,0 +1,50 @@
+# SimQ Decision Journal, Run 1
+
+One line per move, appended as the run goes. Your own comments are added only when you make one.
+
+- **W1 open**: passed — your read: "didn't like the put premium relative to how close the strikes were to the current SimQ price; wanted to wait a few days"
+- **W1 mid**: sold P57 at 0.24 (SimQ 61.00)
+- **W1 fri**: P57 expired worthless (+$24.00); SimQ 58.24 — your read: "Honestly this is going perfectly so far."
+- **W2 open**: sold P52.5 at 0.65 (SimQ 58.24)
+- **W2 mid**: held P52.5 — your read: "inclined to buy to close and cut the loss, but if SimQ falls this far and the shares get assigned, fine with riding the wheel back up the other side"
+- **W2 fri**: P52.5 assigned, bought 100 at $52.50; SimQ 45.88
+- **W3 open**: passed — your read: "wants to sell a covered call but doesn't like the idea of sealing in losses; hoping the first few days show which direction the market wants to go"
+- **W3 mid**: sold C54 at 0.42 (SimQ 49.95)
+- **W3 fri**: C54 expired worthless (+$42.00); SimQ 39.40
+- **W4 open**: passed — your read: "wants to claw back ground with covered calls but doesn't know how to read the headlines and doesn't want to lock in the loss from the assigned put"
+- **W4 mid**: passed
+- **W5 open**: sold C52 at 0.24 (SimQ 46.26) — your read: "likes being able to make a little money back if SimQ bounces back up that high, and the premium isn't bad for now"
+- **W5 mid**: held C52
+- **W5 fri**: C52 expired worthless (+$24.00); SimQ 43.77
+- **W6 open**: sold C48 at 0.52 (SimQ 43.77)
+- **W6 mid**: bought to close C48 at 0.01 (+$51.00) — your read: "likes making almost all of the premium and not risking a 'crazy backswing up' that loses value on the shares"
+- **W7 open**: sold C40 at 0.52 (SimQ 36.13)
+- **W7 mid**: bought to close C40 at 0.01 (+$51.00) — your read: "no need to risk about $2k worth of value over $1 of premium"
+- **W8 open**: passed
+- **W8 mid**: passed
+- **W9 open**: sold C46 at 0.19 (SimQ 40.72)
+- **W9 mid**: bought to close C46 at 0.20 (-$1.00)
+- **W10 open**: sold C48 at 0.16 (SimQ 44.60)
+- **W10 mid**: held C48
+- **W10 fri**: C48 called away, sold 100 at $48.00; SimQ 49.64
+- **W11 open**: sold P47 at 0.34 (SimQ 49.64)
+- **W11 mid**: held P47
+- **W11 fri**: P47 expired worthless (+$34.00); SimQ 48.76
+- **W12 open**: sold P46 at 0.56 (SimQ 48.76)
+- **W12 mid**: held P46
+- **W12 fri**: P46 expired worthless (+$56.00); SimQ 47.04
+- **W13 open**: sold P44 at 0.35 (SimQ 47.04)
+- **W13 mid**: held P44
+- **W13 fri**: P44 expired worthless (+$35.00); SimQ 46.43
+- **W14 open**: sold P43.5 at 0.29 (SimQ 46.43)
+- **W14 mid**: held P43.5
+- **W14 fri**: P43.5 expired worthless (+$29.00); SimQ 45.58
+- **W15 open**: sold P43.5 at 0.47 (SimQ 45.58)
+- **W15 mid**: held P43.5
+- **W15 fri**: P43.5 expired worthless (+$47.00); SimQ 47.33
+- **W16 open**: sold P45 at 0.44 (SimQ 47.33)
+- **W16 mid**: held P45
+- **W16 fri**: P45 expired worthless (+$44.00); SimQ 49.07
+- **W17 open**: sold P46.5 at 0.40 (SimQ 49.07)
+- **W17 mid**: held P46.5
+- **W17 fri**: P46.5 expired worthless (+$40.00); SimQ 48.54

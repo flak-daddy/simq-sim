@@ -1,0 +1,640 @@
+{
+ "run": 1,
+ "seed": 20261022,
+ "start_cash": 7500.0,
+ "apy": 0.04,
+ "week": 18,
+ "phase": "open",
+ "events": [
+  {
+   "w": 1,
+   "ph": "open",
+   "t": "pass"
+  },
+  {
+   "w": 1,
+   "ph": "open",
+   "t": "note",
+   "text": "didn't like the put premium relative to how close the strikes were to the current SimQ price; wanted to wait a few days"
+  },
+  {
+   "w": 1,
+   "ph": "mid",
+   "t": "sell",
+   "kind": "P",
+   "k": 57.0,
+   "fill": 0.24,
+   "ask": 0.27,
+   "spot": 61.0
+  },
+  {
+   "w": 1,
+   "ph": "fri",
+   "t": "expire",
+   "id": 1,
+   "k": 57.0,
+   "spot": 58.24
+  },
+  {
+   "w": 1,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 5.76,
+   "segs": [
+    [
+     7500.0,
+     3
+    ],
+    [
+     7524.0,
+     4
+    ]
+   ]
+  },
+  {
+   "w": 1,
+   "ph": "fri",
+   "t": "note",
+   "text": "Honestly this is going perfectly so far."
+  },
+  {
+   "w": 2,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 52.5,
+   "fill": 0.65,
+   "ask": 0.71,
+   "spot": 58.24
+  },
+  {
+   "w": 2,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 2,
+   "ph": "mid",
+   "t": "note",
+   "text": "inclined to buy to close and cut the loss, but if SimQ falls this far and the shares get assigned, fine with riding the wheel back up the other side"
+  },
+  {
+   "w": 2,
+   "ph": "fri",
+   "t": "assign",
+   "id": 2,
+   "k": 52.5,
+   "spot": 45.88
+  },
+  {
+   "w": 2,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 4.68,
+   "segs": [
+    [
+     7594.76,
+     5
+    ],
+    [
+     2344.76,
+     2
+    ]
+   ]
+  },
+  {
+   "w": 3,
+   "ph": "open",
+   "t": "pass"
+  },
+  {
+   "w": 3,
+   "ph": "open",
+   "t": "note",
+   "text": "wants to sell a covered call but doesn't like the idea of sealing in losses; hoping the first few days show which direction the market wants to go"
+  },
+  {
+   "w": 3,
+   "ph": "mid",
+   "t": "sell",
+   "kind": "C",
+   "k": 54.0,
+   "fill": 0.42,
+   "ask": 0.47,
+   "spot": 49.95
+  },
+  {
+   "w": 3,
+   "ph": "fri",
+   "t": "expire",
+   "id": 3,
+   "k": 54.0,
+   "spot": 39.4
+  },
+  {
+   "w": 3,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 1.82,
+   "segs": [
+    [
+     2349.44,
+     3
+    ],
+    [
+     2391.44,
+     4
+    ]
+   ]
+  },
+  {
+   "w": 4,
+   "ph": "open",
+   "t": "pass"
+  },
+  {
+   "w": 4,
+   "ph": "open",
+   "t": "note",
+   "text": "wants to claw back ground with covered calls but doesn't know how to read the headlines and doesn't want to lock in the loss from the assigned put"
+  },
+  {
+   "w": 4,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 4,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 1.84,
+   "segs": [
+    [
+     2393.26,
+     7
+    ]
+   ]
+  },
+  {
+   "w": 5,
+   "ph": "open",
+   "t": "sell",
+   "kind": "C",
+   "k": 52.0,
+   "fill": 0.24,
+   "ask": 0.28,
+   "spot": 46.26
+  },
+  {
+   "w": 5,
+   "ph": "open",
+   "t": "note",
+   "text": "likes being able to make a little money back if SimQ bounces back up that high, and the premium isn't bad for now"
+  },
+  {
+   "w": 5,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 5,
+   "ph": "fri",
+   "t": "expire",
+   "id": 4,
+   "k": 52.0,
+   "spot": 43.77
+  },
+  {
+   "w": 5,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 1.86,
+   "segs": [
+    [
+     2419.1,
+     7
+    ]
+   ]
+  },
+  {
+   "w": 6,
+   "ph": "open",
+   "t": "sell",
+   "kind": "C",
+   "k": 48.0,
+   "fill": 0.52,
+   "ask": 0.57,
+   "spot": 43.77
+  },
+  {
+   "w": 6,
+   "ph": "mid",
+   "t": "btc",
+   "id": 5,
+   "price": 0.01
+  },
+  {
+   "w": 6,
+   "ph": "mid",
+   "t": "note",
+   "text": "likes making almost all of the premium and not risking a 'crazy backswing up' that loses value on the shares"
+  },
+  {
+   "w": 6,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 1.9,
+   "segs": [
+    [
+     2472.96,
+     3
+    ],
+    [
+     2471.96,
+     4
+    ]
+   ]
+  },
+  {
+   "w": 7,
+   "ph": "open",
+   "t": "sell",
+   "kind": "C",
+   "k": 40.0,
+   "fill": 0.52,
+   "ask": 0.57,
+   "spot": 36.13
+  },
+  {
+   "w": 7,
+   "ph": "mid",
+   "t": "btc",
+   "id": 6,
+   "price": 0.01
+  },
+  {
+   "w": 7,
+   "ph": "mid",
+   "t": "note",
+   "text": "no need to risk about $2k worth of value over $1 of premium"
+  },
+  {
+   "w": 7,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 1.94,
+   "segs": [
+    [
+     2525.86,
+     3
+    ],
+    [
+     2524.86,
+     4
+    ]
+   ]
+  },
+  {
+   "w": 8,
+   "ph": "open",
+   "t": "pass"
+  },
+  {
+   "w": 8,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 8,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 1.94,
+   "segs": [
+    [
+     2526.8,
+     7
+    ]
+   ]
+  },
+  {
+   "w": 9,
+   "ph": "open",
+   "t": "sell",
+   "kind": "C",
+   "k": 46.0,
+   "fill": 0.19,
+   "ask": 0.22,
+   "spot": 40.72
+  },
+  {
+   "w": 9,
+   "ph": "mid",
+   "t": "btc",
+   "id": 7,
+   "price": 0.2
+  },
+  {
+   "w": 9,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 1.95,
+   "segs": [
+    [
+     2547.74,
+     3
+    ],
+    [
+     2527.74,
+     4
+    ]
+   ]
+  },
+  {
+   "w": 10,
+   "ph": "open",
+   "t": "sell",
+   "kind": "C",
+   "k": 48.0,
+   "fill": 0.16,
+   "ask": 0.19,
+   "spot": 44.6
+  },
+  {
+   "w": 10,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 10,
+   "ph": "fri",
+   "t": "called",
+   "id": 8,
+   "k": 48.0,
+   "spot": 49.64
+  },
+  {
+   "w": 10,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 3.0,
+   "segs": [
+    [
+     2545.69,
+     5
+    ],
+    [
+     7345.69,
+     2
+    ]
+   ]
+  },
+  {
+   "w": 11,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 47.0,
+   "fill": 0.34,
+   "ask": 0.39,
+   "spot": 49.64
+  },
+  {
+   "w": 11,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 11,
+   "ph": "fri",
+   "t": "expire",
+   "id": 9,
+   "k": 47.0,
+   "spot": 48.76
+  },
+  {
+   "w": 11,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 5.66,
+   "segs": [
+    [
+     7382.69,
+     7
+    ]
+   ]
+  },
+  {
+   "w": 12,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 46.0,
+   "fill": 0.56,
+   "ask": 0.61,
+   "spot": 48.76
+  },
+  {
+   "w": 12,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 12,
+   "ph": "fri",
+   "t": "expire",
+   "id": 10,
+   "k": 46.0,
+   "spot": 47.04
+  },
+  {
+   "w": 12,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 5.71,
+   "segs": [
+    [
+     7444.35,
+     7
+    ]
+   ]
+  },
+  {
+   "w": 13,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 44.0,
+   "fill": 0.35,
+   "ask": 0.39,
+   "spot": 47.04
+  },
+  {
+   "w": 13,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 13,
+   "ph": "fri",
+   "t": "expire",
+   "id": 11,
+   "k": 44.0,
+   "spot": 46.43
+  },
+  {
+   "w": 13,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 5.74,
+   "segs": [
+    [
+     7485.06,
+     7
+    ]
+   ]
+  },
+  {
+   "w": 14,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 43.5,
+   "fill": 0.29,
+   "ask": 0.33,
+   "spot": 46.43
+  },
+  {
+   "w": 14,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 14,
+   "ph": "fri",
+   "t": "expire",
+   "id": 12,
+   "k": 43.5,
+   "spot": 45.58
+  },
+  {
+   "w": 14,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 5.77,
+   "segs": [
+    [
+     7519.8,
+     7
+    ]
+   ]
+  },
+  {
+   "w": 15,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 43.5,
+   "fill": 0.47,
+   "ask": 0.52,
+   "spot": 45.58
+  },
+  {
+   "w": 15,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 15,
+   "ph": "fri",
+   "t": "expire",
+   "id": 13,
+   "k": 43.5,
+   "spot": 47.33
+  },
+  {
+   "w": 15,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 5.81,
+   "segs": [
+    [
+     7572.57,
+     7
+    ]
+   ]
+  },
+  {
+   "w": 16,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 45.0,
+   "fill": 0.44,
+   "ask": 0.49,
+   "spot": 47.33
+  },
+  {
+   "w": 16,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 16,
+   "ph": "fri",
+   "t": "expire",
+   "id": 14,
+   "k": 45.0,
+   "spot": 49.07
+  },
+  {
+   "w": 16,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 5.85,
+   "segs": [
+    [
+     7622.38,
+     7
+    ]
+   ]
+  },
+  {
+   "w": 17,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 46.5,
+   "fill": 0.4,
+   "ask": 0.44,
+   "spot": 49.07
+  },
+  {
+   "w": 17,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 17,
+   "ph": "fri",
+   "t": "expire",
+   "id": 15,
+   "k": 46.5,
+   "spot": 48.54
+  },
+  {
+   "w": 17,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 5.88,
+   "segs": [
+    [
+     7668.23,
+     7
+    ]
+   ]
+  }
+ ],
+ "reseed": {
+  "13": 945028706
+ }
+}

@@ -1,0 +1,616 @@
+#!/usr/bin/env python3
+"""simbook.py: bookkeeping + turn driver for the SimQ simulator (uses simq.py).
+
+All state is an append-only event log in run-NNN-state.json. Cash, positions, interest,
+scorecard, ledger and journal are derived by replaying that log, so nothing is retyped.
+
+Commands (run from the folder holding simq.py, simbook.py and the state file):
+  new --run N --seed S      create a fresh run (seed from `simq.py newseed`)
+  open                      show the current week's Monday-open package (account + chain)
+  mid                       advance to midweek: Mon-Wed path, buy-to-close prices, new chain
+  fri                       advance to Friday: settle, post interest, advance to next week
+  sell P|C STRIKE           sell to open 1 contract at the current bid
+  btc ID                    buy to close trade ID at the current ask
+  pass                      record a pass (or a hold if a position is open)
+  note "text"               attach the user's comment to the latest move
+  quote P|C STRIKE          bid/ask for one strike at the current phase
+  chain [--half] [--n 15] [--all]   re-show the current chain
+  status                    one-line account summary
+  render                    rewrite run-NNN-ledger.md and run-NNN-journal.md
+Options: --state PATH (default: highest run-*-state.json next to this script)
+"""
+import sys, os, json, glob, io, contextlib
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import simq
+
+DAY = {"open": 0, "mid": 3, "fri": 5}
+PH = {"open": "Monday open", "mid": "Wednesday close", "fri": "Friday close"}
+SHORT = {"open": "open", "mid": "mid", "fri": "fri"}
+
+
+# ---------------------------------------------------------------- state io
+def default_state_path():
+    d = os.path.dirname(os.path.abspath(__file__))
+    files = sorted(glob.glob(os.path.join(d, "run-*-state.json")))
+    return files[-1] if files else os.path.join(d, "run-001-state.json")
+
+
+def new_state(run, seed):
+    return {"run": run, "seed": seed, "start_cash": 7500.0, "apy": 0.04,
+            "week": 1, "phase": "open", "events": []}
+
+
+def load(path):
+    with open(path) as f:
+        return json.load(f)
+
+
+def save(st, path):
+    with open(path, "w") as f:
+        json.dump(st, f, indent=1)
+
+
+def money(x, sign=False):
+    s = f"{abs(x):,.2f}"
+    if sign:
+        return ("+" if x >= 0 else "-") + "$" + s
+    return ("-" if x < 0 else "") + "$" + s
+
+
+# ---------------------------------------------------------------- engine access
+def wk(st, w):
+    simq.BASE_SEED = st["seed"]
+    simq.RESEED = {int(a): int(c) for a, c in st.get("reseed", {}).items()}
+    return simq.gen_week(w)  # regime, s_open, closes, ivs
+
+
+def view(st, w, ph):
+    reg, s_open, closes, ivs = wk(st, w)
+    if ph == "open":
+        return s_open, 5, ivs[0]
+    if ph == "mid":
+        return closes[2], 2, ivs[3]
+    return closes[4], 0, ivs[5]
+
+
+def rows_at(st, w, ph):
+    S, td, iv = view(st, w, ph)
+    return S, simq.chain_rows(S, td, iv)
+
+
+def quote_k(st, w, ph, kind, k):
+    S, td, iv = view(st, w, ph)
+    return simq.quote(S, k, td / 252, iv, kind)
+
+
+# ---------------------------------------------------------------- replay
+def replay(st, upto_week=None, upto_index=None):
+    cash = st["start_cash"]
+    trades, lots, closed_lots = {}, {}, []
+    nid = nlot = 0
+    interest = 0.0
+    evs = st["events"] if upto_index is None else st["events"][:upto_index]
+    for e in evs:
+        if upto_week is not None and e["w"] > upto_week:
+            break
+        t = e["t"]
+        if t == "sell":
+            nid += 1
+            tr = dict(id=nid, w=e["w"], ph=e["ph"], kind=e["kind"], k=e["k"], fill=e["fill"],
+                      ask=e["ask"], spot=e["spot"], status="open", close=None, lot=None,
+                      end_w=None, end_spot=None)
+            if tr["kind"] == "C":
+                for lid, lot in lots.items():
+                    if not any(x["lot"] == lid and x["status"] == "open" for x in trades.values()
+                               if x["kind"] == "C"):
+                        tr["lot"] = lid
+                        lot["credit"] += e["fill"] * 100
+                        break
+            trades[nid] = tr
+            cash += e["fill"] * 100
+        elif t == "btc":
+            tr = trades[e["id"]]
+            tr["status"], tr["close"], tr["end_w"], tr["end_ph"] = "btc", e["price"], e["w"], e["ph"]
+            cash -= e["price"] * 100
+            if tr["kind"] == "C" and tr["lot"] in lots:
+                lots[tr["lot"]]["credit"] -= e["price"] * 100
+        elif t == "expire":
+            tr = trades[e["id"]]
+            tr["status"], tr["end_w"], tr["end_spot"] = "expired", e["w"], e["spot"]
+        elif t == "assign":
+            tr = trades[e["id"]]
+            tr["status"], tr["end_w"], tr["end_spot"] = "assigned", e["w"], e["spot"]
+            cash -= e["k"] * 100
+            nlot += 1
+            lots[nlot] = dict(id=nlot, w=e["w"], cost=e["k"], credit=tr["fill"] * 100, put=tr["id"])
+        elif t == "called":
+            tr = trades[e["id"]]
+            tr["status"], tr["end_w"], tr["end_spot"] = "called", e["w"], e["spot"]
+            cash += e["k"] * 100
+            lot = lots.pop(tr["lot"])
+            lot.update(sold=e["k"], sold_w=e["w"])
+            closed_lots.append(lot)
+        elif t == "interest":
+            cash += e["amount"]
+            interest += e["amount"]
+        cash = round(cash, 10)
+    open_tr = [x for x in trades.values() if x["status"] == "open"]
+    locked = sum(x["k"] * 100 for x in open_tr if x["kind"] == "P")
+    return dict(cash=round(cash, 2), trades=trades, lots=lots, closed_lots=closed_lots,
+                open=open_tr, locked=locked, free=round(cash - locked, 2),
+                shares=100 * len(lots), interest=round(interest, 2))
+
+
+def basis(lot):
+    return lot["cost"] - lot["credit"] / 100.0
+
+
+def week_interest(st, w):
+    base = replay(st, upto_week=w - 1)["cash"]
+    deltas = []
+    for e in st["events"]:
+        if e["w"] != w:
+            continue
+        t, d = e["t"], DAY.get(e.get("ph", "open"), 0)
+        if t == "sell":
+            deltas.append((d, e["fill"] * 100))
+        elif t == "btc":
+            deltas.append((d, -e["price"] * 100))
+        elif t == "assign":
+            deltas.append((5, -e["k"] * 100))
+        elif t == "called":
+            deltas.append((5, e["k"] * 100))
+    deltas.sort(key=lambda x: x[0])
+    segs, cash, day = [], base, 0
+    for d, delta in deltas:
+        if d > day:
+            segs.append((round(cash, 2), d - day))
+            day = d
+        cash += delta
+    segs.append((round(cash, 2), 7 - day))
+    amt = sum(c * st["apy"] / 365 * n for c, n in segs)
+    return round(amt, 2), segs
+
+
+def account_value(st, r, w, ph):
+    S, td, iv = view(st, w, ph)
+    liab = 0.0
+    if ph != "fri":
+        for tr in r["open"]:
+            liab += simq.quote(S, tr["k"], td / 252, iv, tr["kind"])[1] * 100
+    return round(r["cash"] + r["shares"] * S - liab, 2)
+
+
+def scorecard(st, r):
+    tr = list(r["trades"].values())
+    n = len(tr)
+    exp = [x for x in tr if x["status"] == "expired"]
+    btc = [x for x in tr if x["status"] == "btc"]
+    btc_win = [x for x in btc if x["fill"] * 100 - x["close"] * 100 > 0]
+    btc_loss = [x for x in btc if x["fill"] * 100 - x["close"] * 100 <= 0]
+    asg = [x for x in tr if x["status"] == "assigned"]
+    cld = [x for x in tr if x["status"] == "called"]
+    puts = [x for x in tr if x["kind"] == "P"]
+    calls = [x for x in tr if x["kind"] == "C"]
+    prem = sum(x["fill"] for x in tr) * 100
+    cost = sum(x["close"] for x in btc) * 100
+    pp = [x["fill"] / x["k"] * 100 for x in puts]
+    cp = [x["fill"] / x["spot"] * 100 for x in calls]
+    stock = sum((l["sold"] - l["cost"]) * 100 for l in r["closed_lots"])
+    done = [x for x in tr if x["status"] != "open"]
+    opt_net = sum(x["fill"] * 100 for x in done) - cost
+    return dict(n=n, exp=len(exp), btc_win=len(btc_win), btc_loss=len(btc_loss), asg=len(asg),
+                cld=len(cld), prem=prem, cost=cost, put_avg=(sum(pp) / len(pp) if pp else None),
+                call_avg=(sum(cp) / len(cp) if cp else None), stock=stock, opt_net=opt_net,
+                realized=opt_net + stock)
+
+
+def score_line(sc):
+    if not sc["n"]:
+        return "no trades yet"
+    wr1 = sc["exp"] / sc["n"] * 100
+    wr2 = (sc["exp"] + sc["btc_win"]) / sc["n"] * 100
+    return (f"{sc['n']} trades: {sc['exp']} expired worthless, {sc['btc_win']} closed for profit, "
+            f"{sc['btc_loss']} closed at a loss, {sc['asg']} assigned, {sc['cld']} called away | "
+            f"win rate {wr1:.0f}% ({wr2:.0f}% counting profitable closes)")
+
+
+# ---------------------------------------------------------------- display helpers
+def fq(b):
+    return "no bid" if b <= 0 else f"{b:.2f}"
+
+
+def print_chain(rows, S, always=(), n=15, half=False, all_=False):
+    disp = [r for r in rows if all_ or half or abs(r[0] - round(r[0])) < 1e-9 or r[0] in always]
+    if not all_:
+        idx = min(range(len(disp)), key=lambda i: abs(disp[i][0] - S))
+        lo = max(0, idx - n // 2)
+        hi = min(len(disp), lo + n)
+        lo = max(0, hi - n)
+        keep = set(range(lo, hi))
+        for i, r in enumerate(disp):
+            if r[0] in always:
+                keep.add(i)
+        disp = [disp[i] for i in sorted(keep)]
+    print("| Strike | Put bid / ask | Call bid / ask |")
+    print("|---|---|---|")
+    for K, pb, pa, cb, ca in disp:
+        print(f"| {K:g} | {fq(pb)} / {pa:.2f} | {fq(cb)} / {ca:.2f} |")
+
+
+def contract(tr):
+    return f"{tr['kind']}{tr['k']:g}"
+
+
+def free_calls(r):
+    return sum(1 for lid in r["lots"]
+               if not any(x["lot"] == lid and x["status"] == "open" for x in r["trades"].values()))
+
+
+def acct_line(st, r, w, ph):
+    S = view(st, w, ph)[0]
+    v = account_value(st, r, w, ph)
+    pct = (v / st["start_cash"] - 1) * 100
+    parts = [f"Cash {money(r['cash'])}"]
+    if r["locked"]:
+        parts.append(f"free {money(r['free'])}")
+    if r["lots"]:
+        b = ", ".join(f"basis ${basis(l):.2f}" for l in r["lots"].values())
+        parts.append(f"{r['shares']} shares ({b})")
+    else:
+        parts.append("0 shares")
+    parts.append(f"Account {money(v)} ({pct:+.2f}%)")
+    return " | ".join(parts)
+
+
+def positions_text(st, r, w, ph):
+    out = []
+    for tr in r["open"]:
+        b, a = quote_k(st, w, ph, tr["kind"], tr["k"])
+        pl = tr["fill"] * 100 - a * 100
+        out.append(f"#{tr['id']} short {contract(tr)} (sold {tr['fill']:.2f}): bid {fq(b)} / ask {a:.2f} "
+                   f"-> buy to close {money(a * 100)} (P/L {money(pl, True)})")
+    return out
+
+
+# ---------------------------------------------------------------- commands
+def need_move(st):
+    return any(e["w"] == st["week"] and e["ph"] == st["phase"] and e["t"] in ("sell", "btc", "pass")
+               for e in st["events"])
+
+
+def cmd_status(st):
+    r = replay(st)
+    w, ph = st["week"], st["phase"]
+    print(f"Week {w} {PH[ph]} | SimQ ${view(st, w, ph)[0]:.2f} | {acct_line(st, r, w, ph)}")
+    for line in positions_text(st, r, w, ph):
+        print(line)
+
+
+def show_chain(st, w, ph, r, **kw):
+    S, rows = rows_at(st, w, ph)
+    always = tuple(tr["k"] for tr in r["open"])
+    print_chain(rows, S, always=always, **kw)
+
+
+def cmd_open(st, **kw):
+    w, ph = st["week"], st["phase"]
+    if ph != "open":
+        sys.exit(f"Current phase is {PH[ph]}, not Monday open.")
+    r = replay(st)
+    S = view(st, w, "open")[0]
+    print(f"SimQ Week {w}, Monday open | spot ${S:.2f} | 5 trading days to Friday close")
+    print(acct_line(st, r, w, "open"))
+    show_chain(st, w, "open", r, **kw)
+
+
+def cmd_mid(st, **kw):
+    w = st["week"]
+    if st["phase"] == "open":
+        if not need_move(st):
+            st["events"].append({"w": w, "ph": "open", "t": "pass"})
+        st["phase"] = "mid"
+    elif st["phase"] == "fri":
+        sys.exit("Already past midweek.")
+    reg, s_open, closes, ivs = wk(st, w)
+    r = replay(st)
+    print(f"SimQ Week {w}: Mon {closes[0]:.2f} | Tue {closes[1]:.2f} | Wed {closes[2]:.2f} "
+          f"(spot ${closes[2]:.2f}, {(closes[2] / s_open - 1) * 100:+.1f}% vs Monday open) | 2 days to Friday")
+    for line in positions_text(st, r, w, "mid"):
+        print(line)
+    print(f"Cash {money(r['cash'])}" + (f" | free {money(r['free'])}" if r["locked"] else "")
+          + f" | shares {r['shares']}")
+    show_chain(st, w, "mid", r, **kw)
+
+
+def cmd_fri(st):
+    w = st["week"]
+    if st["phase"] == "open":
+        if not need_move(st):
+            st["events"].append({"w": w, "ph": "open", "t": "pass"})
+        st["phase"] = "mid"
+    if st["phase"] == "mid":
+        if not need_move(st):
+            st["events"].append({"w": w, "ph": "mid", "t": "pass"})
+        st["phase"] = "fri"
+    reg, s_open, closes, ivs = wk(st, w)
+    spot = closes[4]
+    r = replay(st)
+    lines = []
+    for tr in r["open"]:
+        itm = spot < tr["k"] if tr["kind"] == "P" else spot > tr["k"]
+        if itm and tr["kind"] == "P":
+            st["events"].append({"w": w, "ph": "fri", "t": "assign", "id": tr["id"], "k": tr["k"], "spot": spot})
+            lines.append(f"#{tr['id']} {contract(tr)} ASSIGNED: bought 100 shares at ${tr['k']:.2f} "
+                         f"(SimQ ${spot:.2f}, ${tr['k'] - spot:.2f} below strike); premium kept {money(tr['fill'] * 100)}")
+        elif itm:
+            st["events"].append({"w": w, "ph": "fri", "t": "called", "id": tr["id"], "k": tr["k"], "spot": spot})
+            lines.append(f"#{tr['id']} {contract(tr)} CALLED AWAY: sold 100 shares at ${tr['k']:.2f} "
+                         f"(SimQ ${spot:.2f}, ${spot - tr['k']:.2f} above strike); premium kept {money(tr['fill'] * 100)}")
+        else:
+            st["events"].append({"w": w, "ph": "fri", "t": "expire", "id": tr["id"], "k": tr["k"], "spot": spot})
+            gap = abs(spot - tr["k"])
+            lines.append(f"#{tr['id']} {contract(tr)} expired worthless, +{money(tr['fill'] * 100)} "
+                         f"(SimQ ${spot:.2f}, ${gap:.2f} {'above' if tr['kind'] == 'P' else 'below'} strike)")
+    amt, segs = week_interest(st, w)
+    st["events"].append({"w": w, "ph": "fri", "t": "interest", "amount": amt,
+                         "segs": [[c, n] for c, n in segs]})
+    st["week"], st["phase"] = w + 1, "open"
+    r2 = replay(st)
+    v = r2["cash"] + 0.0 + r2["shares"] * spot
+    pct = (v / st["start_cash"] - 1) * 100
+    print(f"SimQ Week {w} Friday: Thu {closes[3]:.2f} | Fri {spot:.2f} "
+          f"(week {(spot / s_open - 1) * 100:+.1f}%, from {s_open:.2f})")
+    for line in lines or ["No position open at Friday close."]:
+        print(line)
+    print(f"Regime: {reg}")
+    print(f"Interest +{money(amt)} | Cash {money(r2['cash'])} | shares {r2['shares']} "
+          f"| Account {money(v)} ({pct:+.2f}%)")
+    print(score_line(scorecard(st, r2)))
+    print(f"Next: Week {w + 1} Monday open")
+
+
+def cmd_sell(st, kind, k):
+    kind = kind.upper()
+    w, ph = st["week"], st["phase"]
+    if ph == "fri":
+        sys.exit("Friday is settlement; no trading.")
+    S, rows = rows_at(st, w, ph)
+    row = next((x for x in rows if abs(x[0] - k) < 1e-9), None)
+    if not row:
+        sys.exit(f"Strike {k:g} is not on the chain.")
+    bid, ask = (row[1], row[2]) if kind == "P" else (row[3], row[4])
+    if bid <= 0:
+        sys.exit(f"{kind}{k:g} has no bid; it cannot be sold.")
+    r = replay(st)
+    if kind == "P" and r["free"] < k * 100:
+        sys.exit(f"Not enough free cash for a ${k:g} put: needs ${k * 100:,.0f}, free {money(r['free'])}. "
+                 f"(Collateral is strike x 100; shares do not collateralize a put.)")
+    if kind == "C" and free_calls(r) < 1:
+        sys.exit("No uncovered shares: a call must be covered by 100 shares you hold (no naked calls).")
+    st["events"].append({"w": w, "ph": ph, "t": "sell", "kind": kind, "k": k, "fill": bid, "ask": ask, "spot": S})
+    r = replay(st)
+    tr = max(r["trades"].values(), key=lambda x: x["id"])
+    extra = f"collateral {money(k * 100)}, free cash {money(r['free'])}" if kind == "P" else \
+        f"covered by {tr['lot'] and 'lot ' + str(tr['lot'])}"
+    print(f"Sold #{tr['id']} {contract(tr)} at the bid {bid:.2f} (ask {ask:.2f}) for +{money(bid * 100)}; {extra}")
+
+
+def cmd_btc(st, tid):
+    w, ph = st["week"], st["phase"]
+    if ph == "fri":
+        sys.exit("Friday is settlement; no trading.")
+    r = replay(st)
+    tr = r["trades"].get(tid)
+    if not tr or tr["status"] != "open":
+        sys.exit(f"#{tid} is not an open position.")
+    b, a = quote_k(st, w, ph, tr["kind"], tr["k"])
+    st["events"].append({"w": w, "ph": ph, "t": "btc", "id": tid, "price": a})
+    print(f"Bought to close #{tid} {contract(tr)} at the ask {a:.2f} for {money(a * 100)}; "
+          f"net {money(tr['fill'] * 100 - a * 100, True)} on the trade")
+
+
+def cmd_pass(st):
+    st["events"].append({"w": st["week"], "ph": st["phase"], "t": "pass"})
+    print("Recorded: pass")
+
+
+def add_note(st, text, w=None, ph=None):
+    st["events"].append({"w": w or st["week"], "ph": ph or st["phase"], "t": "note", "text": text})
+
+
+def cmd_quote(st, kind, k):
+    w, ph = st["week"], st["phase"]
+    S, rows = rows_at(st, w, ph)
+    row = next((x for x in rows if abs(x[0] - k) < 1e-9), None)
+    if not row:
+        sys.exit(f"Strike {k:g} is not on the chain.")
+    b, a = (row[1], row[2]) if kind.upper() == "P" else (row[3], row[4])
+    print(f"SIMQ-W{w:02d}-{kind.upper()}{k:g}: bid {fq(b)} / ask {a:.2f} (spot ${S:.2f})")
+
+
+# ---------------------------------------------------------------- rendering
+def render_journal(st):
+    out = [f"# SimQ Decision Journal, Run {st['run']}", "",
+           "One line per move, appended as the run goes. Your own comments are added only when you make one.", ""]
+    lines = []
+    for i, e in enumerate(st["events"]):
+        t, w, ph = e["t"], e["w"], e.get("ph", "open")
+        tag = f"W{w} {SHORT[ph]}"
+        if t == "sell":
+            what = f"sold {e['kind']}{e['k']:g} at {e['fill']:.2f} (SimQ {e['spot']:.2f})"
+        elif t == "btc":
+            r = replay(st, upto_index=i)
+            tr = r["trades"][e["id"]]
+            pl = tr["fill"] * 100 - e["price"] * 100
+            what = f"bought to close {contract(tr)} at {e['price']:.2f} ({money(pl, True)})"
+        elif t == "pass":
+            r = replay(st, upto_index=i)
+            held = [contract(x) for x in r["open"]]
+            what = f"held {', '.join(held)}" if held else "passed"
+        elif t in ("expire", "assign", "called"):
+            r = replay(st, upto_index=i)
+            tr = r["trades"][e["id"]]
+            res = {"expire": f"{contract(tr)} expired worthless (+{money(tr['fill'] * 100)})",
+                   "assign": f"{contract(tr)} assigned, bought 100 at ${e['k']:.2f}",
+                   "called": f"{contract(tr)} called away, sold 100 at ${e['k']:.2f}"}[t]
+            tag, what = f"W{w} fri", f"{res}; SimQ {e['spot']:.2f}"
+        elif t == "note":
+            if lines:
+                lines[-1] += f' — your read: "{e["text"]}"'
+            continue
+        else:
+            continue
+        lines.append(f"- **{tag}**: {what}")
+    return "\n".join(out + lines) + "\n"
+
+
+def render_ledger(st):
+    r = replay(st)
+    w, ph = st["week"], st["phase"]
+    sc = scorecard(st, r)
+    S = view(st, w, ph)[0]
+    v = account_value(st, r, w, ph)
+    pct = (v / st["start_cash"] - 1) * 100
+    L = [f"# SimQ Run {st['run']} Ledger", "",
+         f"- Seed: {st['seed']}" + (f" (path reseeded from Week {min(int(a) for a in st['reseed'])}; see state file)" if st.get("reseed") else "") + f" | Start: ${st['start_cash']:,.0f}, {st['apy'] * 100:.2f}% APY | Rules: claude/csp-ledger-branch-cc.md",
+         f"- Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-{st['run']:03d}-journal.md", "",
+         f"## Current state (Week {w}, {PH[ph]})",
+         f"- SimQ spot: ${S:.2f}",
+         f"- Cash: {money(r['cash'])} | locked collateral: {money(r['locked'])} | free: {money(r['free'])}"]
+    if r["lots"]:
+        for l in r["lots"].values():
+            L.append(f"- Shares: 100 SimQ bought at ${l['cost']:.2f} in Week {l['w']}; effective basis ${basis(l):.2f} "
+                     f"after option premiums")
+    else:
+        L.append("- Shares: 0")
+    if r["open"]:
+        for tr in r["open"]:
+            L.append(f"- Open: #{tr['id']} short {contract(tr)} sold at {tr['fill']:.2f} in Week {tr['w']}")
+    else:
+        L.append("- Open positions: none")
+    L += [f"- Premium collected (gross): {money(sc['prem'])} | buy-to-close costs: {money(sc['cost'])} | "
+          f"interest: {money(r['interest'])}",
+          f"- Realized P&L (options net of buy-backs + stock sales): {money(sc['realized'], True)} "
+          f"(options {money(sc['opt_net'], True)}, stock {money(sc['stock'], True)})",
+          f"- Account value: {money(v)} ({pct:+.2f}% vs start)", "",
+          "## Trade log",
+          "| # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |",
+          "|---|---|---|---|---|---|---|---|---|"]
+    for tr in sorted(r["trades"].values(), key=lambda x: x["id"]):
+        k = tr["k"]
+        coll = money(k * 100) + " cash" if tr["kind"] == "P" else (f"lot {tr['lot']}" if tr["lot"] else "-")
+        if tr["status"] == "open":
+            res = "OPEN"
+        elif tr["status"] == "expired":
+            res = f"Expired worthless (Fri SimQ {tr['end_spot']:.2f})"
+        elif tr["status"] == "assigned":
+            res = f"ASSIGNED: bought 100 at ${k:.2f} (Fri SimQ {tr['end_spot']:.2f})"
+        elif tr["status"] == "called":
+            res = f"CALLED AWAY: sold 100 at ${k:.2f} (Fri SimQ {tr['end_spot']:.2f})"
+        else:
+            net = tr["fill"] * 100 - tr["close"] * 100
+            res = f"Bought to close at {tr['close']:.2f} ({money(tr['close'] * 100)}), net {money(net, True)}"
+        notes = []
+        pct_prem = tr["fill"] / (k if tr["kind"] == "P" else tr["spot"]) * 100
+        notes.append(f"premium {pct_prem:.2f}% of {'collateral' if tr['kind'] == 'P' else 'share value'}")
+        if tr["ph"] == "open" and tr["status"] in ("expired", "assigned", "called"):
+            b, a = quote_k(st, tr["w"], "mid", tr["kind"], k)
+            notes.append(f"held at midweek (ask {a:.2f})")
+        L.append(f"| {tr['id']} | SIMQ-W{tr['w']:02d}-{contract(tr)} | W{tr['w']} {SHORT[tr['ph']]} | ${k:g} | "
+                 f"{tr['fill']:.2f} / {tr['ask']:.2f} | {money(tr['fill'] * 100)} | {coll} | {res} | {'; '.join(notes)} |")
+    if r["closed_lots"]:
+        L += ["", "## Closed share lots", "| Bought | Sold | Stock P&L | Net after option premiums |", "|---|---|---|---|"]
+        for l in r["closed_lots"]:
+            L.append(f"| W{l['w']} at ${l['cost']:.2f} | W{l['sold_w']} at ${l['sold']:.2f} | "
+                     f"{money((l['sold'] - l['cost']) * 100, True)} | {money((l['sold'] - basis(l)) * 100, True)} |")
+    L += ["", "## Weeks", "| Week | Regime | Open | Mon | Tue | Wed | Thu | Fri | Week % | Interest |",
+          "|---|---|---|---|---|---|---|---|---|---|"]
+    ints = {e["w"]: e for e in st["events"] if e["t"] == "interest"}
+    for wk_ in sorted(ints):
+        reg, so, cl, _ = wk(st, wk_)
+        segs = "; ".join(f"{c:,.2f} x {n}d" for c, n in ints[wk_]["segs"])
+        L.append(f"| {wk_} | {reg} | {so:.2f} | " + " | ".join(f"{c:.2f}" for c in cl)
+                 + f" | {(cl[4] / so - 1) * 100:+.1f}% | {ints[wk_]['amount']:.2f} ({segs}) |")
+    L += ["", "## Scorecard", f"- {score_line(sc)}"]
+    if sc["put_avg"] is not None:
+        L.append(f"- Avg put premium: {sc['put_avg']:.2f}% of collateral")
+    if sc["call_avg"] is not None:
+        L.append(f"- Avg call premium: {sc['call_avg']:.2f}% of share value at sale")
+    L.append(f"- Wheel cycles completed (shares called away): {sc['cld']}")
+    L.append("- Account value at week 26 (comparison metric): pending")
+    return "\n".join(L) + "\n"
+
+
+def render(st, path):
+    d, n = os.path.dirname(os.path.abspath(path)), st["run"]
+    with open(os.path.join(d, f"run-{n:03d}-ledger.md"), "w") as f:
+        f.write(render_ledger(st))
+    with open(os.path.join(d, f"run-{n:03d}-journal.md"), "w") as f:
+        f.write(render_journal(st))
+
+
+# ---------------------------------------------------------------- main
+def main(argv):
+    path = default_state_path()
+    kw = {}
+    a = list(argv)
+    if "--state" in a:
+        i = a.index("--state")
+        path = a[i + 1]
+        del a[i:i + 2]
+    if "--half" in a:
+        a.remove("--half")
+        kw["half"] = True
+    if "--all" in a:
+        a.remove("--all")
+        kw["all_"] = True
+    if "--n" in a:
+        i = a.index("--n")
+        kw["n"] = int(a[i + 1])
+        del a[i:i + 2]
+    cmd = a[0]
+    if cmd == "new":
+        run = int(a[a.index("--run") + 1])
+        seed = int(a[a.index("--seed") + 1])
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), f"run-{run:03d}-state.json")
+        st = new_state(run, seed)
+        save(st, path)
+        render(st, path)
+        print(f"Created {path}")
+        return
+    st = load(path)
+    mutating = True
+    if cmd == "open":
+        cmd_open(st, **kw); mutating = False
+    elif cmd == "mid":
+        cmd_mid(st, **kw)
+    elif cmd == "fri":
+        cmd_fri(st)
+    elif cmd == "sell":
+        cmd_sell(st, a[1], float(a[2]))
+    elif cmd == "btc":
+        cmd_btc(st, int(a[1]))
+    elif cmd == "pass":
+        cmd_pass(st)
+    elif cmd == "note":
+        add_note(st, " ".join(a[1:])); print("Note recorded")
+    elif cmd == "quote":
+        cmd_quote(st, a[1], float(a[2])); mutating = False
+    elif cmd == "chain":
+        r = replay(st)
+        S, _, _ = view(st, st["week"], st["phase"])
+        show_chain(st, st["week"], st["phase"], r, **kw); mutating = False
+    elif cmd == "status":
+        cmd_status(st); mutating = False
+    elif cmd == "render":
+        pass
+    else:
+        sys.exit(__doc__)
+    if mutating:
+        save(st, path)
+    render(st, path)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
