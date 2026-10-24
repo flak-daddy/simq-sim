@@ -73,3 +73,4 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W24 mid**: bought to close C30.5 at 0.02 (+$46.00)
 - **W24 mid**: bought to close P22 at 0.02 (+$12.00)
 - **W25 open**: sold C28 at 0.28 (SimQ 25.66)
+- **W25 mid**: bought to close C28 at 0.02 (+$26.00)
