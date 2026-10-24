@@ -3,14 +3,14 @@
 - Seed: 865529296 | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-002-journal.md
 
-## Current state (Week 20, Wednesday close)
-- SimQ spot: $80.79
-- Cash: $8,658.25 | locked collateral: $6,900.00 | free: $1,758.25
+## Current state (Week 21, Monday open)
+- SimQ spot: $75.32
+- Cash: $8,664.89 | locked collateral: $0.00 | free: $8,664.89
 - Shares: 0
-- Open: #32 short P69 sold at 1.02 in Week 20
-- Premium collected (gross): $1,708.00 | buy-to-close costs: $1,088.00 | interest: $88.25
-- Realized P&L (options net of buy-backs + stock sales): +$968.00 (options +$518.00, stock +$450.00)
-- Account value: $8,626.25 (+15.02% vs start)
+- Open positions: none
+- Premium collected (gross): $1,708.00 | buy-to-close costs: $1,088.00 | interest: $94.89
+- Realized P&L (options net of buy-backs + stock sales): +$1,070.00 (options +$620.00, stock +$450.00)
+- Account value: $8,664.89 (+15.53% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -46,7 +46,7 @@
 | 29 | SIMQ-W18-C76 | W18 open | $76 | 0.99 / 1.06 | $99.00 | lot 2 | CALLED AWAY: sold 100 at $76.00 (Fri SimQ 76.41) | premium 1.37% of share value; held at midweek (ask 0.86) |
 | 30 | SIMQ-W19-P67 | W19 open | $67 | 0.65 / 0.69 | $65.00 | $6,700.00 cash | Bought to close at 0.21 ($21.00), net +$44.00 | premium 0.97% of collateral |
 | 31 | SIMQ-W19-P72 | W19 mid | $72 | 0.61 / 0.66 | $61.00 | $7,200.00 cash | Expired worthless (Fri SimQ 83.96) | premium 0.85% of collateral |
-| 32 | SIMQ-W20-P69 | W20 open | $69 | 1.02 / 1.08 | $102.00 | $6,900.00 cash | OPEN | premium 1.48% of collateral |
+| 32 | SIMQ-W20-P69 | W20 open | $69 | 1.02 / 1.08 | $102.00 | $6,900.00 cash | Expired worthless (Fri SimQ 75.32) | premium 1.48% of collateral; held at midweek (ask 0.32) |
 
 ## Closed share lots
 | Bought | Sold | Stock P&L | Net after option premiums |
@@ -76,9 +76,10 @@
 | 17 | calm_up | 71.26 | 72.02 | 72.04 | 71.66 | 72.89 | 72.04 | +1.1% | 0.57 (742.82 x 7d) |
 | 18 | chop | 72.04 | 71.58 | 72.94 | 73.43 | 74.82 | 76.41 | +6.1% | 2.31 (842.39 x 5d; 8,442.39 x 2d) |
 | 19 | selloff | 76.41 | 79.39 | 81.02 | 80.44 | 85.49 | 83.96 | +9.9% | 6.55 (8,509.70 x 3d; 8,549.70 x 4d) |
+| 20 | selloff | 83.96 | 83.36 | 82.33 | 80.79 | 79.81 | 75.32 | -10.3% | 6.64 (8,658.25 x 7d) |
 
 ## Scorecard
-- 32 trades: 14 expired worthless, 11 closed for profit, 2 closed at a loss, 2 assigned, 2 called away | win rate 44% (78% counting profitable closes)
+- 32 trades: 15 expired worthless, 11 closed for profit, 2 closed at a loss, 2 assigned, 2 called away | win rate 47% (81% counting profitable closes)
 - Avg put premium: 0.93% of collateral
 - Avg call premium: 1.55% of share value at sale
 - Wheel cycles completed (shares called away): 2
