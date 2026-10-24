@@ -3,14 +3,14 @@
 - Seed: 20261022 (path reseeded from Week 13; see state file) | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-001-journal.md
 
-## Current state (Week 24, Wednesday close)
-- SimQ spot: $25.81
-- Cash: $3,742.09 | locked collateral: $0.00 | free: $3,742.09
+## Current state (Week 25, Monday open)
+- SimQ spot: $25.66
+- Cash: $3,744.96 | locked collateral: $0.00 | free: $3,744.96
 - Shares: 100 SimQ bought at $42.50 in Week 19; effective basis $40.06 after option premiums
 - Open positions: none
-- Premium collected (gross): $883.00 | buy-to-close costs: $30.00 | interest: $89.09
+- Premium collected (gross): $883.00 | buy-to-close costs: $30.00 | interest: $91.96
 - Realized P&L (options net of buy-backs + stock sales): +$403.00 (options +$853.00, stock -$450.00)
-- Account value: $6,323.09 (-15.69% vs start)
+- Account value: $6,310.96 (-15.85% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -72,6 +72,7 @@
 | 21 | crash | 38.25 | 35.32 | 34.45 | 33.90 | 31.57 | 30.83 | -19.4% | 2.75 (3,577.73 x 3d; 3,596.73 x 4d) |
 | 22 | crash | 30.83 | 29.56 | 32.48 | 30.63 | 30.33 | 31.15 | +1.0% | 2.79 (3,634.48 x 7d) |
 | 23 | crash | 31.15 | 29.80 | 27.57 | 28.94 | 28.85 | 26.94 | -13.5% | 2.82 (3,684.27 x 3d; 3,681.27 x 4d) |
+| 24 | selloff | 26.94 | 26.06 | 26.30 | 25.81 | 25.91 | 25.66 | -4.8% | 2.87 (3,746.09 x 3d; 3,742.09 x 4d) |
 
 ## Scorecard
 - 25 trades: 15 expired worthless, 6 closed for profit, 1 closed at a loss, 2 assigned, 1 called away | win rate 60% (84% counting profitable closes)
