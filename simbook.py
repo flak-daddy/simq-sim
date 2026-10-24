@@ -17,6 +17,7 @@ Commands (run from the folder holding simq.py, simbook.py and the state file):
   chain [--half] [--n 15] [--all]   re-show the current chain (open/mid/chain also list every
                             lower put strike below the trimmed chain, down to the chain bottom)
   status                    one-line account summary
+  weekpnl W                 week W P&L breakdown (also printed automatically at Friday close)
   render                    rewrite run-NNN-ledger.md and run-NNN-journal.md
 Options: --state PATH (default: highest run-*-state.json next to this script)
 """
@@ -351,6 +352,53 @@ def cmd_mid(st, **kw):
     show_chain(st, w, "mid", r, **kw)
 
 
+def week_pnl(st, w):
+    """Friday breakdown of the week's account change: each option trade opened this week
+    (premium in, buy-back out), interest, and share/stock moves (assignment marked to the
+    Friday close, mark-to-market on held shares, call-away proceeds). Rows sum to the change."""
+    prev = replay(st, upto_week=w - 1)
+    prev_spot = wk(st, w - 1)[2][4] if w > 1 else simq.S_START
+    v_prev = prev["cash"] + prev["shares"] * prev_spot
+    cur = replay(st, upto_week=w)
+    spot = wk(st, w)[2][4]
+    v_now = cur["cash"] + cur["shares"] * spot
+    rows, opt = [], 0.0
+    for tr in sorted(cur["trades"].values(), key=lambda x: x["id"]):
+        if tr["w"] != w:
+            continue
+        prem = tr["fill"] * 100
+        cost = (tr["close"] or 0) * 100 if tr["status"] == "btc" else 0.0
+        net = prem - cost
+        opt += net
+        if tr["status"] == "btc":
+            how = f"sold {tr['fill']:.2f}, bought back {tr['close']:.2f}"
+        else:
+            how = f"sold {tr['fill']:.2f}, " + {"expired": "expired", "assigned": "assigned",
+                                                  "called": "called away"}.get(tr["status"], "open")
+        rows.append((f"#{tr['id']} {contract(tr)} ({SHORT[tr['ph']]})", how, net))
+    interest = sum(e["amount"] for e in st["events"] if e["t"] == "interest" and e["w"] == w)
+    stock = round(v_now - v_prev - opt - interest, 2)
+    return rows, opt, interest, stock, v_prev, v_now
+
+
+def print_week_pnl(st, w):
+    rows, opt, interest, stock, v_prev, v_now = week_pnl(st, w)
+    print("")
+    print(f"Week {w} P&L")
+    print("| Item | Detail | Amount |")
+    print("|---|---|---|")
+    for name, how, net in rows:
+        print(f"| {name} | {how} | {money(net, True)} |")
+    if not rows:
+        print("| Options | no trades this week | $0.00 |")
+    print(f"| Options subtotal | | {money(opt, True)} |")
+    print(f"| Interest | | {money(interest, True)} |")
+    if abs(stock) >= 0.005:
+        print(f"| Shares | assignment, mark-to-market or called-away sale | {money(stock, True)} |")
+    print(f"| **Week total** | {money(v_prev)} -> {money(v_now)} | **{money(v_now - v_prev, True)}** "
+          f"({(v_now / v_prev - 1) * 100:+.2f}%) |")
+
+
 def cmd_fri(st):
     w = st["week"]
     if st["phase"] == "open":
@@ -395,6 +443,7 @@ def cmd_fri(st):
     print(f"Interest +{money(amt)} | Cash {money(r2['cash'])} | shares {r2['shares']} "
           f"| Account {money(v)} ({pct:+.2f}%)")
     print(score_line(scorecard(st, r2)))
+    print_week_pnl(st, w)
     print(f"Next: Week {w + 1} Monday open")
 
 
@@ -631,6 +680,8 @@ def main(argv):
         show_chain(st, st["week"], st["phase"], r, **kw); mutating = False
     elif cmd == "status":
         cmd_status(st); mutating = False
+    elif cmd == "weekpnl":
+        print_week_pnl(st, int(a[1])); mutating = False
     elif cmd == "render":
         pass
     else:
