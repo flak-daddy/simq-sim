@@ -65,3 +65,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W17 mid**: held C76
 - **W17 fri**: C76 expired worthless (+$70.00); SimQ 72.04
 - **W18 open**: sold C76 at 0.99 (SimQ 72.04)
+- **W18 mid**: held C76
+- **W18 fri**: C76 called away, sold 100 at $76.00; SimQ 76.41
