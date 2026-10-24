@@ -1,0 +1,158 @@
+SIMQ RUN 2: FULL-YEAR CLOSE-OUT SUMMARY AND BEHAVIOR REVIEW
+============================================================
+Closed: Sat 2026-10-24, after sim Week 52 (full year)
+Seed: 865529296 (no reseed)
+Start: $7,500 paper cash, 4.00% APY on cash, SimQ at $63.80, pricing v2 from Week 1
+Rules: claude/csp-ledger-branch-cc.md | Full books: run-002-ledger.md, run-002-journal.md
+Week 26 log (official cross-run comparison figure): run-002-week26-summary.txt
+
+
+1. THE RESULT
+-------------
+Final account value (Week 52 Friday):  $11,924.36   (+58.99%)   all cash, no shares, no open positions
+Week 26 comparison figure (unchanged):  $9,189.18    (+22.52%)
+
+Benchmarks over the full 52 weeks:
+  Buy and hold SimQ ($63.80 -> $64.67):   $7,602.27   (+1.36%)
+  Leave it all in cash at 4.00%:           $7,799.18   (+3.99%)
+
+Benchmarks over the second half only (Week 26 -> Week 52):
+  Account: $9,189.18 -> $11,924.36 (+29.77%)
+  SimQ fell from $92.15 to $64.67 (-29.8%) over the same 26 weeks.
+
+So you beat buy-and-hold by about 58 points and cash by about 55 points.
+SimQ ended the year almost where it started, after swinging between $36 and $92.
+
+Average gain: +0.90% per week compounded over 52 weeks; +1.01% per week in
+the second half (+$105 per week on average).
+46 of 52 weeks were up. Down weeks: W1 (-11.6%), W3, W16, W31, W32, W45 (-3.4%).
+Deepest drawdown: -12.3% (start to Week 3). Second half: -4.8% (W30 -> W32).
+
+Where the $4,424.36 gain came from:
+  Option premium collected (gross) ...... +$5,700.00  (puts $4,013, calls $1,687)
+  Buy-to-close costs ..................... -$2,748.00
+  Options net ............................ +$2,952.00
+  Stock, lot 1 (bought $41 W1, sold $44.50 W5) ...... +$350.00
+  Stock, lot 2 (bought $75 W16, sold $76 W18) ....... +$100.00
+  Stock, lot 3 (bought $71 W31, sold $74 W33) ....... +$300.00
+  Stock, lot 4 (bought $65 W35, sold $69 W38) ....... +$400.00
+  Interest on cash .......................   +$322.36
+                                           ----------
+                                           +$4,424.36
+
+Second half only (W27-52): premium +$3,385 (puts $2,218, calls $1,167),
+buy-backs -$1,536, stock +$700, interest +$186.18 = +$2,735.18.
+
+Market regimes over 52 weeks:
+  chop 14, selloff 13, calm_up 10, rebound 8, crash 7.
+  Second half: calm_up 7, chop 6, selloff 5, rebound 4, crash 4.
+
+
+2. THE TRADES
+-------------
+93 trades: 79 puts, 14 covered calls. 59 opened Monday, 34 opened midweek.
+  Expired worthless .............. 41
+  Bought to close for profit ..... 37
+  Bought to close at a loss ......  7   (W1 P56 -$656, W5 C43 -$190, W31 P73 -$70,
+                                         W33 C70 -$280, W35 P67 -$104,
+                                         W41 P57 -$106, W45 P65 -$410)
+  Puts assigned ..................  4   (W1 P41, W16 P75, W31 P71, W35 P65)
+  Calls called away ..............  4   (W5 C44.5, W18 C76, W33 C74, W38 C69)
+Win rate 44% (84% counting profitable closes).
+Average put premium 0.89% of collateral; average call premium 2.02% of share value.
+Wheel cycles completed: 4, all four lots closed at a stock profit.
+Passes: 16 (3 at Monday open, 13 holds at midweek).
+
+How the second half unfolded:
+  Weeks 27-30 One Monday put each week, 13-18% below spot, often rolled closer
+              at midweek. Steady +$43 to +$107 per week.
+  Week 31     P73 lost value as SimQ slid 14% in a chop week. You closed it for
+              -$70 and rolled down to P71, which was assigned at $71 (SimQ 69.78).
+  Weeks 32-33 Covered calls on lot 3. In W33's +21.5% rebound you bought back
+              C70 for -$280 and rolled up to C74, called away at $74.
+              Lot 3 net: +$300 stock, +$142 calls, +$83 put premium.
+              W33 was the best week of the year (+$917.67).
+  Week 35     Same pattern in a selloff: closed P67 for -$104, rolled to P65,
+              assigned at $65 (SimQ 64.94).
+  Weeks 36-38 Covered calls on lot 4, all struck above the $65 cost (C69, C70,
+              C69). Called away at $69. Lot 4 net: +$400 stock, +$477 calls.
+  Weeks 39-52 All cash, puts only. From W42 on you usually sold two puts at
+              Monday open using most of the cash, closed both at midweek for
+              nearly full profit, then sold one closer put for the last two days.
+              W45 was the one loss: P65 (13.4% below spot) in a -23.9% selloff,
+              closed for -$410 and rolled to P50, which expired.
+
+
+3. YOUR BEHAVIOR: PATTERNS IN THE JOURNAL
+------------------------------------------
+- The midweek roll is your core routine. Close the Monday position once most
+  of the premium is gone, then sell a closer strike for Thursday and Friday.
+  The median midweek put sat about 9% below spot in the second half, versus
+  about 16% for Monday puts.
+
+- You now close losing puts at midweek instead of holding them. In Run 1 you
+  held both deep in-the-money puts into assignment. In Run 2's second half you
+  closed every losing position at Wednesday and rolled it lower. Two of those
+  rolls (W31, W35) were still assigned; two (W41, W45) expired.
+
+- Covered calls at or above cost. On lots 2 and 4 every call was above the
+  purchase price. On lot 3 you rolled C70 up to C74 after the rebound, paying
+  $280 to avoid selling the shares $1 below cost. All four lots closed at a
+  stock profit. This fixes the "calls below cost" pattern from Run 1.
+
+- Two-put Mondays. From W42 you split cash across two strikes (e.g. 50 and 40,
+  49 and 40, 56 and 57). Every one of those weeks ended up.
+
+- You waited more selectively. Monday passes in W40 and W50 were both followed
+  by a midweek put that expired.
+
+
+4. STRENGTHS
+------------
+- Beat both benchmarks by a wide margin in a year where SimQ went nowhere.
+  The strategy collected premium through every regime.
+- Consistency. 46 up weeks out of 52, with no week after W1 losing more than
+  4.3%.
+- Clean wheel management. Four assignments, four called-away lots, four stock
+  profits. You never sat on a losing lot for long.
+- Fast damage control. Losing positions were cut at Wednesday, and the roll
+  usually recovered most or all of the cost in the same week (W41: -$106 close,
+  +$106 roll).
+- Rule-following and clean books across 93 trades.
+
+
+5. WEAKNESSES
+-------------
+- Roll-downs in falling weeks can still end in assignment. W31 and W35 both
+  rolled to a strike that SimQ closed below on Friday. Paying to close and
+  then being assigned anyway costs twice. It worked out here because the
+  shares were called away at a profit within 2-3 weeks.
+
+- Selloff-week Monday cushions. The three second-half losing puts (W35 P67,
+  W41 P57, W45 P65) were sold 9-13% below spot in selloff weeks. Selloff
+  weeks with wide cushions (W52 at 22-23%) were fine. One week's move in a 3x
+  product can exceed 13% (W45 fell 24%).
+
+- Late-week premium is thin. Many midweek rolls collected $8-$20 for the last
+  two days (W42 P59 $20, W46 P51.5 $10, W47 P57 $10, W52 P60 $8), while tying
+  up $5,000-$6,000 of collateral for that time.
+
+- Full-cash Mondays leave no room to act. With two puts sold, free cash was
+  often under $1,000 at Wednesday. You could only add a position by closing
+  one first.
+
+
+6. THINGS TO TRY IN RUN 3 (process, not strike picks)
+-------------------------------------------------------
+- Before a midweek roll in a falling week, decide in advance whether you would
+  accept assignment on the new strike. If not, consider closing without rolling.
+- Write down your Monday cushion for each regime type and check it against
+  results at Week 26.
+- Track how much of each week's profit comes from the Thursday-Friday roll
+  versus the Monday trade, to see whether the roll is worth the collateral.
+- Keep the covered-call rule (calls at or above cost). It worked on every lot.
+- Keep comparing against the cash benchmark, which is about +2% per 26 weeks.
+
+Cross-run comparison (Week 26, same start conditions, different seeds):
+  Run 1: $6,575.78 (-12.32%), pricing v1/v2
+  Run 2: $9,189.18 (+22.52%), pricing v2

@@ -3,7 +3,7 @@
  "seed": 865529296,
  "start_cash": 7500.0,
  "apy": 0.04,
- "week": 52,
+ "week": 53,
  "phase": "open",
  "events": [
   {
@@ -2463,6 +2463,75 @@
      4
     ]
    ]
+  },
+  {
+   "w": 52,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 56.0,
+   "fill": 0.95,
+   "ask": 1.01,
+   "spot": 72.85
+  },
+  {
+   "w": 52,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 57.0,
+   "fill": 1.07,
+   "ask": 1.13,
+   "spot": 72.85
+  },
+  {
+   "w": 52,
+   "ph": "mid",
+   "t": "btc",
+   "id": 91,
+   "price": 0.03
+  },
+  {
+   "w": 52,
+   "ph": "mid",
+   "t": "btc",
+   "id": 92,
+   "price": 0.04
+  },
+  {
+   "w": 52,
+   "ph": "mid",
+   "t": "sell",
+   "kind": "P",
+   "k": 60.0,
+   "fill": 0.08,
+   "ask": 0.1,
+   "spot": 74.16
+  },
+  {
+   "w": 52,
+   "ph": "fri",
+   "t": "expire",
+   "id": 93,
+   "k": 60.0,
+   "spot": 64.67
+  },
+  {
+   "w": 52,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 9.14,
+   "segs": [
+    [
+     11914.22,
+     3
+    ],
+    [
+     11915.22,
+     4
+    ]
+   ]
   }
- ]
+ ],
+ "status_note": "CLOSED after Week 52 full year (Sat 2026-10-24); all cash, no open positions. Week 26 comparison result: $9,189.18 (+22.52%)"
 }
