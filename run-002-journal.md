@@ -102,3 +102,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W28 open**: sold P72 at 0.36 (SimQ 86.08)
 - **W28 mid**: held P72
 - **W28 fri**: P72 expired worthless (+$36.00); SimQ 84.37
+- **W29 open**: sold P71 at 0.70 (SimQ 84.37)
+- **W29 mid**: bought to close P71 at 0.02 (+$68.00)
+- **W29 mid**: sold P77 at 0.17 (SimQ 84.31)
+- **W29 fri**: P77 expired worthless (+$17.00); SimQ 81.71
