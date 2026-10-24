@@ -1,0 +1,51 @@
+# SimQ Decision Journal, Run 2
+
+One line per move, appended as the run goes. Your own comments are added only when you make one.
+
+- **W1 open**: sold P56 at 0.53 (SimQ 63.80)
+- **W1 mid**: bought to close P56 at 7.09 (-$656.00)
+- **W1 mid**: sold P41 at 0.35 (SimQ 49.36)
+- **W1 fri**: P41 assigned, bought 100 at $41.00; SimQ 38.44
+- **W2 open**: sold P25 at 0.42 (SimQ 38.44)
+- **W2 open**: sold C45 at 0.71 (SimQ 38.44)
+- **W2 mid**: bought to close P25 at 0.01 (+$41.00)
+- **W2 fri**: C45 expired worthless (+$71.00); SimQ 37.75
+- **W3 open**: passed
+- **W3 mid**: sold C42 at 0.23 (SimQ 39.56)
+- **W3 fri**: C42 expired worthless (+$23.00); SimQ 36.53
+- **W4 open**: sold C42 at 0.22 (SimQ 36.53)
+- **W4 open**: sold P29 at 0.24 (SimQ 36.53)
+- **W4 mid**: held C42, P29
+- **W4 fri**: C42 expired worthless (+$22.00); SimQ 40.02
+- **W4 fri**: P29 expired worthless (+$24.00); SimQ 40.02
+- **W5 open**: sold C43 at 0.76 (SimQ 40.02)
+- **W5 mid**: bought to close C43 at 2.66 (-$190.00)
+- **W5 mid**: sold C44.5 at 1.59 (SimQ 44.81)
+- **W5 fri**: C44.5 called away, sold 100 at $44.50; SimQ 47.59
+- **W6 open**: sold P40 at 0.46 (SimQ 47.59)
+- **W6 mid**: held P40
+- **W6 fri**: P40 expired worthless (+$46.00); SimQ 46.18
+- **W7 open**: sold P36 at 0.34 (SimQ 46.18)
+- **W7 mid**: bought to close P36 at 0.01 (+$33.00)
+- **W7 mid**: sold P44 at 0.29 (SimQ 49.74)
+- **W7 fri**: P44 expired worthless (+$29.00); SimQ 53.08
+- **W8 open**: sold P43 at 0.49 (SimQ 53.08)
+- **W8 mid**: held P43
+- **W8 fri**: P43 expired worthless (+$49.00); SimQ 55.21
+- **W9 open**: sold P44 at 0.87 (SimQ 55.21)
+- **W9 open**: sold P32.5 at 0.09 (SimQ 55.21)
+- **W9 mid**: bought to close P44 at 0.01 (+$86.00)
+- **W9 mid**: bought to close P32.5 at 0.01 (+$8.00)
+- **W10 open**: sold P51.5 at 0.47 (SimQ 58.89)
+- **W10 mid**: bought to close P51.5 at 0.27 (+$20.00)
+- **W10 mid**: sold P54 at 0.49 (SimQ 60.99)
+- **W10 fri**: P54 expired worthless (+$49.00); SimQ 60.22
+- **W11 open**: sold P49 at 0.68 (SimQ 60.22)
+- **W11 mid**: bought to close P49 at 0.01 (+$67.00)
+- **W11 mid**: sold P58 at 0.21 (SimQ 65.88)
+- **W11 fri**: P58 expired worthless (+$21.00); SimQ 66.23
+- **W12 open**: sold P56 at 0.57 (SimQ 66.23)
+- **W12 mid**: bought to close P56 at 0.02 (+$55.00)
+- **W13 open**: sold P59 at 0.60 (SimQ 67.10)
+- **W13 mid**: bought to close P59 at 0.44 (+$16.00)
+- **W13 mid**: sold P57 at 0.19 (SimQ 63.73)

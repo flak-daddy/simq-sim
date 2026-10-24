@@ -14,7 +14,8 @@ Commands (run from the folder holding simq.py, simbook.py and the state file):
   pass                      record a pass (or a hold if a position is open)
   note "text"               attach the user's comment to the latest move
   quote P|C STRIKE          bid/ask for one strike at the current phase
-  chain [--half] [--n 15] [--all]   re-show the current chain
+  chain [--half] [--n 15] [--all]   re-show the current chain (open/mid/chain also list every
+                            lower put strike below the trimmed chain, down to the chain bottom)
   status                    one-line account summary
   render                    rewrite run-NNN-ledger.md and run-NNN-journal.md
 Options: --state PATH (default: highest run-*-state.json next to this script)
@@ -61,10 +62,13 @@ def money(x, sign=False):
 def wk(st, w):
     simq.BASE_SEED = st["seed"]
     simq.RESEED = {int(a): int(c) for a, c in st.get("reseed", {}).items()}
+    simq.PRICING_V2_FROM = st.get("pricing_v2_from", 1)
+    simq.SKEW_V2 = w >= simq.PRICING_V2_FROM
     return simq.gen_week(w)  # regime, s_open, closes, ivs
 
 
 def view(st, w, ph):
+    simq.SPREAD_V2 = w >= st.get("spread_v2_from", 1)
     reg, s_open, closes, ivs = wk(st, w)
     if ph == "open":
         return s_open, 5, ivs[0]
@@ -232,10 +236,25 @@ def print_chain(rows, S, always=(), n=15, half=False, all_=False):
             if r[0] in always:
                 keep.add(i)
         disp = [disp[i] for i in sorted(keep)]
-    print("| Strike | Put bid / ask | Call bid / ask |")
-    print("|---|---|---|")
+    print("| Call bid / ask | Strike | Put bid / ask |")
+    print("|---|:---:|---|")
     for K, pb, pa, cb, ca in disp:
-        print(f"| {K:g} | {fq(pb)} / {pa:.2f} | {fq(cb)} / {ca:.2f} |")
+        print(f"| {fq(cb)} / {ca:.2f} | **{K:g}** | {fq(pb)} / {pa:.2f} |")
+    return disp
+
+
+def print_lower_puts(rows, S, below):
+    # Standard output: every listed put strike (incl. .5 and $2.50 steps) below the
+    # trimmed chain, highest first, down to the bottom of the chain (no-bid strikes included).
+    low = sorted((r for r in rows if r[0] < below), key=lambda r: -r[0])
+    if not low:
+        return
+    print("")
+    print("Lower puts")
+    print("| Strike | Put bid / ask | % below spot |")
+    print("|:---:|---|---|")
+    for K, pb, pa, cb, ca in low:
+        print(f"| **{K:g}** | {fq(pb)} / {pa:.2f} | {(1 - K / S) * 100:.1f}% |")
 
 
 def contract(tr):
@@ -290,7 +309,9 @@ def cmd_status(st):
 def show_chain(st, w, ph, r, **kw):
     S, rows = rows_at(st, w, ph)
     always = tuple(tr["k"] for tr in r["open"])
-    print_chain(rows, S, always=always, **kw)
+    disp = print_chain(rows, S, always=always, **kw)
+    if not kw.get("all_"):
+        print_lower_puts(rows, S, min(x[0] for x in disp if x[0] not in always or x[0] >= S))
 
 
 def cmd_open(st, **kw):
@@ -474,7 +495,7 @@ def render_ledger(st):
     pct = (v / st["start_cash"] - 1) * 100
     L = [f"# SimQ Run {st['run']} Ledger", "",
          f"- Seed: {st['seed']}" + (f" (path reseeded from Week {min(int(a) for a in st['reseed'])}; see state file)" if st.get("reseed") else "") + f" | Start: ${st['start_cash']:,.0f}, {st['apy'] * 100:.2f}% APY | Rules: claude/csp-ledger-branch-cc.md",
-         f"- Status: {st.get('status', 'in progress')} | Comparison window: 26 sim weeks | Journal: claude/run-{st['run']:03d}-journal.md", "",
+         f"- Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-{st['run']:03d}-journal.md", "",
          f"## Current state (Week {w}, {PH[ph]})",
          f"- SimQ spot: ${S:.2f}",
          f"- Cash: {money(r['cash'])} | locked collateral: {money(r['locked'])} | free: {money(r['free'])}"]
@@ -538,19 +559,8 @@ def render_ledger(st):
     if sc["call_avg"] is not None:
         L.append(f"- Avg call premium: {sc['call_avg']:.2f}% of share value at sale")
     L.append(f"- Wheel cycles completed (shares called away): {sc['cld']}")
-    L.append(f"- Account value at week 26 (comparison metric): {week26_line(st)}")
+    L.append("- Account value at week 26 (comparison metric): pending")
     return "\n".join(L) + "\n"
-
-
-def week26_line(st, W=simq.MAX_WEEKS):
-    if not any(e["t"] == "interest" and e["w"] == W for e in st["events"]):
-        return "pending"
-    r = replay(st, upto_week=W)
-    spot = wk(st, W)[2][4]
-    v = round(r["cash"] + r["shares"] * spot, 2)
-    bh = st["start_cash"] / simq.S_START * spot
-    return (f"{money(v)} ({(v / st['start_cash'] - 1) * 100:+.2f}%) | buy-and-hold SimQ from $63.80 "
-            f"would be {money(bh)} ({(bh / st['start_cash'] - 1) * 100:+.2f}%)")
 
 
 def render(st, path):

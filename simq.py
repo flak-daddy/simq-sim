@@ -16,6 +16,9 @@ week W's opening price is week W-1's Friday close.
 import sys, math, random
 
 BASE_SEED = 20261022
+SPREAD_V2 = True  # tighter spreads calibrated to real TQQQ chains (Oct 24, 2026); set per week by simbook
+SKEW_V2 = True      # put/call skew calibrated to real TQQQ chains; set per week by simbook
+PRICING_V2_FROM = 1  # weeks >= this use the v2 implied-vol level (REG2) and skew
 RESEED = {}  # {first_week: seed}: from that week on, a different random stream is used
 S_START = 63.80
 LEV, DRAG, RATE = 3, 0.0003, 0.04
@@ -27,6 +30,8 @@ REG = {
     "crash":   dict(mu=-0.0080, sig=0.024, iv=0.90),
     "rebound": dict(mu=0.0070, sig=0.018, iv=0.68),
 }
+# v2 implied-vol baselines (Oct 24, 2026 calibration: real TQQQ ATM IV ~82% in a calm week)
+REG2_IV = {"calm_up": 0.62, "chop": 0.75, "selloff": 1.02, "crash": 1.25, "rebound": 0.90}
 TRANS = {
     "calm_up": {"calm_up": .55, "chop": .25, "selloff": .15, "crash": .03, "rebound": .02},
     "chop":    {"calm_up": .30, "chop": .35, "selloff": .25, "crash": .05, "rebound": .05},
@@ -43,7 +48,7 @@ def t_draw(rng, df=4):
 
 
 def gen_week(w):
-    S, reg, iv_prev = S_START, "chop", 0.58
+    S, reg, iv_prev, iv_prev2 = S_START, "chop", 0.58, 0.76
     for k in range(1, w + 1):
         seed_k = BASE_SEED
         for w0, s0 in sorted(RESEED.items()):
@@ -53,18 +58,20 @@ def gen_week(w):
         probs = TRANS[reg]
         reg = rng.choices(list(probs), weights=list(probs.values()))[0]
         p = REG[reg]
-        s_open, closes, ivs = S, [], [iv_prev]
+        s_open, closes, ivs, ivs2 = S, [], [iv_prev], [iv_prev2]
         for _ in range(5):
             u = p["mu"] + p["sig"] * t_draw(rng)
             r = LEV * u - DRAG
             S = max(0.5, S * max(0.3, 1 + r))
-            iv = p["iv"] + 2.5 * max(0.0, -r) + rng.gauss(0, 0.02)
-            iv = min(1.3, max(0.35, iv))
+            g = rng.gauss(0, 0.02)
+            iv = min(1.3, max(0.35, p["iv"] + 2.5 * max(0.0, -r) + g))
+            iv2 = min(1.7, max(0.5, REG2_IV[reg] + 3.0 * max(0.0, -r) + g))
             closes.append(round(S, 2))
             ivs.append(iv)
+            ivs2.append(iv2)
         S = closes[-1]
-        iv_prev = ivs[-1]
-    return reg, s_open, closes, ivs
+        iv_prev, iv_prev2 = ivs[-1], ivs2[-1]
+    return reg, s_open, closes, (ivs2 if w >= PRICING_V2_FROM else ivs)
 
 
 def ncdf(x):
@@ -81,11 +88,24 @@ def bs(S, K, T, iv, kind):
     return K * math.exp(-RATE * T) * ncdf(-d2) - S * ncdf(-d1)
 
 
+def skew_iv(S, K, iv):
+    # real chains: IV falls ~1.1 vol pts per +1% strike at 82% ATM (puts rich, calls cheap)
+    return iv * min(1.5, max(0.6, 1.0 - 1.3 * (K / S - 1.0)))
+
+
 def quote(S, K, T, iv, kind):
+    if SKEW_V2:
+        iv = skew_iv(S, K, iv)
     mid = bs(S, K, T, iv, kind)
-    half = max(0.01, 0.03 * mid + 0.01)
+    if SPREAD_V2:
+        # fit to two real TQQQ chains (1-day and 5-day): ~0.02 wide when cheap, ~0.05 near $0.9, ~0.08 near $1.4, ~0.15 near $3
+        half = max(0.01, 0.01 + 0.05 * mid) / 2
+    else:
+        half = max(0.01, 0.03 * mid + 0.01)  # v1, used by Run 1 weeks 1-12
     bid = round(max(0.0, mid - half), 2)
     ask = round(mid + half, 2)
+    if ask - bid < 0.01:
+        ask = round(bid + 0.01, 2)
     return bid, ask
 
 
