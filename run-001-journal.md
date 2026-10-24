@@ -76,3 +76,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W25 mid**: bought to close C28 at 0.02 (+$26.00)
 - **W26 open**: sold P25 at 0.18 (SimQ 26.64)
 - **W26 open**: sold C28 at 0.28 (SimQ 26.64)
+- **W26 mid**: held P25, C28
+- **W26 fri**: P25 expired worthless (+$18.00); SimQ 27.53
+- **W26 fri**: C28 expired worthless (+$28.00); SimQ 27.53

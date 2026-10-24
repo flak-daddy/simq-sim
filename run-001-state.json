@@ -3,8 +3,8 @@
  "seed": 20261022,
  "start_cash": 7500.0,
  "apy": 0.04,
- "week": 26,
- "phase": "mid",
+ "week": 27,
+ "phase": "open",
  "events": [
   {
    "w": 1,
@@ -985,6 +985,39 @@
    "fill": 0.28,
    "ask": 0.32,
    "spot": 26.64
+  },
+  {
+   "w": 26,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 26,
+   "ph": "fri",
+   "t": "expire",
+   "id": 27,
+   "k": 25.0,
+   "spot": 27.53
+  },
+  {
+   "w": 26,
+   "ph": "fri",
+   "t": "expire",
+   "id": 28,
+   "k": 28.0,
+   "spot": 27.53
+  },
+  {
+   "w": 26,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 2.93,
+   "segs": [
+    [
+     3819.85,
+     7
+    ]
+   ]
   }
  ],
  "reseed": {

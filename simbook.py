@@ -538,8 +538,19 @@ def render_ledger(st):
     if sc["call_avg"] is not None:
         L.append(f"- Avg call premium: {sc['call_avg']:.2f}% of share value at sale")
     L.append(f"- Wheel cycles completed (shares called away): {sc['cld']}")
-    L.append("- Account value at week 26 (comparison metric): pending")
+    L.append(f"- Account value at week 26 (comparison metric): {week26_line(st)}")
     return "\n".join(L) + "\n"
+
+
+def week26_line(st, W=simq.MAX_WEEKS):
+    if not any(e["t"] == "interest" and e["w"] == W for e in st["events"]):
+        return "pending"
+    r = replay(st, upto_week=W)
+    spot = wk(st, W)[2][4]
+    v = round(r["cash"] + r["shares"] * spot, 2)
+    bh = st["start_cash"] / simq.S_START * spot
+    return (f"{money(v)} ({(v / st['start_cash'] - 1) * 100:+.2f}%) | buy-and-hold SimQ from $63.80 "
+            f"would be {money(bh)} ({(bh / st['start_cash'] - 1) * 100:+.2f}%)")
 
 
 def render(st, path):
