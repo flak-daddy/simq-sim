@@ -4,7 +4,7 @@
  "start_cash": 7500.0,
  "apy": 0.04,
  "week": 16,
- "phase": "open",
+ "phase": "mid",
  "events": [
   {
    "w": 1,
@@ -717,6 +717,11 @@
      4
     ]
    ]
+  },
+  {
+   "w": 16,
+   "ph": "open",
+   "t": "pass"
   }
  ]
 }

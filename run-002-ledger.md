@@ -3,8 +3,8 @@
 - Seed: 865529296 | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-002-journal.md
 
-## Current state (Week 16, Monday open)
-- SimQ spot: $78.18
+## Current state (Week 16, Wednesday close)
+- SimQ spot: $81.51
 - Cash: $8,152.20 | locked collateral: $0.00 | free: $8,152.20
 - Shares: 0
 - Open positions: none
