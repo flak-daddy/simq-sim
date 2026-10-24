@@ -63,3 +63,4 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W21 mid**: bought to close C43 at 0.01 (+$23.00)
 - **W21 mid**: sold C37 at 0.20 (SimQ 33.90)
 - **W21 fri**: C37 expired worthless (+$20.00); SimQ 30.83
+- **W22 open**: sold C35 at 0.35 (SimQ 30.83)
