@@ -71,3 +71,4 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W19 mid**: bought to close P67 at 0.21 (+$44.00)
 - **W19 mid**: sold P72 at 0.61 (SimQ 80.44)
 - **W19 fri**: P72 expired worthless (+$61.00); SimQ 83.96
+- **W20 open**: sold P69 at 1.02 (SimQ 83.96)
