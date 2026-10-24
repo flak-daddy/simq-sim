@@ -1,0 +1,153 @@
+SIMQ RUN 1: CLOSE-OUT SUMMARY AND BEHAVIOR REVIEW
+=================================================
+Closed: Sat 2026-10-24, after sim Week 26 (the comparison window)
+Seed: 20261022, path reseeded from Week 13 with 945028706
+Start: $7,500 paper cash, 4.00% APY on cash, SimQ at $63.80
+Rules: claude/csp-ledger-branch-cc.md | Full books: run-001-ledger.md, run-001-journal.md
+
+
+1. THE RESULT
+-------------
+Final account value (Week 26 Friday):  $6,575.78   (-12.32%)
+
+Benchmarks over the same 26 weeks:
+  Buy and hold SimQ ($63.80 -> $27.53):   $3,236.29   (-56.85%)
+  Leave it all in cash at 4.00%:           about $7,649.59 (+1.99%)
+
+So you beat holding the index by about 44 points but finished about 14 points
+behind doing nothing. SimQ lost 57% of its value in this run, and the account
+lost 12%.
+
+Where the $924.22 net loss came from:
+  Option premium, net of buy-backs ....... +$925.00
+  Interest on cash ........................  +$97.78
+  Lot 1 shares (bought $52.50, sold $48) .. -$450.00  (realized)
+  Lot 2 shares (bought $42.50, now $27.53) -$1,497.00 (unrealized)
+                                           ----------
+                                           -$924.22
+
+At close-out you still hold 100 shares, bought at $42.50, with an effective
+basis of $39.52 after premiums. They are marked at $27.53.
+
+Market regimes over the 26 weeks:
+  calm_up 10, selloff 6, crash 5, rebound 3, chop 2.
+The run had two drawdown stretches: Weeks 1-7 and Weeks 19-24.
+
+
+2. THE TRADES
+-------------
+28 trades: 14 puts, 14 covered calls.
+  Expired worthless .............. 17
+  Bought to close for profit .....  7   (total buy-back cost $32)
+  Bought to close at a loss ......  1   (W9 C46, -$1)
+  Puts assigned ..................  2   (W2 P52.5, W19 P42.5)
+  Calls called away ..............  1   (W10 C48)
+Win rate 61% (86% counting profitable closes).
+
+Premium: $477 from puts, $480 from calls, $957 gross.
+Average put premium 0.79% of collateral; average call premium 0.98% of
+share value.
+Wheel cycles: one completed (W2 -> W10), one still open (W19 -> today).
+
+How the run unfolded:
+  Weeks 1-2   Two puts during a selloff. The second (P52.5) was assigned when
+              SimQ fell 21% in a week.
+  Weeks 3-10  Covered calls on lot 1 through a crash and rebound. You bought
+              back at 0.01 twice. Lot 1 was called away at $48 in W10, for a
+              $450 stock loss (-$202 net of premiums).
+  Weeks 11-18 Eight straight puts, all expired, during the calm_up stretch.
+              About $307 of premium.
+  Week 19     P42.5 assigned in a selloff (SimQ 45.86 -> 39.30).
+  Weeks 20-26 Mostly covered calls on lot 2 while SimQ slid from about $39 to
+              about $26. Several were bought back early. Puts were sold only
+              with wide cushions (W20 P34, W24 P22) or in chop (W26 P25).
+
+
+3. YOUR BEHAVIOR: PATTERNS IN THE JOURNAL
+------------------------------------------
+- You wait when unsure. W1 open, W3 open, W4, W8 and W18 open were passes,
+  usually because you wanted to "see which way the market goes" first. When
+  you sold at midweek after waiting (W1, W3, W18), all three expired worthless.
+
+- You lock in nearly-full profit early. Seven times you bought back an option
+  for 0.01-0.03 at midweek, keeping 90-98% of the premium. In your words, there
+  was "no need to risk about $2k worth of value over $1 of premium."
+
+- You accept assignment rather than pay up to close. Both times a put went
+  deep in the money by Wednesday (W2: ask 5.06 vs 0.65 received; W19: ask 3.09
+  vs 0.31 received), you held and took the shares. You said you were "fine
+  with riding the wheel back up the other side."
+
+- You move strikes with the regime, especially late in the run. Put cushions
+  were 4-7% below spot during the calm_up weeks and 13-18% below spot during
+  the W20-W24 selloff and crash weeks. In the three crash weeks (W21-W23) you
+  sold no puts at all, only calls.
+
+- Your words and actions on "locking in a loss" don't match. Early on you said
+  you didn't want to seal in the loss on assigned shares. In practice, most
+  calls on both lots were struck below your purchase price: W7 C40 and W10 C48
+  on a $52.50 lot, and C28-C37 on the $42.50 lot. The W10 call is the one that
+  locked in the -$450.
+
+
+4. STRENGTHS
+------------
+- Risk hygiene on winners. Buying back near-worthless options cost $32 in
+  total and removed late-week gap risk on seven positions. That habit is cheap
+  and sound.
+- Patience. Waiting until midweek when the picture was unclear never cost you
+  a loss in this run.
+- Adapting to headlines. In W4 you said you didn't know how to read the
+  headlines. By W20-W26 your trades lined up with the regime: no puts in crash
+  weeks, far-OTM puts in selloffs, calls while holding shares in down weeks.
+  That is a real improvement over the run.
+- Consistency. You traded nearly every week, kept sizes fixed and never broke
+  a rule. The books are clean.
+- The strategy did its main job: it cut the loss from SimQ's 57% drop to 12%.
+
+
+5. WEAKNESSES
+-------------
+- Small gains, big losses. In this run, put premium averaged under 1% a week,
+  but each assignment cost several times that. The eight-week calm_up streak
+  of expired puts earned about $307. The W19 assignment alone is down about
+  $1,200 net of premium so far. A high win rate hid the fact that the
+  strategy's total return was negative.
+
+- Both assignments came from Monday-open puts sold in selloff regimes:
+  W2 followed a selloff week, and in W19 the headlines pointed down. Both times
+  the strike was within about one week's expected move of a 3x leveraged
+  instrument (roughly 8-10% at those implied vols). Your later habit of
+  widening the cushion in bad regimes came after both assignments.
+
+- No exit plan for assigned shares. Holding to ride the wheel back up is a
+  valid choice, but in a leveraged instrument that keeps trending down it
+  means sitting on a growing loss while selling calls for $20-50 a week. There
+  was no pre-set point where you would cut the position.
+
+- Mixed signals on assigned stock. You resisted locking in the loss, but you
+  repeatedly wrote calls below cost, which risks locking it in anyway, at
+  whatever strike the call is at. Pick one approach per lot and apply it
+  consistently.
+
+- Idle cash during wheel cycle 2. With about $3,600 free during W20-W26, puts
+  were sold in only three of seven weeks. In crash weeks that was the right
+  call. It still meant interest did most of the work on that cash.
+
+- Structural note (not a decision error): wheeling a 3x leveraged product
+  exposes you to its volatility decay. Long stretches of chop or decline erode
+  the shares faster than premium can rebuild them. Some of this run's result
+  comes from the instrument itself, not from your choices.
+
+
+6. THINGS TO TRY IN RUN 2 (process, not strike picks)
+-------------------------------------------------------
+- Write your assignment rule before you sell each put: will you close if the
+  put goes deep in the money by midweek, or take the shares? Then follow it.
+- Decide one stance per assigned lot ("calls only above cost" or "calls near
+  spot, accept the loss") and record it in a note.
+- Keep comparing your result to the cash benchmark, not only to buy-and-hold.
+  This run's real target was beating +2%.
+- Keep the early buy-back habit. It worked.
+- Skew (lower strikes priced at higher implied vol) is due to be turned on in
+  Run 2. That will make far-OTM puts pay more and change the trade-offs above.

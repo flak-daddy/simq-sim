@@ -1,7 +1,7 @@
 # SimQ Run 1 Ledger
 
 - Seed: 20261022 (path reseeded from Week 13; see state file) | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
-- Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-001-journal.md
+- Status: CLOSED after Week 26 (Sat 2026-10-24); 100 shares still held, marked at Week 26 close $27.53. Seed 20261022, reseeded from Week 13 with 945028706 | Comparison window: 26 sim weeks | Journal: claude/run-001-journal.md
 
 ## Current state (Week 27, Monday open)
 - SimQ spot: $27.53

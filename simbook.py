@@ -474,7 +474,7 @@ def render_ledger(st):
     pct = (v / st["start_cash"] - 1) * 100
     L = [f"# SimQ Run {st['run']} Ledger", "",
          f"- Seed: {st['seed']}" + (f" (path reseeded from Week {min(int(a) for a in st['reseed'])}; see state file)" if st.get("reseed") else "") + f" | Start: ${st['start_cash']:,.0f}, {st['apy'] * 100:.2f}% APY | Rules: claude/csp-ledger-branch-cc.md",
-         f"- Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-{st['run']:03d}-journal.md", "",
+         f"- Status: {st.get('status', 'in progress')} | Comparison window: 26 sim weeks | Journal: claude/run-{st['run']:03d}-journal.md", "",
          f"## Current state (Week {w}, {PH[ph]})",
          f"- SimQ spot: ${S:.2f}",
          f"- Cash: {money(r['cash'])} | locked collateral: {money(r['locked'])} | free: {money(r['free'])}"]
