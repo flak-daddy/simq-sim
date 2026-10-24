@@ -68,3 +68,4 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W22 fri**: C35 expired worthless (+$35.00); SimQ 31.15
 - **W23 open**: sold C34.5 at 0.47 (SimQ 31.15)
 - **W23 mid**: bought to close C34.5 at 0.03 (+$44.00)
+- **W24 open**: sold C30.5 at 0.48 (SimQ 26.94)
