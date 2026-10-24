@@ -3,14 +3,14 @@
 - Seed: 20261022 (path reseeded from Week 13; see state file) | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-001-journal.md
 
-## Current state (Week 21, Monday open)
-- SimQ spot: $38.25
-- Cash: $3,553.73 | locked collateral: $0.00 | free: $3,553.73
-- Shares: 100 SimQ bought at $42.50 in Week 19; effective basis $41.74 after option premiums
-- Open positions: none
-- Premium collected (gross): $695.00 | buy-to-close costs: $22.00 | interest: $80.73
+## Current state (Week 21, Wednesday close)
+- SimQ spot: $33.90
+- Cash: $3,577.73 | locked collateral: $0.00 | free: $3,577.73
+- Shares: 100 SimQ bought at $42.50 in Week 19; effective basis $41.50 after option premiums
+- Open: #20 short C43 sold at 0.24 in Week 21
+- Premium collected (gross): $719.00 | buy-to-close costs: $22.00 | interest: $80.73
 - Realized P&L (options net of buy-backs + stock sales): +$223.00 (options +$673.00, stock -$450.00)
-- Account value: $7,378.73 (-1.62% vs start)
+- Account value: $6,966.73 (-7.11% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -34,6 +34,7 @@
 | 17 | SIMQ-W19-P42.5 | W19 open | $42.5 | 0.31 / 0.35 | $31.00 | $4,250.00 cash | ASSIGNED: bought 100 at $42.50 (Fri SimQ 39.30) | premium 0.73% of collateral; held at midweek (ask 3.09) |
 | 18 | SIMQ-W20-P34 | W20 open | $34 | 0.18 / 0.21 | $18.00 | $3,400.00 cash | Expired worthless (Fri SimQ 38.25) | premium 0.53% of collateral; held at midweek (ask 0.15) |
 | 19 | SIMQ-W20-C43.5 | W20 open | $43.5 | 0.45 / 0.50 | $45.00 | lot 2 | Expired worthless (Fri SimQ 38.25) | premium 1.15% of share value; held at midweek (ask 0.01) |
+| 20 | SIMQ-W21-C43 | W21 open | $43 | 0.24 / 0.27 | $24.00 | lot 2 | OPEN | premium 0.63% of share value |
 
 ## Closed share lots
 | Bought | Sold | Stock P&L | Net after option premiums |
@@ -65,8 +66,8 @@
 | 20 | selloff | 39.30 | 38.11 | 35.34 | 36.65 | 37.55 | 38.25 | -2.7% | 2.72 (3,551.01 x 7d) |
 
 ## Scorecard
-- 19 trades: 13 expired worthless, 2 closed for profit, 1 closed at a loss, 2 assigned, 1 called away | win rate 68% (79% counting profitable closes)
+- 20 trades: 13 expired worthless, 2 closed for profit, 1 closed at a loss, 2 assigned, 1 called away | win rate 65% (75% counting profitable closes)
 - Avg put premium: 0.81% of collateral
-- Avg call premium: 0.85% of share value at sale
+- Avg call premium: 0.82% of share value at sale
 - Wheel cycles completed (shares called away): 1
 - Account value at week 26 (comparison metric): pending
