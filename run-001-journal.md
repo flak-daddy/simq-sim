@@ -70,3 +70,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W23 mid**: bought to close C34.5 at 0.03 (+$44.00)
 - **W24 open**: sold C30.5 at 0.48 (SimQ 26.94)
 - **W24 open**: sold P22 at 0.14 (SimQ 26.94)
+- **W24 mid**: bought to close C30.5 at 0.02 (+$46.00)
+- **W24 mid**: bought to close P22 at 0.02 (+$12.00)
