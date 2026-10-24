@@ -4,7 +4,7 @@
  "start_cash": 7500.0,
  "apy": 0.04,
  "week": 21,
- "phase": "open",
+ "phase": "mid",
  "events": [
   {
    "w": 1,
@@ -920,6 +920,16 @@
      7
     ]
    ]
+  },
+  {
+   "w": 21,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 56.0,
+   "fill": 0.66,
+   "ask": 0.71,
+   "spot": 75.32
   }
  ]
 }
