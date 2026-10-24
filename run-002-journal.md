@@ -137,3 +137,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W37 open**: sold C70 at 1.98 (SimQ 64.33)
 - **W37 mid**: bought to close P37.5 at 0.01 (+$9.00)
 - **W37 fri**: C70 expired worthless (+$198.00); SimQ 64.64
+- **W38 open**: sold C69 at 0.96 (SimQ 64.64)
+- **W38 mid**: held C69
+- **W38 fri**: C69 called away, sold 100 at $69.00; SimQ 69.33
