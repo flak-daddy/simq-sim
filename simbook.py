@@ -19,6 +19,7 @@ Commands (run from the folder holding simq.py, simbook.py and the state file):
   status                    one-line account summary
   weekpnl W                 week W P&L breakdown (also printed automatically at Friday close)
   render                    rewrite run-NNN-ledger.md and run-NNN-journal.md
+  hints [W]                 Claude only: hidden regime + this week's 4-headline plan (spoils the game)
 Options: --state PATH (default: highest run-*-state.json next to this script)
 """
 import sys, os, json, glob, io, contextlib
@@ -39,7 +40,7 @@ def default_state_path():
 
 def new_state(run, seed):
     return {"run": run, "seed": seed, "start_cash": 7500.0, "apy": 0.04,
-            "week": 1, "phase": "open", "events": []}
+            "pricing": "v3", "headlines": "v2", "week": 1, "phase": "open", "events": []}
 
 
 def load(path):
@@ -64,6 +65,7 @@ def wk(st, w):
     simq.BASE_SEED = st["seed"]
     simq.RESEED = {int(a): int(c) for a, c in st.get("reseed", {}).items()}
     simq.PRICING_V2_FROM = st.get("pricing_v2_from", 1)
+    simq.PRICING = st.get("pricing", "v2")  # states written before Oct 24, 2026 (Runs 1-2) use v1/v2
     simq.SKEW_V2 = w >= simq.PRICING_V2_FROM
     return simq.gen_week(w)  # regime, s_open, closes, ivs
 
@@ -551,7 +553,7 @@ def render_ledger(st):
     pct = (v / st["start_cash"] - 1) * 100
     L = [f"# SimQ Run {st['run']} Ledger", "",
          f"- Seed: {st['seed']}" + (f" (path reseeded from Week {min(int(a) for a in st['reseed'])}; see state file)" if st.get("reseed") else "") + f" | Start: ${st['start_cash']:,.0f}, {st['apy'] * 100:.2f}% APY | Rules: claude/csp-ledger-branch-cc.md",
-         f"- Status: {st.get('status_note', 'in progress')} | Comparison window: 26 sim weeks | Journal: claude/run-{st['run']:03d}-journal.md", "",
+         f"- Status: {st.get('status_note', st.get('status', 'in progress'))} | Comparison window: 26 sim weeks | Journal: claude/run-{st['run']:03d}-journal.md", "",
          f"## Current state (Week {w}, {PH[ph]})",
          f"- SimQ spot: ${S:.2f}",
          f"- Cash: {money(r['cash'])} | locked collateral: {money(r['locked'])} | free: {money(r['free'])}"]
@@ -639,6 +641,48 @@ def render(st, path):
         f.write(render_journal(st))
 
 
+# ---------------------------------------------------------------- headline plan (v2 headlines)
+# Four headlines per week. Each slot is TRUE (hints at the real regime), FALSE (hints, just as
+# convincingly, at a wrong regime) or NOISE (market news with no regime direction). The mix is drawn
+# from its own random stream, so it is reproducible and never changes the market path.
+REG_LABEL = {"calm_up": "calm, drifting up", "chop": "range-bound / directionless",
+             "selloff": "steady selling", "crash": "violent, high-stress drop",
+             "rebound": "sharp recovery / relief rally"}
+CONFUSE = {"calm_up": ["chop", "rebound", "selloff"], "chop": ["calm_up", "selloff", "rebound"],
+           "selloff": ["crash", "chop", "rebound"], "crash": ["selloff", "rebound", "chop"],
+           "rebound": ["calm_up", "crash", "selloff"]}
+
+
+def headline_plan(st, w):
+    import random
+    reg = wk(st, w)[0]
+    rng = random.Random(f"headlines-{st['seed']}-{w}")
+    n_true = rng.choices([0, 1, 2], weights=[0.25, 0.50, 0.25])[0]
+    n_false = rng.choices([0, 1, 2], weights=[0.30, 0.45, 0.25])[0]
+    n_false = min(n_false, 3 - n_true)
+    wrong = rng.choice(CONFUSE[reg])
+    slots = ["TRUE"] * n_true
+    for _ in range(n_false):
+        slots.append("FALSE:" + (wrong if rng.random() < 0.7 else rng.choice(CONFUSE[reg])))
+    slots += ["NOISE"] * (4 - len(slots))
+    rng.shuffle(slots)
+    return reg, slots
+
+
+def cmd_hints(st, w):
+    reg, slots = headline_plan(st, w)
+    print(f"Week {w} regime (hidden): {reg} ({REG_LABEL[reg]})")
+    print("Headline plan, in display order:")
+    for i, s in enumerate(slots, 1):
+        if s == "TRUE":
+            print(f"  {i}. TRUE  - hint at {reg} ({REG_LABEL[reg]})")
+        elif s.startswith("FALSE"):
+            r = s.split(":")[1]
+            print(f"  {i}. FALSE - hint, just as convincingly, at {r} ({REG_LABEL[r]})")
+        else:
+            print(f"  {i}. NOISE - real-sounding market news with no regime direction")
+
+
 # ---------------------------------------------------------------- main
 def main(argv):
     path = default_state_path()
@@ -696,6 +740,8 @@ def main(argv):
         print_week_pnl(st, int(a[1])); mutating = False
     elif cmd == "render":
         pass
+    elif cmd == "hints":
+        cmd_hints(st, int(a[1]) if len(a) > 1 else st["week"]); mutating = False
     else:
         sys.exit(__doc__)
     if mutating:

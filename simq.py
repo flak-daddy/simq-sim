@@ -19,6 +19,8 @@ BASE_SEED = 20261022
 SPREAD_V2 = True  # tighter spreads calibrated to real TQQQ chains (Oct 24, 2026); set per week by simbook
 SKEW_V2 = True      # put/call skew calibrated to real TQQQ chains; set per week by simbook
 PRICING_V2_FROM = 1  # weeks >= this use the v2 implied-vol level (REG2) and skew
+PRICING = "v3"      # implied-vol level: "v3" (standard for new runs since Oct 24, 2026) or "v2"
+                    # (Run 1 W13-26 and Run 2). simbook sets this from the state file; v3 keeps v2 skew/spreads
 RESEED = {}  # {first_week: seed}: from that week on, a different random stream is used
 S_START = 63.80
 LEV, DRAG, RATE = 3, 0.0003, 0.04
@@ -32,6 +34,10 @@ REG = {
 }
 # v2 implied-vol baselines (Oct 24, 2026 calibration: real TQQQ ATM IV ~82% in a calm week)
 REG2_IV = {"calm_up": 0.62, "chop": 0.75, "selloff": 1.02, "crash": 1.25, "rebound": 0.90}
+# v3 implied-vol baselines (Oct 24, 2026 recalibration; see claude/market-calibration.md, snapshot 2):
+# implied vol set relative to each regime's own realized vol, using real TQQQ ratios:
+# ~1.3x in calm weeks (weekly options, Oct 2026 chain) and ~1.05x in a sharp selloff (Mar 2026).
+REG3_IV = {"calm_up": 0.54, "chop": 0.75, "selloff": 0.92, "crash": 1.05, "rebound": 0.95}
 TRANS = {
     "calm_up": {"calm_up": .55, "chop": .25, "selloff": .15, "crash": .03, "rebound": .02},
     "chop":    {"calm_up": .30, "chop": .35, "selloff": .25, "crash": .05, "rebound": .05},
@@ -48,7 +54,7 @@ def t_draw(rng, df=4):
 
 
 def gen_week(w):
-    S, reg, iv_prev, iv_prev2 = S_START, "chop", 0.58, 0.76
+    S, reg, iv_prev, iv_prev2, iv_prev3 = S_START, "chop", 0.58, 0.76, 0.76
     for k in range(1, w + 1):
         seed_k = BASE_SEED
         for w0, s0 in sorted(RESEED.items()):
@@ -58,7 +64,7 @@ def gen_week(w):
         probs = TRANS[reg]
         reg = rng.choices(list(probs), weights=list(probs.values()))[0]
         p = REG[reg]
-        s_open, closes, ivs, ivs2 = S, [], [iv_prev], [iv_prev2]
+        s_open, closes, ivs, ivs2, ivs3 = S, [], [iv_prev], [iv_prev2], [iv_prev3]
         for _ in range(5):
             u = p["mu"] + p["sig"] * t_draw(rng)
             r = LEV * u - DRAG
@@ -66,11 +72,15 @@ def gen_week(w):
             g = rng.gauss(0, 0.02)
             iv = min(1.3, max(0.35, p["iv"] + 2.5 * max(0.0, -r) + g))
             iv2 = min(1.7, max(0.5, REG2_IV[reg] + 3.0 * max(0.0, -r) + g))
+            iv3 = min(1.7, max(0.4, REG3_IV[reg] + 3.0 * max(0.0, -r) + g))
             closes.append(round(S, 2))
             ivs.append(iv)
             ivs2.append(iv2)
+            ivs3.append(iv3)
         S = closes[-1]
-        iv_prev, iv_prev2 = ivs[-1], ivs2[-1]
+        iv_prev, iv_prev2, iv_prev3 = ivs[-1], ivs2[-1], ivs3[-1]
+    if PRICING == "v3":
+        return reg, s_open, closes, ivs3
     return reg, s_open, closes, (ivs2 if w >= PRICING_V2_FROM else ivs)
 
 
