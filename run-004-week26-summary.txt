@@ -1,0 +1,65 @@
+SIMQ RUN 4: WEEK 26 RESULTS (COMPARISON WINDOW)
+================================================
+Logged: Sun 2026-10-25, after sim Week 26
+Status: Run 4 CONTINUES to Week 52 ("full year"). These Week 26 figures are Run 4's
+official comparison result against other runs. Seed stays hidden until the run ends.
+Start: $7,500 paper cash, 4.00% APY on cash, SimQ at $63.80, pricing v3, headlines v3
+Rules: claude/csp-ledger-branch-cc.md | Full books: run-004-ledger.md, run-004-journal.md
+
+
+1. THE RESULT
+-------------
+Account value (Week 26 Friday):  $8,255.14   (+10.07%)   all cash, no shares, no open positions
+
+Benchmarks over the same 26 weeks:
+  Buy and hold SimQ ($63.80 -> $29.10):   $3,420.85   (-54.39%)
+  Leave it all in cash at 4.00%:           $7,649.59   (+1.99%)
+  Run 3 at Week 26 (pricing v3, headlines v2): $9,779.00   (+30.39%)
+  Run 2 at Week 26 (pricing v2):           $9,189.18   (+22.52%)
+  Run 1 at Week 26 (pricing v1):           $6,575.78   (-12.32%)
+Runs 1-3 used older pricing and/or headline rules, so they are not strictly like-for-like.
+
+Where the $755.14 gain came from:
+  Option premium collected (gross) ...... +$1,183.00  (puts $1,042, calls $141)
+  Buy-to-close costs .....................   -$679.00  (incl. -$192 net on W4 P55, -$324 net on W7 P50)
+  Options net ............................   +$504.00
+  Stock, lot 1 (bought $45.00 W7, sold $46.00 W9) ... +$100.00
+  Interest on cash .......................   +$151.14
+                                           ----------
+                                           +$755.14
+
+Market regimes over the 26 weeks:
+  calm_up 12, chop 8, crash 2, rebound 2, selloff 2.
+  SimQ touched the low 70s in Week 3, then two crash weeks (W4 midweek, W7) took it
+  to $38.80. After a W8 rebound to $44.62 it slid steadily to the mid 20s by Week 17
+  and finished Week 26 at $29.10.
+
+
+2. THE TRADES
+-------------
+32 trades (30 puts, 2 covered calls). 23 opened Monday, 9 opened midweek. 6 weeks passed at Monday open.
+  Expired worthless .............. 17
+  Closed for a profit ............ 11
+  Closed at a loss ...............  2  (W4 P55 -$192, W7 P50 -$324)
+  Puts assigned ..................  1  (W7 P45)
+  Calls called away ..............  1  (W9 C46)
+Win rate 53% (88% counting profitable closes).
+Avg put premium 0.86% of collateral; avg call premium 1.56% of share value.
+
+Wheel cycles completed: 1, closed at a stock profit.
+  Lot 1: assigned $45 (W7 crash week), basis worked down with W9 calls (C49 closed
+         +$61, C46 +$74), called away $46 (W9). Net after option premiums +$348.
+
+Notable weeks:
+  W4  (rebound, -17% midweek): P55 bought back for -$192, rolled to P50 which expired.
+  W7  (crash, -37%): P50 bought back for -$324; the midweek P45 was assigned at $45
+      with SimQ closing $38.80. Account fell to -7.12%, its low for the half.
+  W8-W9: lot 1 recovered with SimQ; two covered calls and the call-away put the
+      account back to +4.76% by W9.
+  W10-W26: mostly calm_up/chop around $27-$31; small puts 15-25% out, steady
+      +0.1% to +0.5% weeks plus interest.
+
+
+3. NEXT
+-------
+Run 4 continues from Week 27 Monday open, same rules, same seed.
