@@ -3,15 +3,15 @@
 - Seed: 943118079 | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-003-journal.md
 
-## Current state (Week 37, Monday open)
-- SimQ spot: $26.09
-- Cash: $1,606.75 | locked collateral: $0.00 | free: $1,606.75
+## Current state (Week 38, Monday open)
+- SimQ spot: $26.73
+- Cash: $1,607.98 | locked collateral: $0.00 | free: $1,607.98
 - Shares: 100 SimQ bought at $50.00 in Week 28; effective basis $48.73 after option premiums
 - Shares: 100 SimQ bought at $33.00 in Week 30; effective basis $32.89 after option premiums
 - Open positions: none
-- Premium collected (gross): $2,186.00 | buy-to-close costs: $1,233.00 | interest: $153.75
+- Premium collected (gross): $2,186.00 | buy-to-close costs: $1,233.00 | interest: $154.98
 - Realized P&L (options net of buy-backs + stock sales): +$2,253.00 (options +$953.00, stock +$1,300.00)
-- Account value: $6,824.75 (-9.00% vs start)
+- Account value: $6,953.98 (-7.28% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -117,6 +117,7 @@
 | 34 | rebound | 19.94 | 20.69 | 19.77 | 20.81 | 21.59 | 19.49 | -2.3% | 1.21 (1,582.08 x 7d) |
 | 35 | rebound | 19.49 | 19.50 | 19.13 | 20.44 | 20.66 | 23.46 | +20.4% | 1.23 (1,605.29 x 3d; 1,604.29 x 4d) |
 | 36 | rebound | 23.46 | 24.89 | 25.87 | 25.17 | 25.07 | 26.09 | +11.2% | 1.23 (1,605.52 x 7d) |
+| 37 | calm_up | 26.09 | 26.56 | 26.74 | 27.17 | 26.84 | 26.73 | +2.5% | 1.23 (1,606.75 x 7d) |
 
 ## Scorecard
 - 55 trades: 27 expired worthless, 18 closed for profit, 4 closed at a loss, 4 assigned, 2 called away | win rate 49% (82% counting profitable closes)

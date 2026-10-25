@@ -133,3 +133,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W35 mid**: bought to close P15 at 0.01 (+$21.00)
 - **W36 open**: passed
 - **W36 mid**: passed
+- **W37 open**: passed
+- **W37 mid**: passed
