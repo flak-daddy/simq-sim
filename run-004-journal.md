@@ -81,3 +81,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W26 open**: passed
 - **W26 mid**: sold P28 at 0.03 (SimQ 30.48)
 - **W26 fri**: P28 expired worthless (+$3.00); SimQ 29.10
+- **W27 open**: passed
+- **W27 open**: passed
+- **W27 mid**: passed
