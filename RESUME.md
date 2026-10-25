@@ -3,7 +3,7 @@
 Rules: claude/csp-ledger-branch-cc.md. Index: claude/run-index.md. Calibration: claude/market-calibration.md. Books are kept by script; do not hand-edit ledgers.
 
 ## Active run
-**Run 3**, extended to Week 52 (full year). Next phase: **Week 44 Monday open**. Files: run-003-state.json, run-003-ledger.md, run-003-journal.md. Seed hidden until the run ends.
+**Run 3**, extended to Week 52 (full year). Next phase: **Week 45 Monday open**. Files: run-003-state.json, run-003-ledger.md, run-003-journal.md. Seed hidden until the run ends.
 Week 26 comparison figure (logged Sat 2026-10-24): $9,779.00 (+30.39%), all cash; buy-and-hold SimQ $6,027.04 (-19.64%); cash-only $7,649.59 (+1.99%). Review: claude/run-003-week26-summary.txt.
 At Week 52: reveal the seed, write claude/run-003-summary.txt (full-year review), set the closed status_note, update run-index.md.
 Previous: Run 2 closed after Week 52: $11,924.36 (+58.99%); Week 26 figure $9,189.18 (+22.52%). Review: claude/run-002-summary.txt.
