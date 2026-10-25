@@ -3,15 +3,15 @@
 - Seed: 943118079 | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-003-journal.md
 
-## Current state (Week 31, Monday open)
-- SimQ spot: $32.95
-- Cash: $1,480.57 | locked collateral: $0.00 | free: $1,480.57
-- Shares: 100 SimQ bought at $50.00 in Week 28; effective basis $48.99 after option premiums
+## Current state (Week 32, Monday open)
+- SimQ spot: $27.36
+- Cash: $1,507.72 | locked collateral: $0.00 | free: $1,507.72
+- Shares: 100 SimQ bought at $50.00 in Week 28; effective basis $48.73 after option premiums
 - Shares: 100 SimQ bought at $33.00 in Week 30; effective basis $32.89 after option premiums
 - Open positions: none
-- Premium collected (gross): $2,065.00 | buy-to-close costs: $1,231.00 | interest: $146.57
-- Realized P&L (options net of buy-backs + stock sales): +$2,134.00 (options +$834.00, stock +$1,300.00)
-- Account value: $8,070.57 (+7.61% vs start)
+- Premium collected (gross): $2,091.00 | buy-to-close costs: $1,231.00 | interest: $147.72
+- Realized P&L (options net of buy-backs + stock sales): +$2,160.00 (options +$860.00, stock +$1,300.00)
+- Account value: $6,979.72 (-6.94% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -67,6 +67,7 @@
 | 49 | SIMQ-W29-P33 | W29 open | $33 | 0.23 / 0.25 | $23.00 | $3,300.00 cash | Bought to close at 0.01 ($1.00), net +$22.00 | premium 0.70% of collateral |
 | 50 | SIMQ-W30-C51 | W30 open | $51 | 0.15 / 0.17 | $15.00 | lot 3 | Expired worthless (Fri SimQ 32.95) | premium 0.34% of share value; held at midweek (ask 0.01) |
 | 51 | SIMQ-W30-P33 | W30 open | $33 | 0.11 / 0.13 | $11.00 | $3,300.00 cash | ASSIGNED: bought 100 at $33.00 (Fri SimQ 32.95) | premium 0.33% of collateral; held at midweek (ask 0.78) |
+| 52 | SIMQ-W31-C34 | W31 mid | $34 | 0.26 / 0.29 | $26.00 | lot 3 | Expired worthless (Fri SimQ 27.36) | premium 0.84% of share value |
 
 ## Closed share lots
 | Bought | Sold | Stock P&L | Net after option premiums |
@@ -107,10 +108,11 @@
 | 28 | selloff | 58.11 | 56.56 | 48.31 | 45.48 | 47.87 | 45.12 | -22.4% | 6.42 (9,945.57 x 3d; 9,683.57 x 2d; 4,683.57 x 2d) |
 | 29 | selloff | 45.12 | 43.65 | 42.65 | 43.64 | 42.85 | 43.96 | -2.6% | 3.64 (4,749.99 x 3d; 4,747.99 x 4d) |
 | 30 | selloff | 43.96 | 39.35 | 37.90 | 34.76 | 32.39 | 32.95 | -25.0% | 2.94 (4,777.63 x 5d; 1,477.63 x 2d) |
+| 31 | selloff | 32.95 | 34.07 | 34.31 | 31.04 | 29.03 | 27.36 | -17.0% | 1.15 (1,480.57 x 3d; 1,506.57 x 4d) |
 
 ## Scorecard
-- 51 trades: 25 expired worthless, 16 closed for profit, 4 closed at a loss, 4 assigned, 2 called away | win rate 49% (80% counting profitable closes)
+- 52 trades: 26 expired worthless, 16 closed for profit, 4 closed at a loss, 4 assigned, 2 called away | win rate 50% (81% counting profitable closes)
 - Avg put premium: 0.75% of collateral
-- Avg call premium: 1.08% of share value at sale
+- Avg call premium: 1.06% of share value at sale
 - Wheel cycles completed (shares called away): 2
 - Account value at week 26 (comparison metric): $9,779.00 (+30.39%) | buy-and-hold SimQ $6,027.04 (-19.64%) | cash only $7,649.59 (+1.99%)
