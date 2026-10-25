@@ -5,7 +5,7 @@
  "apy": 0.04,
  "pricing": "v3",
  "headlines": "v2",
- "week": 40,
+ "week": 41,
  "phase": "open",
  "events": [
   {
@@ -1687,6 +1687,28 @@
    "segs": [
     [
      1609.21,
+     7
+    ]
+   ]
+  },
+  {
+   "w": 40,
+   "ph": "open",
+   "t": "pass"
+  },
+  {
+   "w": 40,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 40,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 1.24,
+   "segs": [
+    [
+     1610.44,
      7
     ]
    ]
