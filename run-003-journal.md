@@ -126,3 +126,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W32 mid**: passed
 - **W33 open**: sold P15 at 0.58 (SimQ 17.94)
 - **W33 mid**: bought to close P15 at 0.01 (+$57.00)
+- **W34 open**: sold P15 at 0.15 (SimQ 19.94)
+- **W34 mid**: held P15
+- **W34 fri**: P15 expired worthless (+$15.00); SimQ 19.49
