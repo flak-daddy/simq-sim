@@ -20,3 +20,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W5 mid**: bought to close P48 at 0.03 (+$47.00)
 - **W5 mid**: sold P55 at 0.40 (SimQ 60.70)
 - **W5 fri**: P55 assigned, bought 100 at $55.00; SimQ 54.88
+- **W6 open**: sold C59 at 1.19 (SimQ 54.88)
+- **W6 mid**: bought to close C59 at 4.01 (-$282.00)
+- **W6 mid**: sold C62 at 1.97 (SimQ 61.88)
+- **W6 fri**: C62 called away, sold 100 at $62.00; SimQ 74.90
