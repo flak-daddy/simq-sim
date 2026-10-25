@@ -56,3 +56,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W14 fri**: C49 expired worthless (+$18.00); SimQ 45.99
 - **W15 open**: passed
 - **W15 mid**: passed
+- **W16 open**: sold C50 at 0.28 (SimQ 44.03)
+- **W16 open**: sold P34 at 0.17 (SimQ 44.03)
+- **W16 mid**: bought to close C50 at 0.01 (+$27.00)
+- **W16 fri**: P34 expired worthless (+$17.00); SimQ 49.02
