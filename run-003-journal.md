@@ -75,3 +75,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W20 open**: sold C55 at 0.83 (SimQ 51.49)
 - **W20 mid**: held C55
 - **W20 fri**: C55 called away, sold 100 at $55.00; SimQ 57.68
+- **W21 open**: sold P49 at 0.23 (SimQ 57.68)
+- **W21 mid**: held P49
+- **W21 fri**: P49 expired worthless (+$23.00); SimQ 52.07
