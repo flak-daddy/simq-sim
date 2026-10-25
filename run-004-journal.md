@@ -91,3 +91,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W29 open**: sold P30 at 0.11 (SimQ 33.46)
 - **W29 mid**: held P30
 - **W29 fri**: P30 expired worthless (+$11.00); SimQ 31.17
+- **W30 open**: sold P25 at 0.21 (SimQ 31.17)
+- **W30 open**: sold P26 at 0.31 (SimQ 31.17)
+- **W30 mid**: bought to close P26 at 4.26 (-$395.00)
+- **W30 fri**: P25 assigned, bought 100 at $25.00; SimQ 21.49
