@@ -28,3 +28,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W7 mid**: bought to close P50 at 3.81 (-$324.00)
 - **W7 mid**: sold P45 at 1.13 (SimQ 46.99)
 - **W7 fri**: P45 assigned, bought 100 at $45.00; SimQ 38.80
+- **W8 open**: sold P25 at 0.31 (SimQ 38.80)
+- **W8 mid**: bought to close P25 at 0.01 (+$30.00)
