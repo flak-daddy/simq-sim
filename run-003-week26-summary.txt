@@ -1,0 +1,62 @@
+SIMQ RUN 3: WEEK 26 RESULTS (COMPARISON WINDOW)
+================================================
+Logged: Sat 2026-10-24, after sim Week 26
+Status: Run 3 CONTINUES to Week 52 ("full year"). These Week 26 figures are Run 3's
+official comparison result against other runs. Seed stays hidden until the run ends.
+Start: $7,500 paper cash, 4.00% APY on cash, SimQ at $63.80, pricing v3, headlines v2
+Rules: claude/csp-ledger-branch-cc.md | Full books: run-003-ledger.md, run-003-journal.md
+
+
+1. THE RESULT
+-------------
+Account value (Week 26 Friday):  $9,779.00   (+30.39%)   all cash, no shares, no open positions
+
+Benchmarks over the same 26 weeks:
+  Buy and hold SimQ ($63.80 -> $51.27):   $6,027.04   (-19.64%)
+  Leave it all in cash at 4.00%:           $7,649.59   (+1.99%)
+  Run 2 at Week 26 (pricing v2):           $9,189.18   (+22.52%)
+  Run 1 at Week 26 (pricing v1):           $6,575.78   (-12.32%)
+Runs 1-2 used older pricing/headline rules, so they are not strictly like-for-like.
+
+Where the $2,279.00 gain came from:
+  Option premium collected (gross) ...... +$1,814.00  (puts $1,090, calls $724)
+  Buy-to-close costs .....................   -$961.00  (incl. -$396 net on W9 P54, -$282 net on W6 C59)
+  Options net ............................   +$853.00
+  Stock, lot 1 (bought $55.00 W5, sold $62.00 W6) ... +$700.00
+  Stock, lot 2 (bought $49.00 W9, sold $55.00 W20) .. +$600.00
+  Interest on cash .......................   +$126.00
+                                           ----------
+                                           +$2,279.00
+
+Market regimes over the 26 weeks:
+  chop 8, calm_up 8, selloff 5, rebound 4, crash 1.
+  SimQ slid from $63.80 to $39 by Week 11, recovered to the high 50s by Week 20,
+  and finished Week 26 at $51.27.
+
+
+2. THE TRADES
+-------------
+41 trades (puts and covered calls). 30 opened Monday, 11 opened midweek.
+  Expired worthless .............. 22
+  Closed for a profit ............ 12
+  Closed at a loss ...............  3  (W6 C59 -$282, W9 P54 -$396, W18 C52 -$25)
+  Puts assigned ..................  2  (W5 P55, W9 P49)
+  Calls called away ..............  2  (W6 C62, W20 C55)
+Win rate 54% (83% counting profitable closes).
+
+Wheel cycles completed: 2, both closed at a stock profit.
+  Lot 1: assigned $55 (W5), called away $62 (W6). Net after option premiums +$655.
+  Lot 2: assigned $49 (W9), held 11 weeks with covered calls (basis worked down
+         to $44.05), called away $55 (W20). Net after option premiums +$1,095.
+
+Notable weeks:
+  W9  (chop, -24%): P54 went deep ITM; bought back for -$396 and rolled to P49 at
+      midweek, which was assigned Friday at $49.
+  W20 (chop, +12%): C55 called away, closing lot 2 at a $600 stock gain.
+  W22 (selloff): P46 expired with SimQ $0.02 above the strike.
+  W26 (selloff): ran two puts (P49, P48) on nearly all the cash; both expired.
+
+
+3. NEXT
+-------
+Run 3 continues from Week 27 Monday open, same rules, same seed.

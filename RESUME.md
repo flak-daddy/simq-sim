@@ -3,7 +3,10 @@
 Rules: claude/csp-ledger-branch-cc.md. Index: claude/run-index.md. Calibration: claude/market-calibration.md. Books are kept by script; do not hand-edit ledgers.
 
 ## Active run
-None. Run 2 closed after Week 52 (full year) on Sat 2026-10-24: $11,924.36 (+58.99%); Week 26 comparison figure $9,189.18 (+22.52%). Seed revealed (865529296). Full-year review: claude/run-002-summary.txt. Next step is the user's call: "start Run 3" (new seed via `python3 simq.py newseed`, kept hidden) or "replay Run K".
+**Run 3**, extended to Week 52 (full year). Next phase: **Week 27 Monday open**. Files: run-003-state.json, run-003-ledger.md, run-003-journal.md. Seed hidden until the run ends.
+Week 26 comparison figure (logged Sat 2026-10-24): $9,779.00 (+30.39%), all cash; buy-and-hold SimQ $6,027.04 (-19.64%); cash-only $7,649.59 (+1.99%). Review: claude/run-003-week26-summary.txt.
+At Week 52: reveal the seed, write claude/run-003-summary.txt (full-year review), set the closed status_note, update run-index.md.
+Previous: Run 2 closed after Week 52: $11,924.36 (+58.99%); Week 26 figure $9,189.18 (+22.52%). Review: claude/run-002-summary.txt.
 New runs automatically use the current standard (pricing v3, headlines v2): `simbook.py new` writes `pricing: "v3"` and `headlines: "v2"` into the state. Old states without those fields replay exactly as they were played.
 A closed run's ledger shows its closed status via a `status_note` (or older `status`) key in its state file.
 
@@ -44,4 +47,4 @@ Before using either copy, check that simbook.py contains `print_week_pnl` and `h
 Update claude/run-index.md only when status changes.
 
 ## Honor system
-User agrees not to run `meta`/`hints`/`mid`/`fri` ahead of the phase or look up in-progress seeds. Recommend a fresh chat every 4-5 weeks.
+User agrees not to run `meta`/`hints`/`mid`/`fri` ahead of the phase or look up in-progress seeds. Recommend a fresh chat every 4-5 weeks (the user has been comfortable going longer).
