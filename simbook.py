@@ -5,8 +5,8 @@ All state is an append-only event log in run-NNN-state.json. Cash, positions, in
 scorecard, ledger and journal are derived by replaying that log, so nothing is retyped.
 
 Commands (run from the folder holding simq.py, simbook.py and the state file):
-  new --run N --seed S [--headlines v3]   create a fresh run (seed from `simq.py newseed`);
-                            v3 = scripted headlines printed by `open` (opinion can mislead, data never does)
+  new --run N --seed S [--headlines v2]   create a fresh run (seed from `simq.py newseed`);
+                            default headlines v3 = scripted, printed by `open` (opinion can mislead, data never does)
   open                      show the current week's Monday-open package (account + chain)
   mid                       advance to midweek: Mon-Wed path, buy-to-close prices, new chain
   fri                       advance to Friday: settle, post interest, advance to next week
@@ -42,7 +42,7 @@ def default_state_path():
 
 def new_state(run, seed):
     return {"run": run, "seed": seed, "start_cash": 7500.0, "apy": 0.04,
-            "pricing": "v3", "headlines": "v2", "week": 1, "phase": "open", "events": []}
+            "pricing": "v3", "headlines": "v3", "week": 1, "phase": "open", "events": []}
 
 
 def load(path):

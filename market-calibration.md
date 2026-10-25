@@ -55,3 +55,17 @@ Monte Carlo check (300 random 52-week markets, put held to Friday, edge = bid pr
 Under v3 a seller who ignores the market roughly breaks even: positive in calm/chop/rebound weeks, negative in selloff/crash weeks. Any lasting edge has to come from reading the market and managing trades.
 Versioning: state field `pricing` ("v3" for runs created from Oct 24, 2026; absent = v2 behaviour, so Runs 1-2 replay unchanged). Price paths and regimes are identical across v1/v2/v3; only option prices differ.
 Limits: snapshot 2 uses third-party 30-day IV summaries, not a full weekly chain. If a weekly chain from a volatile day becomes available, add it as snapshot 3.
+
+## Check: regime label vs. weekly direction (Oct 25, 2026, after Run 3)
+Question: Run 3 had 11 of 41 directional weeks (calm_up, rebound, selloff, crash) close against their label (e.g. W46 rebound -9.1%, W42 selloff +5.2%, W7 calm_up -14.7%). Bug or design?
+Monte Carlo of simq.gen_week's weekly draw (40,000 weeks per regime, no code changes):
+
+| Regime | Mean week | Weekly sd | Weeks against label | Weeks moving >10% |
+|---|---|---|---|---|
+| calm_up | +1.7% | 6.1% | 38% | 10% |
+| chop | -0.2% | 8.7% | n/a | 22% |
+| selloff | -7.4% | 12.6% | 25% | 50% |
+| crash | -11.7% | 14.7% | 19% | 63% |
+| rebound | +10.7% | 13.1% | 19% | 55% |
+
+Finding: not a bug. A regime sets the week's drift and volatility, not its result; one week of noise is several times the drift, so roughly 1 in 4 directional weeks should end against the label. Run 3's 27% (11/41) is in line. Real leveraged-ETF weeks behave similarly (a calm uptrend still has many down weeks; bear markets have sharp up weeks). Thinner tails for calm regimes (t df 10 instead of 4) were tested and barely change this (calm_up down weeks 39% -> 40%), so no change was made. Making labels match outcomes more often would need less noise or more drift per regime, which would make the sim easier and less realistic.
