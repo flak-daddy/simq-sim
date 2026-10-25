@@ -102,3 +102,11 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W32 open**: sold P12 at 0.23 (SimQ 16.42)
 - **W32 mid**: bought to close P10 at 0.01 (+$7.00)
 - **W32 mid**: bought to close P12 at 0.01 (+$22.00)
+- **W33 open**: sold P11 at 0.03 (SimQ 15.14)
+- **W33 open**: sold P12 at 0.08 (SimQ 15.14)
+- **W33 open**: sold P13 at 0.18 (SimQ 15.14)
+- **W33 mid**: bought to close P12 at 0.01 (+$7.00)
+- **W33 mid**: bought to close P13 at 0.02 (+$16.00)
+- **W33 mid**: sold P16 at 0.47 (SimQ 16.28)
+- **W33 fri**: P11 expired worthless (+$3.00); SimQ 16.14
+- **W33 fri**: P16 expired worthless (+$47.00); SimQ 16.14
