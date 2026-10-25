@@ -1,0 +1,47 @@
+{
+ "run": 3,
+ "seed": 943118079,
+ "start_cash": 7500.0,
+ "apy": 0.04,
+ "pricing": "v3",
+ "headlines": "v2",
+ "week": 2,
+ "phase": "open",
+ "events": [
+  {
+   "w": 1,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 56.0,
+   "fill": 0.53,
+   "ask": 0.57,
+   "spot": 63.8
+  },
+  {
+   "w": 1,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 1,
+   "ph": "fri",
+   "t": "expire",
+   "id": 1,
+   "k": 56.0,
+   "spot": 61.87
+  },
+  {
+   "w": 1,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 5.79,
+   "segs": [
+    [
+     7553.0,
+     7
+    ]
+   ]
+  }
+ ]
+}
