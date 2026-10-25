@@ -3,14 +3,14 @@
 - Seed: 943118079 | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-003-journal.md
 
-## Current state (Week 14, Monday open)
-- SimQ spot: $43.48
-- Cash: $3,592.79 | locked collateral: $0.00 | free: $3,592.79
-- Shares: 100 SimQ bought at $49.00 in Week 9; effective basis $46.33 after option premiums
+## Current state (Week 15, Monday open)
+- SimQ spot: $45.99
+- Cash: $3,623.57 | locked collateral: $0.00 | free: $3,623.57
+- Shares: 100 SimQ bought at $49.00 in Week 9; effective basis $46.15 after option premiums
 - Open positions: none
-- Premium collected (gross): $1,135.00 | buy-to-close costs: $903.00 | interest: $60.79
-- Realized P&L (options net of buy-backs + stock sales): +$932.00 (options +$232.00, stock +$700.00)
-- Account value: $7,940.79 (+5.88% vs start)
+- Premium collected (gross): $1,164.00 | buy-to-close costs: $904.00 | interest: $63.57
+- Realized P&L (options net of buy-backs + stock sales): +$960.00 (options +$260.00, stock +$700.00)
+- Account value: $8,222.57 (+9.63% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -36,6 +36,8 @@
 | 19 | SIMQ-W12-P30 | W12 open | $30 | 0.32 / 0.35 | $32.00 | $3,000.00 cash | Bought to close at 0.01 ($1.00), net +$31.00 | premium 1.07% of collateral |
 | 20 | SIMQ-W12-C46 | W12 open | $46 | 0.21 / 0.23 | $21.00 | lot 2 | Bought to close at 0.01 ($1.00), net +$20.00 | premium 0.54% of share value |
 | 21 | SIMQ-W13-P34 | W13 open | $34 | 0.13 / 0.15 | $13.00 | $3,400.00 cash | Bought to close at 0.02 ($2.00), net +$11.00 | premium 0.38% of collateral |
+| 22 | SIMQ-W14-C49 | W14 open | $49 | 0.18 / 0.19 | $18.00 | lot 2 | Expired worthless (Fri SimQ 45.99) | premium 0.41% of share value; held at midweek (ask 0.05) |
+| 23 | SIMQ-W14-P35 | W14 open | $35 | 0.11 / 0.13 | $11.00 | $3,500.00 cash | Bought to close at 0.01 ($1.00), net +$10.00 | premium 0.31% of collateral |
 
 ## Closed share lots
 | Bought | Sold | Stock P&L | Net after option premiums |
@@ -58,10 +60,11 @@
 | 11 | selloff | 46.73 | 47.45 | 46.48 | 43.09 | 41.61 | 39.04 | -16.5% | 2.70 (3,522.60 x 7d) |
 | 12 | calm_up | 39.04 | 39.26 | 39.49 | 40.12 | 40.44 | 39.38 | +0.9% | 2.74 (3,578.30 x 3d; 3,576.30 x 4d) |
 | 13 | chop | 39.38 | 38.51 | 39.40 | 40.44 | 41.10 | 43.48 | +10.4% | 2.75 (3,592.04 x 3d; 3,590.04 x 4d) |
+| 14 | calm_up | 43.48 | 44.25 | 45.03 | 45.62 | 46.05 | 45.99 | +5.8% | 2.78 (3,621.79 x 3d; 3,620.79 x 4d) |
 
 ## Scorecard
-- 21 trades: 9 expired worthless, 7 closed for profit, 2 closed at a loss, 2 assigned, 1 called away | win rate 43% (76% counting profitable closes)
-- Avg put premium: 0.87% of collateral
-- Avg call premium: 1.68% of share value at sale
+- 23 trades: 10 expired worthless, 8 closed for profit, 2 closed at a loss, 2 assigned, 1 called away | win rate 43% (78% counting profitable closes)
+- Avg put premium: 0.83% of collateral
+- Avg call premium: 1.47% of share value at sale
 - Wheel cycles completed (shares called away): 1
 - Account value at week 26 (comparison metric): pending
