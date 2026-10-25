@@ -34,3 +34,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W9 mid**: bought to close C49 at 0.06 (+$61.00)
 - **W9 mid**: sold C46 at 0.74 (SimQ 45.80)
 - **W9 fri**: C46 called away, sold 100 at $46.00; SimQ 46.23
+- **W10 open**: passed
+- **W10 mid**: passed
