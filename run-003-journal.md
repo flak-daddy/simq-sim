@@ -148,3 +148,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W42 open**: sold C33 at 0.11 (SimQ 29.92)
 - **W42 mid**: held C33
 - **W42 fri**: C33 expired worthless (+$11.00); SimQ 31.48
+- **W43 open**: sold C36 at 0.22 (SimQ 31.48)
+- **W43 mid**: held C36
+- **W43 fri**: C36 expired worthless (+$22.00); SimQ 32.64
