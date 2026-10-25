@@ -5,7 +5,7 @@
  "apy": 0.04,
  "pricing": "v3",
  "headlines": "v2",
- "week": 52,
+ "week": 53,
  "phase": "open",
  "events": [
   {
@@ -2122,6 +2122,29 @@
      7
     ]
    ]
+  },
+  {
+   "w": 52,
+   "ph": "open",
+   "t": "pass"
+  },
+  {
+   "w": 52,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 52,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 4.07,
+   "segs": [
+    [
+     5307.98,
+     7
+    ]
+   ]
   }
- ]
+ ],
+ "status_note": "CLOSED after Week 52 full year (Sun 2026-10-25); holding 100 shares (lot 3, cost $50.00, basis $48.73, marked $36.62), no open positions. Week 26 comparison result: $9,779.00 (+30.39%); Week 52: $8,974.05 (+19.65%)"
 }

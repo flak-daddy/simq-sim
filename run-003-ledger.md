@@ -1,16 +1,16 @@
 # SimQ Run 3 Ledger
 
 - Seed: 943118079 | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
-- Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-003-journal.md
+- Status: CLOSED after Week 52 full year (Sun 2026-10-25); holding 100 shares (lot 3, cost $50.00, basis $48.73, marked $36.62), no open positions. Week 26 comparison result: $9,779.00 (+30.39%); Week 52: $8,974.05 (+19.65%) | Comparison window: 26 sim weeks | Journal: claude/run-003-journal.md
 
-## Current state (Week 52, Monday open)
-- SimQ spot: $31.92
-- Cash: $5,307.98 | locked collateral: $0.00 | free: $5,307.98
+## Current state (Week 53, Monday open)
+- SimQ spot: $36.62
+- Cash: $5,312.05 | locked collateral: $0.00 | free: $5,312.05
 - Shares: 100 SimQ bought at $50.00 in Week 28; effective basis $48.73 after option premiums
 - Open positions: none
-- Premium collected (gross): $2,455.00 | buy-to-close costs: $1,237.00 | interest: $189.98
+- Premium collected (gross): $2,455.00 | buy-to-close costs: $1,237.00 | interest: $194.05
 - Realized P&L (options net of buy-backs + stock sales): +$2,618.00 (options +$1,218.00, stock +$1,400.00)
-- Account value: $8,499.98 (+13.33% vs start)
+- Account value: $8,974.05 (+19.65% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -143,6 +143,7 @@
 | 49 | calm_up | 29.97 | 29.94 | 30.34 | 30.48 | 30.38 | 30.64 | +2.2% | 4.01 (5,232.86 x 7d) |
 | 50 | calm_up | 30.64 | 30.36 | 30.39 | 29.90 | 29.41 | 30.61 | -0.1% | 4.04 (5,264.87 x 7d) |
 | 51 | chop | 30.61 | 30.31 | 30.59 | 31.12 | 32.61 | 31.92 | +4.3% | 4.07 (5,303.91 x 7d) |
+| 52 | calm_up | 31.92 | 32.83 | 34.38 | 34.25 | 37.42 | 36.62 | +14.7% | 4.07 (5,307.98 x 7d) |
 
 ## Scorecard
 - 66 trades: 34 expired worthless, 21 closed for profit, 4 closed at a loss, 4 assigned, 3 called away | win rate 52% (83% counting profitable closes)
@@ -150,3 +151,4 @@
 - Avg call premium: 0.94% of share value at sale
 - Wheel cycles completed (shares called away): 3
 - Account value at week 26 (comparison metric): $9,779.00 (+30.39%) | buy-and-hold SimQ $6,027.04 (-19.64%) | cash only $7,649.59 (+1.99%)
+- Account value at week 52 (full year): $8,974.05 (+19.65%) | buy-and-hold SimQ $4,304.86 (-42.60%) | cash only $7,799.18 (+3.99%)

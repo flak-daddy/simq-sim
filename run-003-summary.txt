@@ -1,0 +1,187 @@
+SIMQ RUN 3: FULL-YEAR CLOSE-OUT SUMMARY AND BEHAVIOR REVIEW
+============================================================
+Closed: Sun 2026-10-25, after sim Week 52 (full year)
+Seed: 943118079 (no reseed)
+Start: $7,500 paper cash, 4.00% APY on cash, SimQ at $63.80, pricing v3, headlines v2
+Rules: claude/csp-ledger-branch-cc.md | Full books: run-003-ledger.md, run-003-journal.md
+Week 26 log (official cross-run comparison figure): run-003-week26-summary.txt
+
+
+1. THE RESULT
+-------------
+Final account value (Week 52 Friday):  $8,974.05   (+19.65%)
+  Cash $5,312.05 + 100 shares (lot 3, bought $50.00 W28) marked at $36.62 = $3,662.00
+  No open option positions.
+Week 26 comparison figure (unchanged):  $9,779.00   (+30.39%)
+
+Benchmarks over the full 52 weeks:
+  Buy and hold SimQ ($63.80 -> $36.62):   $4,304.86   (-42.60%)
+  Leave it all in cash at 4.00%:           $7,799.18   (+3.99%)
+
+Benchmarks over the second half only (Week 26 -> Week 52):
+  Account: $9,779.00 -> $8,974.05 (-8.23%)
+  SimQ fell from $51.27 to $36.62 (-28.6%), bottoming at $17.94 in Week 32.
+
+So you beat buy-and-hold by about 62 points and cash by about 16 points
+for the year. The second half gave back about 10 points of the first half's
+lead. The share lot still held (-$1,338 unrealized) more than accounts for it.
+
+Average gain: +0.35% per week compounded over 52 weeks.
+37 of 52 weeks were up (15 of 26 in the second half).
+Deepest drawdown: -48.4%, from $9,872.57 (Week 27) to $5,096.88 (Week 32).
+Best week: W35 +14.89% (+$816). Worst week: W32 -26.98% (-$1,883), the crash.
+
+Where the $1,474.05 gain came from:
+  Option premium collected (gross) ...... +$2,455.00  (puts $1,504, calls $951)
+  Buy-to-close costs ..................... -$1,237.00
+  Options net ............................ +$1,218.00
+  Stock, lot 1 (bought $55 W5, sold $62 W6) ......... +$700.00
+  Stock, lot 2 (bought $49 W9, sold $55 W20) ........ +$600.00
+  Stock, lot 4 (bought $33 W30, sold $34 W45) ....... +$100.00
+  Stock, lot 3 (bought $50 W28, held, marked $36.62)  -$1,338.00  (unrealized)
+  Interest on cash .......................   +$194.05
+                                           ----------
+                                           +$1,474.05
+
+Second half only (W27-52): premium +$641 (puts $414, calls $227),
+buy-backs -$276, stock +$100 realized and -$1,338 unrealized,
+interest +$68.05 = -$804.95.
+
+Market regimes over 52 weeks:
+  calm_up 19, selloff 11, chop 11, rebound 9, crash 2.
+  Second half: calm_up 11, selloff 6, rebound 5, chop 3, crash 1.
+  W28-W32 ran selloff, selloff, selloff, selloff, crash: SimQ fell from $58.11
+  to $17.94 (-69%) in five weeks, then rebounded to $26 by W36 and drifted to
+  $36.62 by year end.
+
+
+2. THE TRADES
+-------------
+66 trades: 44 puts, 22 covered calls. 49 opened Monday, 17 opened midweek.
+  Expired worthless .............. 34
+  Bought to close for profit ..... 21
+  Bought to close at a loss ......  4   (W6 C59 -$282, W9 P54 -$396,
+                                         W18 C52 -$25, W28 P47 -$242)
+  Puts assigned ..................  4   (W5 P55, W9 P49, W28 P50, W30 P33)
+  Calls called away ..............  3   (W6 C62, W20 C55, W45 C34)
+Win rate 52% (83% counting profitable closes).
+Average put premium 0.87% of collateral; average call premium 0.94% of share value.
+Wheel cycles completed: 3, all closed at a stock profit. One lot (lot 3) still open.
+Weeks with no trade at all: 10 (W15, W32, W36-W40, W48, W49, W52).
+
+Second half: 25 trades (19 Monday, 6 midweek).
+
+How the second half unfolded:
+  Week 27     Two Monday puts (P43, P41), both closed near full profit at
+              midweek, rolled to P47. Account peaked at $9,872.57.
+  Week 28     Two Monday puts again, P50 and P47 (14% and 19% below $58.11) in a
+              -22.4% selloff. You closed P47 for -$242, held P50 into assignment
+              at $50 (SimQ $45.12) and sold P35 with the rest. Lot 3 opened.
+  Weeks 29-30 Calls on lot 3 (C52, C51) above cost, plus a P33 each week with the
+              remaining cash. In W30 (-25%) the P33 was assigned with SimQ $0.05
+              below the strike. Lot 4 opened. Cash fell to about $1,480.
+  Week 31     C34 on lot 3, well below its $50 cost (expired; SimQ fell to $27.36).
+  Week 32     Crash, -34.4% to $17.94. No trades. Account -27% for the week.
+  Weeks 33-35 One P15 each week on the ~$1,500 of free cash: +$93 total.
+  Weeks 36-40 Five full passes. Neither lot carried a call; free cash (~$1,600)
+              only covered strikes of $15 or lower.
+  Weeks 41-45 Covered calls on lot 4 only (C31, C33, C36, C37/C34, C36/C34),
+              with two midweek roll-downs in W44 and W45. Called away at $34 in
+              W45 (+$100 stock, +$146 calls, +$11 put premium). Free cash back to $5,160.
+  Weeks 46-52 One put at a time on about half the cash (P28, P26, P29, P29);
+              all expired or closed near full profit. Three full passes
+              (W48, W49, W52). Lot 3 sat uncovered from W32 to the end.
+
+
+3. YOUR BEHAVIOR: PATTERNS IN THE JOURNAL
+------------------------------------------
+- Two-put Mondays carried into a selloff. The Run 2 habit of splitting nearly
+  all cash across two strikes worked through W27, then W28's -22% selloff put
+  both under water at once. The result was an assignment plus a -$242 close in
+  the same week, and only ~$1,500 free afterwards.
+
+- Two lots at once through a crash. After W30 you held 200 shares (costs $50
+  and $33) with almost no free cash. That combination is what turned a bad
+  stretch into a -48% drawdown: no premium to collect and no cash to sell puts
+  at the lows.
+
+- Calls below cost returned. W31 C34 on the $50 lot and W41 C31 on the $33 lot
+  were both under purchase price. Neither was exercised, so it cost nothing
+  here, but it breaks the "calls at or above cost" rule that worked in Run 2.
+
+- Long full passes. W36-W40 had no positions at all. With SimQ at $23-29 and
+  lot 4 bought at $33, near-cost calls had little or no bid, and the cash was
+  too small for puts. You chose to wait rather than write calls far below cost.
+
+- Smaller sizing after the drawdown. From W46 you ran one put at a time with
+  half the cash, closer to spot (5-16% below) than your first-half Monday puts.
+  Every one of them made money.
+
+- Midweek roll-downs on calls (W44, W45) to collect a second premium. The W45
+  roll to C34 was the one that got the shares called away, at a $100 profit.
+
+
+4. STRENGTHS
+------------
+- Still beat buy-and-hold by about 62 points and cash by about 16 points in a
+  year where SimQ lost 43% and fell as low as $17.94.
+- Option trading itself was clean: 83% profitable counting closes, only 4 losing
+  closes all year, and options netted +$1,218.
+- Every lot that was closed was closed at a stock profit (3 of 3).
+- You kept your head through the crash: no panic sales of shares at the lows,
+  and the account recovered from $5,096.88 to $8,974.05 (+76%) from W32.
+- Rule-following and clean books across 66 trades.
+
+
+5. WEAKNESSES
+-------------
+- Concentration in selloff stretches. Both second-half assignments (W28, W30)
+  came in consecutive selloff weeks, and the second added a lot while the first
+  was already down. Four selloff weeks in a row is rare, but in a 3x product a
+  run like W28-W32 can take a lot from $50 to $18.
+
+- Lot 3 was never worked after W31. At a $50 cost it needed SimQ to more than
+  double from the lows before a call at cost had any bid. It finished the year
+  $13.38 under water per share and accounts for the whole second-half loss.
+
+- Idle capital. Ten weeks with no trade at all. The W36-W40 stretch was mostly
+  forced (little cash, calls far below cost), but W48, W49 and W52 were passes
+  with $5,200+ free.
+
+- Two puts sized to nearly all cash leave no room to respond. Same note as Run 2,
+  but this time it was tested and it hurt.
+
+
+6. A NOTE ON THE SIM ITSELF
+---------------------------
+Regime labels and actual weekly price direction disagreed in 11 of the 41 weeks
+that had a directional regime (calm_up, rebound, selloff, crash), and 8 of 23 in
+the second half. Examples: W46 "rebound" -9.1%, W42 "selloff" +5.2%, W7
+"calm_up" -14.7%. Selloffs were mostly right (9 of 11 down); calm_up was the
+noisiest (7 of 19 down, though most of those were small). This may be intended
+noise within a regime, but it makes TRUE headlines look wrong after the fact.
+Worth a look in tools/pricing-review before Run 4 (how simq.py turns a regime
+into weekly drift and volatility).
+
+
+7. THINGS TO TRY IN RUN 4 (process, not strike picks)
+-------------------------------------------------------
+- Set a cap on how much cash is committed to puts at once (for example, keep
+  enough free to sell one more put after an assignment).
+- Decide in advance what you will do if a second put is likely to be assigned
+  while you already hold a lot. Closing it at midweek is the tool you already use.
+- Go back to the Run 2 rule: covered calls at or above cost. Write down an
+  exception rule in advance if you want one (for example, how far below cost).
+- Track idle weeks with free cash separately from weeks where cash was locked.
+- Keep the half-cash, one-put-at-a-time sizing from W46-W52 as a comparison
+  against two-put Mondays.
+
+Cross-run comparison:
+  Week 26 (official comparison window):
+    Run 1: $6,575.78  (-12.32%), pricing v1/v2
+    Run 2: $9,189.18  (+22.52%), pricing v2
+    Run 3: $9,779.00  (+30.39%), pricing v3, headlines v2
+  Week 52 (full year):
+    Run 2: $11,924.36 (+58.99%); buy-and-hold +1.36%
+    Run 3: $8,974.05  (+19.65%); buy-and-hold -42.60%
+  Runs 1-2 used older pricing/headline rules, so they are not strictly like-for-like.
