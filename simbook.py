@@ -239,7 +239,8 @@ def fq(b):
     return "no bid" if b <= 0 else f"{b:.2f}"
 
 
-def print_chain(rows, S, always=(), n=15, half=False, all_=False):
+def print_chain(rows, S, always=(), n=15, half=False, all_=False, marks=None):
+    marks = marks or {}
     disp = [r for r in rows if all_ or half or abs(r[0] - round(r[0])) < 1e-9 or r[0] in always]
     if not all_:
         idx = min(range(len(disp)), key=lambda i: abs(disp[i][0] - S))
@@ -250,7 +251,10 @@ def print_chain(rows, S, always=(), n=15, half=False, all_=False):
         for i, r in enumerate(disp):
             if r[0] in always:
                 keep.add(i)
+        gaps = {disp[i][0] for j, i in enumerate(sorted(keep)) if j and i - sorted(keep)[j - 1] > 1}
         disp = [disp[i] for i in sorted(keep)]
+    else:
+        gaps = set()
     print("| Call bid / ask | Strike | Put bid / ask |")
     print("|---|:---:|---|")
     marked = False
@@ -259,7 +263,10 @@ def print_chain(rows, S, always=(), n=15, half=False, all_=False):
             # spot marker row: calls above it are out of the money, puts below it are out of the money
             print(f"| ITM calls ▲ | **\\* SimQ {S:.2f} \\*** | ▼ ITM puts |")
             marked = True
-        print(f"| {fq(cb)} / {ca:.2f} | **{K:g}** | {fq(pb)} / {pa:.2f} |")
+        if K in gaps:
+            print("| ⋮ | ⋮ | ⋮ |")
+        tag = " ◆" if K in marks else ""
+        print(f"| {fq(cb)} / {ca:.2f} | **{K:g}**{tag} | {fq(pb)} / {pa:.2f} |")
     if not marked:
         print(f"| ITM calls ▲ | **\\* SimQ {S:.2f} \\*** | ▼ ITM puts |")
     return disp
@@ -330,8 +337,21 @@ def cmd_status(st):
 
 def show_chain(st, w, ph, r, **kw):
     S, rows = rows_at(st, w, ph)
-    always = tuple(tr["k"] for tr in r["open"])
-    disp = print_chain(rows, S, always=always, **kw)
+    # held share lots: mark the strike each was assigned at (its purchase price) so calls can be
+    # kept at or above cost; the row is always shown, even when it sits outside the trimmed window
+    marks = {}
+    for l in sorted(r["lots"].values(), key=lambda x: x["id"]):
+        marks.setdefault(l["cost"], []).append(l)
+    listed = {x[0] for x in rows}
+    always = tuple(tr["k"] for tr in r["open"]) + tuple(k for k in marks if k in listed)
+    disp = print_chain(rows, S, always=always, marks=marks, **kw)
+    if marks:
+        parts = []
+        for k, ls in sorted(marks.items()):
+            for l in ls:
+                where = "" if k in listed else ", above the listed chain"
+                parts.append(f"lot {l['id']} assigned at ${k:g} (basis ${basis(l):.2f}{where})")
+        print(f"◆ = held lot's assigned strike: " + "; ".join(parts))
     if not kw.get("all_"):
         print_lower_puts(rows, S, min(x[0] for x in disp if x[0] not in always or x[0] >= S))
 
