@@ -127,3 +127,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W37 mid**: held P11, P12
 - **W37 fri**: P11 expired worthless (+$3.00); SimQ 13.97
 - **W37 fri**: P12 expired worthless (+$9.00); SimQ 13.97
+- **W38 open**: passed
+- **W38 mid**: passed
