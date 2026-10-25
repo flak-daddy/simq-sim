@@ -69,3 +69,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W18 mid**: bought to close C52 at 0.42 (-$25.00)
 - **W18 mid**: sold C53 at 0.17 (SimQ 50.60)
 - **W18 fri**: C53 expired worthless (+$17.00); SimQ 51.57
+- **W19 open**: sold C54 at 0.62 (SimQ 51.57)
+- **W19 mid**: held C54
+- **W19 fri**: C54 expired worthless (+$62.00); SimQ 51.49
