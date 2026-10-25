@@ -145,3 +145,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W41 mid**: moved C31 cover to lot 4
 - **W41 mid**: held C31
 - **W41 fri**: C31 expired worthless (+$17.00); SimQ 29.92
+- **W42 open**: sold C33 at 0.11 (SimQ 29.92)
+- **W42 mid**: held C33
+- **W42 fri**: C33 expired worthless (+$11.00); SimQ 31.48
