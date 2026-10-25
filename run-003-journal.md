@@ -78,3 +78,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W21 open**: sold P49 at 0.23 (SimQ 57.68)
 - **W21 mid**: held P49
 - **W21 fri**: P49 expired worthless (+$23.00); SimQ 52.07
+- **W22 open**: sold P46 at 0.57 (SimQ 52.07)
+- **W22 mid**: sold P42 at 0.27 (SimQ 46.83)
+- **W22 fri**: P46 expired worthless (+$57.00); SimQ 46.02
+- **W22 fri**: P42 expired worthless (+$27.00); SimQ 46.02
