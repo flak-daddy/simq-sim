@@ -23,7 +23,7 @@ Before using either copy, check that simbook.py contains `print_week_pnl` and `h
 ## Commands (all in the working folder)
 - `python3 simbook.py open` : Monday open (spot, trimmed chain, lower-puts table, account line).
 - `python3 simbook.py hints` : Claude only. Hidden regime plus this week's 4-headline plan (TRUE / FALSE:<regime> / NOISE, in display order). Write the 4 headlines from it. Never show this output to the user.
-- `sell P|C STRIKE`, `btc ID`, `pass`, `note "user anecdote"`, `quote P|C STRIKE`, `chain [--all]`, `status`, `weekpnl W`
+- `sell P|C STRIKE [--lot N]` (calls pick their covering lot with --lot; default is the oldest free lot), `relot ID LOT` (move an open call to another free lot, logged in the journal), `btc ID`, `pass`, `note "user anecdote"`, `quote P|C STRIKE`, `chain [--all]`, `status`, `weekpnl W`
 - `python3 simbook.py mid` : midweek path, buy-to-close prices, trimmed chain, lower-puts table
 - `python3 simbook.py fri` : settle, post interest, print the week P&L breakdown, advance to next week
 - `python3 simbook.py new --run N --seed S` : start a new run on the current standard (seed from `python3 simq.py newseed`, keep hidden)

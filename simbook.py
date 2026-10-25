@@ -106,7 +106,10 @@ def replay(st, upto_week=None, upto_index=None):
             tr = dict(id=nid, w=e["w"], ph=e["ph"], kind=e["kind"], k=e["k"], fill=e["fill"],
                       ask=e["ask"], spot=e["spot"], status="open", close=None, lot=None,
                       end_w=None, end_spot=None)
-            if tr["kind"] == "C":
+            if tr["kind"] == "C" and e.get("lot") in lots:
+                tr["lot"] = e["lot"]
+                lots[e["lot"]]["credit"] += e["fill"] * 100
+            elif tr["kind"] == "C":
                 for lid, lot in lots.items():
                     if not any(x["lot"] == lid and x["status"] == "open" for x in trades.values()
                                if x["kind"] == "C"):
@@ -121,6 +124,13 @@ def replay(st, upto_week=None, upto_index=None):
             cash -= e["price"] * 100
             if tr["kind"] == "C" and tr["lot"] in lots:
                 lots[tr["lot"]]["credit"] -= e["price"] * 100
+        elif t == "relot":
+            # move an open covered call onto a different share lot (user's choice of cover)
+            tr = trades[e["id"]]
+            if tr["lot"] in lots:
+                lots[tr["lot"]]["credit"] -= tr["fill"] * 100
+            tr["lot"] = e["lot"]
+            lots[e["lot"]]["credit"] += tr["fill"] * 100
         elif t == "expire":
             tr = trades[e["id"]]
             tr["status"], tr["end_w"], tr["end_spot"] = "expired", e["w"], e["spot"]
@@ -449,7 +459,30 @@ def cmd_fri(st):
     print(f"Next: Week {w + 1} Monday open")
 
 
-def cmd_sell(st, kind, k):
+def lot_is_free(r, lid):
+    return lid in r["lots"] and not any(x["lot"] == lid and x["status"] == "open" and x["kind"] == "C"
+                                        for x in r["trades"].values())
+
+
+def cmd_relot(st, tid, lid):
+    w, ph = st["week"], st["phase"]
+    if ph == "fri":
+        sys.exit("Friday is settlement; no changes.")
+    r = replay(st)
+    tr = r["trades"].get(tid)
+    if not tr or tr["status"] != "open" or tr["kind"] != "C":
+        sys.exit(f"#{tid} is not an open covered call.")
+    if tr["lot"] == lid:
+        sys.exit(f"#{tid} is already covered by lot {lid}.")
+    if not lot_is_free(r, lid):
+        sys.exit(f"Lot {lid} is not held or already covers an open call.")
+    st["events"].append({"w": w, "ph": ph, "t": "relot", "id": tid, "lot": lid})
+    r = replay(st)
+    b = ", ".join(f"lot {l['id']} basis ${basis(l):.2f}" for l in r["lots"].values())
+    print(f"#{tid} {contract(tr)} now covered by lot {lid} (was lot {tr['lot']}); {b}")
+
+
+def cmd_sell(st, kind, k, lot=None):
     kind = kind.upper()
     w, ph = st["week"], st["phase"]
     if ph == "fri":
@@ -467,7 +500,12 @@ def cmd_sell(st, kind, k):
                  f"(Collateral is strike x 100; shares do not collateralize a put.)")
     if kind == "C" and free_calls(r) < 1:
         sys.exit("No uncovered shares: a call must be covered by 100 shares you hold (no naked calls).")
-    st["events"].append({"w": w, "ph": ph, "t": "sell", "kind": kind, "k": k, "fill": bid, "ask": ask, "spot": S})
+    ev = {"w": w, "ph": ph, "t": "sell", "kind": kind, "k": k, "fill": bid, "ask": ask, "spot": S}
+    if kind == "C" and lot is not None:
+        if not lot_is_free(r, lot):
+            sys.exit(f"Lot {lot} is not held or already covers an open call.")
+        ev["lot"] = lot
+    st["events"].append(ev)
     r = replay(st)
     tr = max(r["trades"].values(), key=lambda x: x["id"])
     extra = f"collateral {money(k * 100)}, free cash {money(r['free'])}" if kind == "P" else \
@@ -534,6 +572,9 @@ def render_journal(st):
                    "assign": f"{contract(tr)} assigned, bought 100 at ${e['k']:.2f}",
                    "called": f"{contract(tr)} called away, sold 100 at ${e['k']:.2f}"}[t]
             tag, what = f"W{w} fri", f"{res}; SimQ {e['spot']:.2f}"
+        elif t == "relot":
+            r = replay(st, upto_index=i)
+            what = f"moved {contract(r['trades'][e['id']])} cover to lot {e['lot']}"
         elif t == "note":
             if lines:
                 lines[-1] += f' — your read: "{e["text"]}"'
@@ -721,7 +762,9 @@ def main(argv):
     elif cmd == "fri":
         cmd_fri(st)
     elif cmd == "sell":
-        cmd_sell(st, a[1], float(a[2]))
+        cmd_sell(st, a[1], float(a[2]), lot=int(a[a.index("--lot") + 1]) if "--lot" in a else None)
+    elif cmd == "relot":
+        cmd_relot(st, int(a[1]), int(a[2]))
     elif cmd == "btc":
         cmd_btc(st, int(a[1]))
     elif cmd == "pass":
