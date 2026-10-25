@@ -3,14 +3,14 @@
 - Seed: 867728425 | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-004-journal.md
 
-## Current state (Week 9, Monday open)
-- SimQ spot: $44.62
-- Cash: $3,118.68 | locked collateral: $0.00 | free: $3,118.68
-- Shares: 100 SimQ bought at $45.00 in Week 7; effective basis $43.87 after option premiums
+## Current state (Week 10, Monday open)
+- SimQ spot: $46.23
+- Cash: $7,857.16 | locked collateral: $0.00 | free: $7,857.16
+- Shares: 0
 - Open positions: none
-- Premium collected (gross): $742.00 | buy-to-close costs: $666.00 | interest: $42.68
-- Realized P&L (options net of buy-backs + stock sales): +$76.00 (options +$76.00, stock +$0.00)
-- Account value: $7,580.68 (+1.08% vs start)
+- Premium collected (gross): $883.00 | buy-to-close costs: $672.00 | interest: $46.16
+- Realized P&L (options net of buy-backs + stock sales): +$311.00 (options +$211.00, stock +$100.00)
+- Account value: $7,857.16 (+4.76% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -28,6 +28,13 @@
 | 11 | SIMQ-W07-P50 | W7 open | $50 | 0.57 / 0.61 | $57.00 | $5,000.00 cash | Bought to close at 3.81 ($381.00), net -$324.00 | premium 1.14% of collateral |
 | 12 | SIMQ-W07-P45 | W7 mid | $45 | 1.13 / 1.20 | $113.00 | $4,500.00 cash | ASSIGNED: bought 100 at $45.00 (Fri SimQ 38.80) | premium 2.51% of collateral |
 | 13 | SIMQ-W08-P25 | W8 open | $25 | 0.31 / 0.33 | $31.00 | $2,500.00 cash | Bought to close at 0.01 ($1.00), net +$30.00 | premium 1.24% of collateral |
+| 14 | SIMQ-W09-C49 | W9 open | $49 | 0.67 / 0.72 | $67.00 | lot 1 | Bought to close at 0.06 ($6.00), net +$61.00 | premium 1.50% of share value |
+| 15 | SIMQ-W09-C46 | W9 mid | $46 | 0.74 / 0.79 | $74.00 | lot 1 | CALLED AWAY: sold 100 at $46.00 (Fri SimQ 46.23) | premium 1.62% of share value |
+
+## Closed share lots
+| Bought | Sold | Stock P&L | Net after option premiums |
+|---|---|---|---|
+| W7 at $45.00 | W9 at $46.00 | +$100.00 | +$348.00 |
 
 ## Weeks
 | Week | Regime | Open | Mon | Tue | Wed | Thu | Fri | Week % | Interest |
@@ -40,9 +47,11 @@
 | 6 | selloff | 66.31 | 67.79 | 69.92 | 67.37 | 63.85 | 61.64 | -7.0% | 5.97 (7,786.40 x 7d) |
 | 7 | crash | 61.64 | 58.31 | 48.35 | 46.99 | 45.51 | 38.80 | -37.1% | 4.92 (7,849.37 x 3d; 7,581.37 x 2d; 3,081.37 x 2d) |
 | 8 | rebound | 38.80 | 38.89 | 40.18 | 39.94 | 40.86 | 44.62 | +15.0% | 2.39 (3,117.29 x 3d; 3,116.29 x 4d) |
+| 9 | calm_up | 44.62 | 45.18 | 45.58 | 45.80 | 46.29 | 46.23 | +3.6% | 3.48 (3,185.68 x 3d; 3,253.68 x 2d; 7,853.68 x 2d) |
 
 ## Scorecard
-- 13 trades: 6 expired worthless, 4 closed for profit, 2 closed at a loss, 1 assigned, 0 called away | win rate 46% (77% counting profitable closes)
+- 15 trades: 6 expired worthless, 5 closed for profit, 2 closed at a loss, 1 assigned, 1 called away | win rate 40% (73% counting profitable closes)
 - Avg put premium: 1.13% of collateral
-- Wheel cycles completed (shares called away): 0
+- Avg call premium: 1.56% of share value at sale
+- Wheel cycles completed (shares called away): 1
 - Account value at week 26 (comparison metric): pending
