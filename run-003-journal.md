@@ -159,3 +159,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W45 mid**: bought to close C36 at 0.01 (+$26.00)
 - **W45 mid**: sold C34 at 0.14 (SimQ 32.54)
 - **W45 fri**: C34 called away, sold 100 at $34.00; SimQ 34.21
+- **W46 open**: passed
+- **W46 mid**: sold P28 at 0.24 (SimQ 30.76)
+- **W46 fri**: P28 expired worthless (+$24.00); SimQ 31.08
