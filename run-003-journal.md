@@ -47,3 +47,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W12 open**: sold C46 at 0.21 (SimQ 39.04)
 - **W12 mid**: bought to close P30 at 0.01 (+$31.00)
 - **W12 mid**: bought to close C46 at 0.01 (+$20.00)
+- **W13 open**: sold P34 at 0.13 (SimQ 39.38)
+- **W13 mid**: bought to close P34 at 0.02 (+$11.00)
+- **W13 mid**: passed
