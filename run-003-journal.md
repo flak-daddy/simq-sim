@@ -60,3 +60,8 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W16 open**: sold P34 at 0.17 (SimQ 44.03)
 - **W16 mid**: bought to close C50 at 0.01 (+$27.00)
 - **W16 fri**: P34 expired worthless (+$17.00); SimQ 49.02
+- **W17 open**: sold C55 at 0.46 (SimQ 49.02)
+- **W17 open**: sold P32.5 at 0.04 (SimQ 49.02)
+- **W17 mid**: held C55, P32.5
+- **W17 fri**: C55 expired worthless (+$46.00); SimQ 47.49
+- **W17 fri**: P32.5 expired worthless (+$4.00); SimQ 47.49
