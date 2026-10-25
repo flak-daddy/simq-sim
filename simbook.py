@@ -5,7 +5,8 @@ All state is an append-only event log in run-NNN-state.json. Cash, positions, in
 scorecard, ledger and journal are derived by replaying that log, so nothing is retyped.
 
 Commands (run from the folder holding simq.py, simbook.py and the state file):
-  new --run N --seed S      create a fresh run (seed from `simq.py newseed`)
+  new --run N --seed S [--headlines v3]   create a fresh run (seed from `simq.py newseed`);
+                            v3 = scripted headlines printed by `open` (opinion can mislead, data never does)
   open                      show the current week's Monday-open package (account + chain)
   mid                       advance to midweek: Mon-Wed path, buy-to-close prices, new chain
   fri                       advance to Friday: settle, post interest, advance to next week
@@ -25,6 +26,7 @@ Options: --state PATH (default: highest run-*-state.json next to this script)
 import sys, os, json, glob, io, contextlib
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import simq
+import headlines
 
 DAY = {"open": 0, "mid": 3, "fri": 5}
 PH = {"open": "Monday open", "mid": "Wednesday close", "fri": "Friday close"}
@@ -341,6 +343,8 @@ def cmd_open(st, **kw):
     r = replay(st)
     S = view(st, w, "open")[0]
     print(f"SimQ Week {w}, Monday open | spot ${S:.2f} | 5 trading days to Friday close")
+    if st.get("headlines") == "v3":
+        headlines.print_monday(st["seed"], w, wk(st, w)[0])
     print(acct_line(st, r, w, "open"))
     show_chain(st, w, "open", r, **kw)
 
@@ -711,6 +715,9 @@ def headline_plan(st, w):
 
 
 def cmd_hints(st, w):
+    if st.get("headlines") == "v3":
+        sys.exit("This run uses scripted headlines (v3): `open` prints them. "
+                 "Friday shows the regime only. No hints needed.")
     reg, slots = headline_plan(st, w)
     print(f"Week {w} regime (hidden): {reg} ({REG_LABEL[reg]})")
     print("Headline plan, in display order:")
@@ -747,8 +754,11 @@ def main(argv):
     if cmd == "new":
         run = int(a[a.index("--run") + 1])
         seed = int(a[a.index("--seed") + 1])
+        hv = a[a.index("--headlines") + 1] if "--headlines" in a else None
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)), f"run-{run:03d}-state.json")
         st = new_state(run, seed)
+        if hv:
+            st["headlines"] = hv
         save(st, path)
         render(st, path)
         print(f"Created {path}")
