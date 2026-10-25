@@ -36,3 +36,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W9 fri**: C46 called away, sold 100 at $46.00; SimQ 46.23
 - **W10 open**: passed
 - **W10 mid**: passed
+- **W11 open**: sold P35 at 0.13 (SimQ 41.18)
+- **W11 mid**: bought to close P35 at 0.01 (+$12.00)
