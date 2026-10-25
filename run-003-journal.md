@@ -24,3 +24,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W6 mid**: bought to close C59 at 4.01 (-$282.00)
 - **W6 mid**: sold C62 at 1.97 (SimQ 61.88)
 - **W6 fri**: C62 called away, sold 100 at $62.00; SimQ 74.90
+- **W7 open**: sold P64.5 at 1.04 (SimQ 74.90)
+- **W7 mid**: bought to close P64.5 at 0.73 (+$31.00)
+- **W7 mid**: sold P62 at 0.19 (SimQ 65.90)
+- **W7 fri**: P62 expired worthless (+$19.00); SimQ 63.92
