@@ -166,3 +166,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W47 mid**: bought to close P26 at 0.01 (+$32.00)
 - **W48 open**: passed
 - **W48 mid**: passed
+- **W49 open**: passed
+- **W49 mid**: passed
