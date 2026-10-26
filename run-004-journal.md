@@ -140,3 +140,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W41 mid**: bought to close P13 at 0.01 (+$4.00)
 - **W41 mid**: bought to close P14 at 0.01 (+$10.00)
 - **W41 mid**: bought to close P15 at 0.01 (+$21.00)
+- **W42 open**: sold P16 at 0.19 (SimQ 17.32)
+- **W42 mid**: held P16
+- **W42 fri**: P16 expired worthless (+$19.00); SimQ 17.26
