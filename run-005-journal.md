@@ -50,3 +50,9 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W13 mid**: moved C35 cover to lot 2
 - **W13 mid**: held C35
 - **W13 fri**: C35 called away, sold 100 at $35.00; SimQ 36.94
+- **W14 open**: sold P33.5 at 0.17 (SimQ 36.94)
+- **W14 open**: sold C41 at 0.05 (SimQ 36.94)
+- **W14 mid**: bought to close P33.5 at 0.05 (+$12.00)
+- **W14 mid**: sold P36.5 at 0.32 (SimQ 38.82)
+- **W14 fri**: C41 expired worthless (+$5.00); SimQ 40.26
+- **W14 fri**: P36.5 expired worthless (+$32.00); SimQ 40.26
