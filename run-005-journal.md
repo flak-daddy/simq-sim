@@ -69,3 +69,9 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W18 open**: sold P48.5 at 0.49 (SimQ 52.89)
 - **W18 mid**: held P48.5
 - **W18 fri**: P48.5 expired worthless (+$49.00); SimQ 50.81
+- **W19 open**: sold P39 at 0.17 (SimQ 50.81)
+- **W19 open**: sold P41 at 0.30 (SimQ 50.81)
+- **W19 mid**: bought to close P39 at 0.01 (+$16.00)
+- **W19 mid**: bought to close P41 at 0.01 (+$29.00)
+- **W19 mid**: sold P50 at 0.20 (SimQ 54.98)
+- **W19 fri**: P50 expired worthless (+$20.00); SimQ 52.87
