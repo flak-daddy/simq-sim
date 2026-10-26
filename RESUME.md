@@ -3,7 +3,7 @@
 Rules: claude/csp-ledger-branch-cc.md. Index: claude/run-index.md. Calibration: claude/market-calibration.md. Books are kept by script; do not hand-edit ledgers.
 
 ## Active run
-**None.** Run 4 closed after Week 52 (Sun 2026-10-25). Start Run 5 (first run on market v2) with the steps below; use /home/claude/simq-run5/ as the working folder.
+**Run 5** (market v2, started Oct 26, 2026), working folder /home/claude/simq-run5/. Seed hidden until Week 52. `python3 simbook.py status` shows where it stands.
 Last closed: Run 4 after Week 52 (Sun 2026-10-25): $5,995.09 (-20.07%), holding 500 shares in five lots (costs $25, $12, $13, $10.50, $9.50; marked $8.78); buy-and-hold SimQ $1,032.13 (-86.24%); cash-only $7,799.18 (+3.99%). Week 26 comparison figure $8,255.14 (+10.07%). Seed 867728425. Review: claude/run-004-summary.txt.
 Previous: Run 3 closed after Week 52: $8,974.05 (+19.65%); Week 26 figure $9,779.00 (+30.39%). Seed 943118079. Review: claude/run-003-summary.txt.
 To start a new run: `python3 simq.py newseed` (keep the seed hidden), then `python3 simbook.py new --run N --seed S`, and follow the same setup and weekly flow below with run-NNN files. (The regime-vs-direction question from run-003-summary.txt section 6 was checked: by design, see market-calibration.md.)
@@ -45,6 +45,7 @@ Before using either copy, check that simbook.py contains `print_week_pnl`, `head
 - Journal: one line per move, user anecdote added only if given.
 - Auto-advance: when the user sells a put/call at Monday open, record the fill and immediately run `mid` in the same turn (show the fill line, then the midweek package). Don't stop to ask.
 - At midweek, "hold" means hold and settle Friday. When the user acts at midweek (buy to close and/or sell new), execute it and settle Friday in the same turn.
+- Friday then Monday (restored Oct 26, 2026, Run 5 Week 2): after settling Friday and doing the Friday push, run `open` for the next Monday in the same turn and show it after the Friday package. Separate each day's package (fill, midweek, Friday, next Monday) with a page-break line "-----------------".
 
 ## After each Friday (only then)
 1. Copy the run's state/ledger/journal (and any changed scripts or rule docs) from the working folder into the repo clone, then `git add -A && git commit -m "Run N Week W" && git push` (end the commit message with the session's attribution lines). One commit per sim week; no mid-week pushes.
