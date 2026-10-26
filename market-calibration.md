@@ -110,6 +110,33 @@ Effect on the pricing-v3 put-seller check (tools/pricing-review/market_v2.py, 30
 | Wednesday, 10% below spot | +0.03% | +0.10% |
 | Wednesday, 15% below spot | -0.00% | +0.02% |
 
-Per-regime edges are unchanged (Monday 15% put under v2: calm_up +0.41%, chop +0.53%, rebound +1.21%, selloff -1.19%, crash -3.61%); the blind-seller edge turns positive only because calm and rebound weeks are now more common. That is the real-world variance risk premium showing up in a rising market, but it does make blind put selling profitable on average (about +0.2-0.4% of collateral per week on Mondays). Whether to trim calm/chop implied vol to restore a near-zero blind edge is an open decision (it would be a pricing v4, separate from market v2). Decision (user, Oct 26, 2026): keep pricing v3 for Run 5; ask again after Run 5 closes, before Run 6 starts (flagged in RESUME.md).
+Per-regime edges are unchanged (Monday 15% put under v2: calm_up +0.41%, chop +0.53%, rebound +1.21%, selloff -1.19%, crash -3.61%); the blind-seller edge turns positive only because calm and rebound weeks are now more common. That is the real-world variance risk premium showing up in a rising market, but it does make blind put selling profitable on average (about +0.2-0.4% of collateral per week on Mondays). Whether to trim calm/chop implied vol to restore a near-zero blind edge is an open decision (it would be a pricing v4, separate from market v2). Decision (user, Oct 26, 2026): keep pricing v3 for Run 5; ask again after Run 5 closes. Decided after Run 5 (user, Oct 26, 2026): no pricing v4. The user considers the spread fair over the long haul, so pricing v3 stays the standard.
 
 Versioning: state field `market` ("v2" written by `simbook.py new` from Run 5; absent = v1, so Runs 1-4 replay unchanged, verified byte-for-byte on ledgers, journals, status and week P&L). `simq.py` standalone commands (meta/open/mid/fri) default to v1.
+
+
+## Market v3: two transition rows adjusted (Oct 26, 2026, after Run 5; standard from Run 6)
+
+Change (user, after Run 5): crash -> rebound .55 -> .45, with the freed .10 going to crash -> chop (.15 -> .25); selloff -> rebound .30 -> .35, taken from selloff -> chop (.30 -> .25). crash -> crash (.10) and selloff -> selloff (.20) unchanged, as are all other rows and every regime's drift, volatility, implied vol, skew and spreads.
+
+| From \ to | calm_up | chop | selloff | crash | rebound |
+|---|---|---|---|---|---|
+| selloff | .12 | .25 (.30) | .20 | .08 | .35 (.30) |
+| crash | .00 | .25 (.15) | .20 | .10 | .45 (.55) |
+(v2 values in parentheses; other rows as in market v2.)
+
+Monte Carlo (tools/pricing-review/market_v3.py; 8,000 years for the distribution, 300 for the put edge):
+
+| | Market v2 | Market v3 |
+|---|---|---|
+| Regime mix (calm_up / chop / selloff / crash / rebound) | 51 / 25 / 11 / 3 / 9% | 51 / 25 / 11 / 3 / 9% |
+| SimQ median year | +7.0% | +7.7% |
+| SimQ 10th / 90th percentile | -60.0% / +164.5% | -59.8% / +165.0% |
+| Years finishing up | 54% | 54% |
+| Crash / selloff weeks per year | 1.6 / 5.9 | 1.7 / 6.0 |
+| Median worst in-year drawdown | -52% | -52% |
+| Blind Monday put 10% / 15% below spot (edge, % collateral/week) | +0.36% / +0.21% | +0.37% / +0.22% |
+
+The two rows only apply in the week after a crash or selloff (about 14% of weeks), so the annual statistics barely move; the differences above are within simulation noise. The effect is on the shape of recoveries: after a crash, chop is now more likely and an immediate rebound less likely; after a selloff, a rebound is a little more likely.
+
+Versioning: state field `market` = "v3" is written by `simbook.py new` from Run 6. Run 5 keeps "v2" and Runs 1-4 have no field (v1); replays of Runs 2-5 were verified byte-for-byte on ledgers and journals after the change. (Run 1's stored ledger already differed from a fresh render before this change, in the midweek ask shown for held positions, because Run 1 predates the pricing fields; fills are stored and unaffected.)

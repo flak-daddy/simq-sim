@@ -3,16 +3,15 @@
 Rules: claude/csp-ledger-branch-cc.md. Index: claude/run-index.md. Calibration: claude/market-calibration.md. Books are kept by script; do not hand-edit ledgers.
 
 ## Active run
-**None.** Run 5 closed after Week 52 (Mon 2026-10-26). Before starting Run 6, settle the two pending items below with the user; then start Run 6 with the steps below, using /home/claude/simq-run6/ as the working folder.
+**None.** Run 5 closed after Week 52 (Mon 2026-10-26). Start Run 6 (first run on market v3) with the steps below, using /home/claude/simq-run6/ as the working folder.
 Last closed: Run 5 after Week 52 (Mon 2026-10-26): $11,409.90 (+52.13%), all cash; buy-and-hold SimQ $9,148.12 (+21.97%); cash-only $7,799.18 (+3.99%). Week 26 comparison figure $9,410.86 (+25.48%). Seed 526270675. First run on market v2. Review: claude/run-005-summary.txt.
 Previous: Run 4 after Week 52 (Sun 2026-10-25): $5,995.09 (-20.07%), holding 500 shares in five lots (costs $25, $12, $13, $10.50, $9.50; marked $8.78); buy-and-hold SimQ $1,032.13 (-86.24%); cash-only $7,799.18 (+3.99%). Week 26 comparison figure $8,255.14 (+10.07%). Seed 867728425. Review: claude/run-004-summary.txt.
 Previous: Run 3 closed after Week 52: $8,974.05 (+19.65%); Week 26 figure $9,779.00 (+30.39%). Seed 943118079. Review: claude/run-003-summary.txt.
 To start a new run: `python3 simq.py newseed` (keep the seed hidden), then `python3 simbook.py new --run N --seed S`, and follow the same setup and weekly flow below with run-NNN files. (The regime-vs-direction question from run-003-summary.txt section 6 was checked: by design, see market-calibration.md.)
 At Week 52 of any run: reveal the seed, write claude/run-NNN-summary.txt (full-year review), set the closed status_note, update run-index.md.
-**PENDING DECISION (ask the user, do not skip):** after Run 5 closes, and before Run 6 starts, ask the user whether to make pricing v4: trim calm/chop implied vol so a blind put seller breaks even again under market v2 (currently about +0.36% of collateral/week for a Monday put 10% below spot). The user chose on Oct 26, 2026 to leave pricing at v3 for Run 5 and to be asked again then. Background: market-calibration.md, "Market v2", last paragraphs. Remove this note once the user has decided.
-**PENDING REMINDER (ask the user, do not skip):** at Run 5 close-out, remind the user to consider adjusting the market v2 selloff / crash / rebound transition rates (TRANS_V2 in simq.py). Requested Oct 26, 2026 during Run 5 Week 6. Remove this note once raised and the user has decided.
+Decisions after Run 5 (user, Oct 26, 2026): (1) no pricing v4, pricing v3 stays (spread judged fair over the long haul); (2) market v3 adopted: crash -> rebound .45 (freed .10 to crash -> chop), selloff -> rebound .35 (from selloff -> chop); see market-calibration.md, "Market v3". Review of Run 5 against Run 1 and a blind-wheel baseline: claude/run-005-vs-run-001-review.txt.
 Previous: Run 2 closed after Week 52: $11,924.36 (+58.99%); Week 26 figure $9,189.18 (+22.52%). Review: claude/run-002-summary.txt.
-New runs automatically use the current standard (pricing v3, headlines v3, market v2): `simbook.py new` writes `pricing: "v3"`, `headlines: "v3"` and `market: "v2"` into the state (`--headlines v2` for the old style). Market v2 (from Run 5) gives the index an upward drift and less sticky selloffs; see market-calibration.md, "Market v2". Old states without those fields replay exactly as they were played (Runs 1-4 use market v1).
+New runs automatically use the current standard (pricing v3, headlines v3, market v3): `simbook.py new` writes `pricing: "v3"`, `headlines: "v3"` and `market: "v3"` into the state (`--headlines v2` for the old style). Market v2 (from Run 5) gives the index an upward drift and less sticky selloffs; see market-calibration.md, "Market v2". Old states replay exactly as they were played (Runs 1-4 have no market field and use market v1; Run 5 uses market v2). Market v3 (from Run 6) changes two rows of v2; see "Market v3".
 A closed run's ledger shows its closed status via a `status_note` (or older `status`) key in its state file.
 
 ## Setup (once per chat) — via GitHub, no retyping
@@ -23,7 +22,7 @@ Code, rule docs and state live in the private repo **flak-daddy/simq-sim** (bran
 4. `python3 simbook.py status` (in the working folder) confirms where the run stands.
 Do NOT project_read the scripts and re-Write them; that is the token-expensive path this replaces.
 Fallback only if GitHub is unreachable: project_read claude/simq.py, claude/simbook.py, claude/run-NNN-state.json and save them locally.
-Before using either copy, check that simbook.py contains `print_week_pnl`, `headline_plan` and `chain_window`, and simq.py contains `SKEW_V2`, `REG3_IV` and `TRANS_V2`. If not, it's stale.
+Before using either copy, check that simbook.py contains `print_week_pnl`, `headline_plan` and `chain_window`, and simq.py contains `SKEW_V2`, `REG3_IV`, `TRANS_V2` and `TRANS_V3`. If not, it's stale.
 
 ## Commands (all in the working folder)
 - `python3 simbook.py open` : Monday open (spot, full chain table, account line).

@@ -56,7 +56,18 @@ TRANS_V2 = {
     "crash":   {"calm_up": .00, "chop": .15, "selloff": .20, "crash": .10, "rebound": .55},
     "rebound": {"calm_up": .50, "chop": .25, "selloff": .10, "crash": .02, "rebound": .13},
 }
-MARKET = "v1"  # regime-transition table: "v1" (Runs 1-4) or "v2" (standard for new runs from Run 5); set by simbook
+# Market v3 (Oct 26, 2026, after Run 5; standard from Run 6): v2 with two rows changed by the user.
+# crash -> rebound .55 -> .45 (the .10 moves to crash -> chop .15 -> .25); selloff -> rebound .30 -> .35
+# (taken from selloff -> chop .30 -> .25). crash -> crash .10 and selloff -> selloff .20 unchanged.
+TRANS_V3 = {
+    "calm_up": {"calm_up": .68, "chop": .20, "selloff": .08, "crash": .02, "rebound": .02},
+    "chop":    {"calm_up": .43, "chop": .33, "selloff": .14, "crash": .03, "rebound": .07},
+    "selloff": {"calm_up": .12, "chop": .25, "selloff": .20, "crash": .08, "rebound": .35},
+    "crash":   {"calm_up": .00, "chop": .25, "selloff": .20, "crash": .10, "rebound": .45},
+    "rebound": {"calm_up": .50, "chop": .25, "selloff": .10, "crash": .02, "rebound": .13},
+}
+TRANS_BY_MARKET = {"v1": TRANS, "v2": TRANS_V2, "v3": TRANS_V3}
+MARKET = "v1"  # regime-transition table: "v1" (Runs 1-4), "v2" (Run 5) or "v3" (standard from Run 6); set by simbook
 
 
 def t_draw(rng, df=4):
@@ -73,7 +84,7 @@ def gen_week(w):
             if k >= w0:
                 seed_k = s0
         rng = random.Random(seed_k * 1000 + k)
-        probs = (TRANS_V2 if MARKET == "v2" else TRANS)[reg]
+        probs = TRANS_BY_MARKET[MARKET][reg]
         reg = rng.choices(list(probs), weights=list(probs.values()))[0]
         p = REG[reg]
         s_open, closes, ivs, ivs2, ivs3 = S, [], [iv_prev], [iv_prev2], [iv_prev3]

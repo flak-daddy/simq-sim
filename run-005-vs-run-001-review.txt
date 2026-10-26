@@ -1,0 +1,152 @@
+SIMQ REVIEW: RUN 5 VS RUN 1 (AND VS A BLIND BASELINE)
+=====================================================
+Written: Mon 2026-10-26, after Run 5 closed
+Question: what made Run 5 more profitable than Run 1? The seed, the pricing, or better
+moves? And is +52% a sign of skill, or is the model tilted toward profit?
+Tool: tools/pricing-review/wheel_compare.py (reproduces every number below)
+
+
+1. THE HEADLINE NUMBERS
+-----------------------
+                       Run 1 (26 weeks)          Run 5 (26 weeks)    Run 5 (52 weeks)
+  Your account         $6,575.78 (-12.32%)      $9,410.86 (+25.48%)  $11,409.90 (+52.13%)
+  Buy-and-hold SimQ    -56.85% ($63.80->27.53)  -21.13% (->50.32)    +21.97% (->77.82)
+  Cash at 4%           +1.99%                   +1.99%               +3.99%
+  Market model         v1 (downward drift)      v2 (upward drift)    v2
+  Pricing              older (v1/v2)            v3                   v3
+
+Run 1 stopped at Week 26, so the like-for-like comparison is Week 26: a 37.8-point gap
+(+25.48% against -12.32%).
+
+
+2. METHOD: A BLIND BASELINE
+---------------------------
+To separate the three causes, the same mechanical wheel was run on both runs' exact
+price paths under each pricing version:
+  - Every Monday, sell a put 10% (or 15%) below spot with all free cash.
+  - Hold to Friday, with no midweek management.
+  - If assigned, sell a covered call each Monday at the higher of the lot's cost or 5%
+    above spot, held to Friday.
+  - Cash earns 4%.
+It never reads headlines, never closes early, and never changes its distance. Whatever
+it earns is what the path and pricing hand out for free. The gap between it and you is
+your contribution.
+
+Blind wheel results (account % change):
+
+                         Run 1 path, 26w   Run 5 path, 26w   Run 5 path, 52w
+  10% put, pricing v1        -26.3%            +9.2%            +36.0%
+  10% put, pricing v3        -21.5%           +14.9%            +54.2%
+  15% put, pricing v1         -3.4%            +9.8%            +21.5%
+  15% put, pricing v3         +2.7%           +17.8%            +43.8%
+  Your actual result         -12.3%           +25.5%            +52.1%
+
+
+3. CAUSE 1: THE PATH (SEED AND MARKET MODEL), THE BIGGEST FACTOR
+-------------------------------------------------------------------
+Holding the rules and the pricing fixed (v3) and changing only the path:
+  10% wheel: -21.5% on Run 1's path vs +14.9% on Run 5's path = 36 points
+  15% wheel:  +2.7% on Run 1's path vs +17.8% on Run 5's path = 15 points
+
+Run 1's path lost 57% in 26 weeks, with 11 selloff or crash weeks in a downward-drifting
+market (v1). Run 5's path lost 21% in its first half, then rose 55% in the second. Part
+of that is the seed and part is the market model: market v1's median year was about -55%
+for SimQ, while market v2's is about +4% to +7%.
+
+Most of the 38-point gap between Run 1 and Run 5 at Week 26 is here. A rule that never
+thinks would have made 15-36 points more on Run 5's path than on Run 1's.
+
+
+4. CAUSE 2: PRICING, A REAL BUT SMALLER FACTOR
+----------------------------------------------
+Average Monday bid as % of strike:
+                          Run 1 path       Run 5 path
+  10% below, pricing v1     0.62%            0.50%
+  10% below, pricing v3     1.55%            1.33%
+  15% below, pricing v1     0.19%            0.14%
+  15% below, pricing v3     0.91%            0.75%
+
+Pricing v3 pays roughly 2.5x (10% out) to 5x (15% out) what v1 paid for the same put,
+mostly because of skew. In the blind wheel that is worth about 5-8 points over 26 weeks,
+and 18-22 points over Run 5's 52 weeks. It matters most for the far-OTM puts you sold in
+Run 5 (13% below spot on average); in v1 those paid next to nothing.
+
+
+5. CAUSE 3: YOUR DECISIONS, POSITIVE BUT MODEST
+-----------------------------------------------
+Run 1 (your -12.3%):
+  Between the two blind rules: 14 points better than the 10% wheel (-26.3%) and 9 points
+  worse than the 15% wheel (-3.4%), on v1 pricing.
+  What cost you: puts 4-7% below spot in calm weeks, two assignments held into a falling
+  market, and calls written below cost (the W10 C48 locked in -$450).
+
+Run 5, first half (your +25.5%):
+  8-11 points better than both blind rules (+14.9%, +17.8%). This is where your moves
+  clearly helped: cutting the W2 P55 and W3 P42 at midweek instead of taking assignment, keeping
+  calls at or above cost, rerouting the W13 call onto the cheaper lot, and getting every
+  lot called away at a profit.
+
+Run 5, second half (your +21.2%):
+  Behind the 10% wheel (+34.2% for the half) and level with the 15% wheel (+22.1%). In a
+  rising market, the blind 10% rule kept all its cash in a put close to spot every week
+  and got paid for it. You closed early, passed some Mondays, and often sold further out,
+  which gave up premium in exchange for safety that this half didn't need.
+
+Run 5, full year (your +52.1%):
+  About the same as the blind 10% wheel (+54.2%) and 8 points ahead of the blind 15%
+  wheel (+43.8%). Your process was better than Run 1's in identifiable ways, but on this
+  path a rule that never looked at a headline did about as well.
+
+Habit changes from Run 1 to Run 5 that did show up in results:
+  - Cut losers at midweek (W2, W3, W38, W41) rather than riding into assignment.
+  - Calls at or above cost on every lot; all four lots called away at a stock profit
+    (Run 1: one lot called away at -$450, one held at -$1,497).
+  - Put distance about 13% below spot on average (Run 1: 4-7% in calm weeks).
+
+
+6. IS THE MODEL TILTED TOWARD PROFIT? YES, BY ABOUT +20% A YEAR
+-------------------------------------------------------------
+The +0.36% figure is not index drift. It is the blind put seller's average profit per
+week (premium minus payouts, as % of collateral) for a Monday put 10% below spot under
+market v2 and pricing v3. Compounded over 52 weeks it is roughly +20% a year, and the
+Monte Carlo confirms it:
+
+Blind wheel over 600 random 52-week years, pricing v3:
+                     10% put: median   p10 / p90         beats cash   Run 5's +52.1% ranks
+  Market v1               -25.1%       -72% / +52%          33%          90th percentile
+  Market v2               +21.5%       -32% / +63%          69%          83rd percentile
+  Market v3               +23.5%       -32% / +65%          71%          79th percentile
+                     15% put: median
+  Market v1               -14.7%       -70% / +45%          39%          95th percentile
+  Market v2               +17.1%       -30% / +41%          72%          98th percentile
+  Market v3               +20.3%       -25% / +42%          76%          96th percentile
+
+So under the current model a mechanical put seller makes about +17-24% in a typical year
+and beats cash about 70% of the time. Under market v1 the same rule lost money in a
+typical year. That tilt is the variance risk premium in a market that drifts up: the
+pricing charges about fair implied vol for each regime, but calm and rebound weeks (when
+puts expire worthless) are now the common case.
+
+
+7. ANSWERS
+----------
+Was it just the seed? Mostly the path, which is the seed plus the market model. Run 5's
+path was a good year (SimQ +22% against a typical +4-7%), and the move from market v1 to
+v2 turned a strategy that loses in a typical year into one that makes about +20%.
+
+Was it the pricing? Partly. Pricing v3 pays several times what v1 did for out-of-the-money
+puts, worth roughly 5-8 points over 26 weeks and about 20 points over Run 5's full year.
+
+Did you make better moves? Yes, measurably in the first half: about 8-11 points ahead of
+the blind rules, mostly from cutting losing puts early and managing lots well. Over the
+full year your +52% matched the blind 10% wheel on the same path, so it is not evidence of
+skill beyond what the model and this path handed out. Your process is clearly better than
+Run 1's; the result is mostly the environment.
+
+A fair way to judge future runs: compare your result to the blind 10% and 15% wheels on
+the same path (the tool computes both), not to cash or buy-and-hold. In Run 5 you were
++8 to +11 points at Week 26 and -2 to +8 points at Week 52.
+
+Caveats: one path per run is a small sample; the blind wheel puts all free cash in one
+strike, which is more aggressive than your sizing; and Run 1's exact pricing mixed v1 and
+v2, so its pricing comparison is approximate.
