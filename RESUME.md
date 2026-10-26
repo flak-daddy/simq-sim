@@ -3,8 +3,9 @@
 Rules: claude/csp-ledger-branch-cc.md. Index: claude/run-index.md. Calibration: claude/market-calibration.md. Books are kept by script; do not hand-edit ledgers.
 
 ## Active run
-**Run 4** (pricing v3, headlines v3), started Sun 2026-10-25, seed hidden in run-004-state.json until Week 52. Working folder: /home/claude/simq-run4/ with run-004 files. Use `python3 simbook.py status` for where it stands.
-Last closed: Run 3 after Week 52 (Sun 2026-10-25): $8,974.05 (+19.65%), holding 100 shares (lot 3, cost $50, marked $36.62); buy-and-hold SimQ $4,304.86 (-42.60%); cash-only $7,799.18 (+3.99%). Week 26 comparison figure $9,779.00 (+30.39%). Seed 943118079. Review: claude/run-003-summary.txt.
+**None.** Run 4 closed after Week 52 (Sun 2026-10-25). Start Run 5 with the steps below; use /home/claude/simq-run5/ as the working folder.
+Last closed: Run 4 after Week 52 (Sun 2026-10-25): $5,995.09 (-20.07%), holding 500 shares in five lots (costs $25, $12, $13, $10.50, $9.50; marked $8.78); buy-and-hold SimQ $1,032.13 (-86.24%); cash-only $7,799.18 (+3.99%). Week 26 comparison figure $8,255.14 (+10.07%). Seed 867728425. Review: claude/run-004-summary.txt.
+Previous: Run 3 closed after Week 52: $8,974.05 (+19.65%); Week 26 figure $9,779.00 (+30.39%). Seed 943118079. Review: claude/run-003-summary.txt.
 To start a new run: `python3 simq.py newseed` (keep the seed hidden), then `python3 simbook.py new --run N --seed S`, and follow the same setup and weekly flow below with run-NNN files. (The regime-vs-direction question from run-003-summary.txt section 6 was checked: by design, see market-calibration.md.)
 At Week 52 of any run: reveal the seed, write claude/run-NNN-summary.txt (full-year review), set the closed status_note, update run-index.md.
 Previous: Run 2 closed after Week 52: $11,924.36 (+58.99%); Week 26 figure $9,189.18 (+22.52%). Review: claude/run-002-summary.txt.

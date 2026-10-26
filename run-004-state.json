@@ -5,7 +5,7 @@
  "apy": 0.04,
  "pricing": "v3",
  "headlines": "v3",
- "week": 52,
+ "week": 53,
  "phase": "open",
  "events": [
   {
@@ -2285,6 +2285,65 @@
      4
     ]
    ]
+  },
+  {
+   "w": 52,
+   "ph": "open",
+   "t": "sell",
+   "kind": "C",
+   "k": 10.5,
+   "fill": 0.12,
+   "ask": 0.13,
+   "spot": 10.04,
+   "lot": 5
+  },
+  {
+   "w": 52,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 9.5,
+   "fill": 0.11,
+   "ask": 0.13,
+   "spot": 10.04
+  },
+  {
+   "w": 52,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 52,
+   "ph": "fri",
+   "t": "expire",
+   "id": 78,
+   "k": 10.5,
+   "spot": 8.78
+  },
+  {
+   "w": 52,
+   "ph": "fri",
+   "t": "assign",
+   "id": 79,
+   "k": 9.5,
+   "spot": 8.78
+  },
+  {
+   "w": 52,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 1.75,
+   "segs": [
+    [
+     2553.34,
+     5
+    ],
+    [
+     1603.34,
+     2
+    ]
+   ]
   }
- ]
+ ],
+ "status_note": "CLOSED after Week 52 full year (Sun 2026-10-25); holding 500 shares in five lots (lot 2 $25.00, lot 3 $12.00, lot 4 $13.00, lot 5 $10.50, lot 6 $9.50; marked $8.78), no open positions. Week 26 comparison result: $8,255.14 (+10.07%); Week 52: $5,995.09 (-20.07%)"
 }
