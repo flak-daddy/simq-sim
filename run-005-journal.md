@@ -62,3 +62,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W15 fri**: C45 called away, sold 100 at $45.00; SimQ 48.96
 - **W16 open**: sold P44 at 0.50 (SimQ 48.96)
 - **W16 mid**: bought to close P44 at 0.20 (+$30.00)
+- **W17 open**: sold P45.5 at 0.21 (SimQ 50.15)
+- **W17 mid**: bought to close P45.5 at 0.01 (+$20.00)
+- **W17 mid**: sold P51 at 0.22 (SimQ 53.88)
+- **W17 fri**: P51 expired worthless (+$22.00); SimQ 52.89
