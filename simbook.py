@@ -42,7 +42,7 @@ def default_state_path():
 
 def new_state(run, seed):
     return {"run": run, "seed": seed, "start_cash": 7500.0, "apy": 0.04,
-            "pricing": "v3", "headlines": "v3", "week": 1, "phase": "open", "events": []}
+            "pricing": "v3", "headlines": "v3", "market": "v2", "week": 1, "phase": "open", "events": []}
 
 
 def load(path):
@@ -68,6 +68,7 @@ def wk(st, w):
     simq.RESEED = {int(a): int(c) for a, c in st.get("reseed", {}).items()}
     simq.PRICING_V2_FROM = st.get("pricing_v2_from", 1)
     simq.PRICING = st.get("pricing", "v2")  # states written before Oct 24, 2026 (Runs 1-2) use v1/v2
+    simq.MARKET = st.get("market", "v1")  # regime transitions; absent = v1 (Runs 1-4 replay unchanged)
     simq.SKEW_V2 = w >= simq.PRICING_V2_FROM
     return simq.gen_week(w)  # regime, s_open, closes, ivs
 

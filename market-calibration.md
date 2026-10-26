@@ -69,3 +69,47 @@ Monte Carlo of simq.gen_week's weekly draw (40,000 weeks per regime, no code cha
 | rebound | +10.7% | 13.1% | 19% | 55% |
 
 Finding: not a bug. A regime sets the week's drift and volatility, not its result; one week of noise is several times the drift, so roughly 1 in 4 directional weeks should end against the label. Run 3's 27% (11/41) is in line. Real leveraged-ETF weeks behave similarly (a calm uptrend still has many down weeks; bear markets have sharp up weeks). Thinner tails for calm regimes (t df 10 instead of 4) were tested and barely change this (calm_up down weeks 39% -> 40%), so no change was made. Making labels match outcomes more often would need less noise or more drift per regime, which would make the sim easier and less realistic.
+
+## Market v2: regime transitions with an upward drift (Oct 25, 2026, after Run 4; standard from Run 5)
+Question (user, after Run 4): is it bad luck that runs keep hitting major crashes, or does the model lean that way?
+Finding: the model leaned that way. Under the original transition table (market v1), the long-run regime mix was calm_up 30%, chop 26%, selloff 22%, rebound 12%, crash 9%, which drifts the unleveraged index about -15%/yr. With 3x leverage and volatility drag, SimQ's median year was about -58%, only about 1 year in 6 finished up, 87% of years had a drawdown worse than -50%, and the average year had 4.7 crash weeks. Selloffs were sticky: from a selloff, the next week was selloff or crash 50% of the time and calm_up only 5%. Runs 1, 3 and 4 (-57% by W26, -43%, -86%) were typical draws; Run 2 (+1%) was the lucky one. Real TQQQ has had years like that (2022 about -79%), but its long-run drift is positive because the Nasdaq-100 under it trends up.
+
+Change (market v2): only the transition odds change. Each regime's drift, volatility, implied vol, skew and spreads are untouched, so a selloff or crash week looks exactly as it did; they just come less often, and dips draw buyers (selloff -> rebound .30, crash -> rebound .55, selloff -> selloff .20).
+
+| From \ to | calm_up | chop | selloff | crash | rebound |
+|---|---|---|---|---|---|
+| calm_up | .68 (.55) | .20 (.25) | .08 (.15) | .02 (.03) | .02 (.02) |
+| chop | .43 (.30) | .33 (.35) | .14 (.25) | .03 (.05) | .07 (.05) |
+| selloff | .12 (.05) | .30 (.25) | .20 (.30) | .08 (.20) | .30 (.20) |
+| crash | .00 (.00) | .15 (.10) | .20 (.30) | .10 (.20) | .55 (.40) |
+| rebound | .50 (.35) | .25 (.25) | .10 (.15) | .02 (.05) | .13 (.20) |
+(v1 values in parentheses.)
+
+Monte Carlo, 8,000 random 52-week years each:
+
+| | Market v1 | Market v2 |
+|---|---|---|
+| Regime mix (calm_up / chop / selloff / crash / rebound) | 30 / 26 / 22 / 9 / 13% | 52 / 25 / 11 / 3 / 9% |
+| Unleveraged index drift | about -15%/yr | about +11%/yr |
+| SimQ median year | about -58% | about +4% (target was about +5%) |
+| SimQ 10th / 90th percentile year | -88% / +30% | -60% / +155% |
+| Years finishing up | 17% | 53% |
+| Median worst drawdown within the year | -74% | -50% |
+| Years with a drawdown worse than -50% | 87% | 49% |
+| Crash weeks per year | 4.7 | 1.7 |
+| Selloff weeks per year | 11.6 | 6.0 |
+
+The SimQ target is about +5% for the median year, deliberately below real TQQQ's history: SimQ's selloff and crash weeks are very volatile (weekly sd 13-15%), so volatility drag eats much of an +11% index drift. Bad years remain common (1 in 10 is -60% or worse).
+
+Effect on the pricing-v3 put-seller check (tools/pricing-review/market_v2.py, 300 years each, put held to Friday, bid premium minus payout, % of collateral per week):
+
+| Put | Market v1 | Market v2 |
+|---|---|---|
+| Monday, 10% below spot | -0.13% | +0.36% |
+| Monday, 15% below spot | -0.03% | +0.21% |
+| Wednesday, 10% below spot | +0.03% | +0.10% |
+| Wednesday, 15% below spot | -0.00% | +0.02% |
+
+Per-regime edges are unchanged (Monday 15% put under v2: calm_up +0.41%, chop +0.53%, rebound +1.21%, selloff -1.19%, crash -3.61%); the blind-seller edge turns positive only because calm and rebound weeks are now more common. That is the real-world variance risk premium showing up in a rising market, but it does make blind put selling profitable on average (about +0.2-0.4% of collateral per week on Mondays). Whether to trim calm/chop implied vol to restore a near-zero blind edge is an open decision (it would be a pricing v4, separate from market v2).
+
+Versioning: state field `market` ("v2" written by `simbook.py new` from Run 5; absent = v1, so Runs 1-4 replay unchanged, verified byte-for-byte on ledgers, journals, status and week P&L). `simq.py` standalone commands (meta/open/mid/fri) default to v1.
