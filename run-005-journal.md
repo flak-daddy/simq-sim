@@ -120,3 +120,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W31 open**: passed
 - **W31 mid**: sold P61 at 0.45 (SimQ 69.20)
 - **W31 fri**: P61 expired worthless (+$45.00); SimQ 62.26
+- **W32 open**: sold P40 at 0.25 (SimQ 62.26)
+- **W32 open**: sold P50 at 1.11 (SimQ 62.26)
+- **W32 mid**: bought to close P50 at 0.22 (+$89.00)
+- **W32 fri**: P40 expired worthless (+$25.00); SimQ 60.34
