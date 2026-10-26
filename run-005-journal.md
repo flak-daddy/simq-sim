@@ -79,3 +79,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W20 open**: sold P40 at 0.07 (SimQ 52.87)
 - **W20 mid**: bought to close P40 at 0.23 (-$16.00)
 - **W20 fri**: P45 assigned, bought 100 at $45.00; SimQ 44.14
+- **W21 open**: sold C49.5 at 0.63 (SimQ 44.14)
+- **W21 open**: sold P33 at 0.27 (SimQ 44.14)
+- **W21 mid**: bought to close P33 at 0.01 (+$26.00)
+- **W21 fri**: C49.5 called away, sold 100 at $49.50; SimQ 53.16
