@@ -151,3 +151,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W37 fri**: C70 called away, sold 100 at $70.00; SimQ 70.76
 - **W38 open**: sold P65 at 1.06 (SimQ 70.76)
 - **W38 mid**: bought to close P65 at 1.25 (-$19.00)
+- **W39 open**: sold P60 at 1.04 (SimQ 68.67)
+- **W39 mid**: bought to close P60 at 0.01 (+$103.00)
