@@ -108,3 +108,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W27 open**: sold P43.5 at 0.73 (SimQ 50.32)
 - **W27 mid**: bought to close P40 at 0.01 (+$32.00)
 - **W27 mid**: bought to close P43.5 at 0.04 (+$69.00)
+- **W28 open**: sold P55 at 0.59 (SimQ 66.30)
+- **W28 mid**: bought to close P55 at 0.01 (+$58.00)
