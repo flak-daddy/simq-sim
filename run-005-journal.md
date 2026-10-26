@@ -83,3 +83,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W21 open**: sold P33 at 0.27 (SimQ 44.14)
 - **W21 mid**: bought to close P33 at 0.01 (+$26.00)
 - **W21 fri**: C49.5 called away, sold 100 at $49.50; SimQ 53.16
+- **W22 open**: sold P41 at 0.22 (SimQ 53.16)
+- **W22 open**: sold P44 at 0.46 (SimQ 53.16)
+- **W22 mid**: bought to close P41 at 0.01 (+$21.00)
+- **W22 mid**: bought to close P44 at 0.01 (+$45.00)
