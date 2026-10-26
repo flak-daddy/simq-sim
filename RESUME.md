@@ -21,7 +21,7 @@ Code, rule docs and state live in the private repo **flak-daddy/simq-sim** (bran
 4. `python3 simbook.py status` (in the working folder) confirms where the run stands.
 Do NOT project_read the scripts and re-Write them; that is the token-expensive path this replaces.
 Fallback only if GitHub is unreachable: project_read claude/simq.py, claude/simbook.py, claude/run-NNN-state.json and save them locally.
-Before using either copy, check that simbook.py contains `print_week_pnl`, `headline_plan` and `chain_window`, and simq.py contains `SKEW_V2` and `REG3_IV`. If not, it's stale.
+Before using either copy, check that simbook.py contains `print_week_pnl`, `headline_plan` and `chain_window`, and simq.py contains `SKEW_V2`, `REG3_IV` and `TRANS_V2`. If not, it's stale.
 
 ## Commands (all in the working folder)
 - `python3 simbook.py open` : Monday open (spot, full chain table, account line).
