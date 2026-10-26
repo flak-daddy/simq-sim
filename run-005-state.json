@@ -6,7 +6,7 @@
  "pricing": "v3",
  "headlines": "v3",
  "market": "v2",
- "week": 44,
+ "week": 45,
  "phase": "open",
  "events": [
   {
@@ -2035,6 +2035,39 @@
     [
      10838.67,
      7
+    ]
+   ]
+  },
+  {
+   "w": 44,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 65.0,
+   "fill": 0.35,
+   "ask": 0.38,
+   "spot": 71.9
+  },
+  {
+   "w": 44,
+   "ph": "mid",
+   "t": "btc",
+   "id": 74,
+   "price": 0.02
+  },
+  {
+   "w": 44,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 8.35,
+   "segs": [
+    [
+     10881.98,
+     3
+    ],
+    [
+     10879.98,
+     4
     ]
    ]
   }
