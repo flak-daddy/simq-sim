@@ -3,14 +3,14 @@
 - Seed: 526270675 | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-005-journal.md
 
-## Current state (Week 11, Monday open)
-- SimQ spot: $35.63
-- Cash: $3,567.71 | locked collateral: $0.00 | free: $3,567.71
-- Shares: 100 SimQ bought at $40.00 in Week 3; effective basis $38.68 after option premiums
+## Current state (Week 12, Monday open)
+- SimQ spot: $36.91
+- Cash: $3,604.47 | locked collateral: $0.00 | free: $3,604.47
+- Shares: 100 SimQ bought at $40.00 in Week 3; effective basis $38.66 after option premiums
 - Open positions: none
-- Premium collected (gross): $672.00 | buy-to-close costs: $639.00 | interest: $34.71
-- Realized P&L (options net of buy-backs + stock sales): +$33.00 (options +$33.00, stock +$0.00)
-- Account value: $7,130.71 (-4.92% vs start)
+- Premium collected (gross): $706.00 | buy-to-close costs: $639.00 | interest: $37.47
+- Realized P&L (options net of buy-backs + stock sales): +$67.00 (options +$67.00, stock +$0.00)
+- Account value: $7,295.47 (-2.73% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -31,6 +31,8 @@
 | 14 | SIMQ-W09-P32.5 | W9 open | $32.5 | 0.35 / 0.38 | $35.00 | $3,250.00 cash | Bought to close at 0.03 ($3.00), net +$32.00 | premium 1.08% of collateral |
 | 15 | SIMQ-W10-C40 | W10 open | $40 | 0.03 / 0.04 | $3.00 | lot 1 | Expired worthless (Fri SimQ 35.63) | premium 0.08% of share value; held at midweek (ask 0.01) |
 | 16 | SIMQ-W10-P34 | W10 open | $34 | 0.45 / 0.48 | $45.00 | $3,400.00 cash | Expired worthless (Fri SimQ 35.63) | premium 1.32% of collateral; held at midweek (ask 0.11) |
+| 17 | SIMQ-W11-C40.5 | W11 open | $40.5 | 0.02 / 0.04 | $2.00 | lot 1 | Expired worthless (Fri SimQ 36.91) | premium 0.06% of share value; held at midweek (ask 0.01) |
+| 18 | SIMQ-W11-P33 | W11 open | $33 | 0.32 / 0.35 | $32.00 | $3,300.00 cash | Expired worthless (Fri SimQ 36.91) | premium 0.97% of collateral; held at midweek (ask 0.05) |
 
 ## Weeks
 | Week | Regime | Open | Mon | Tue | Wed | Thu | Fri | Week % | Interest |
@@ -45,10 +47,11 @@
 | 8 | calm_up | 32.55 | 31.91 | 31.84 | 34.52 | 34.32 | 34.42 | +5.7% | 2.67 (3,480.61 x 3d; 3,479.61 x 4d) |
 | 9 | calm_up | 34.42 | 34.82 | 35.97 | 35.80 | 35.75 | 35.70 | +3.7% | 2.70 (3,517.28 x 3d; 3,514.28 x 4d) |
 | 10 | calm_up | 35.70 | 35.60 | 35.87 | 36.25 | 36.04 | 35.63 | -0.2% | 2.73 (3,564.98 x 7d) |
+| 11 | calm_up | 35.63 | 36.16 | 36.27 | 36.06 | 36.68 | 36.91 | +3.6% | 2.76 (3,601.71 x 7d) |
 
 ## Scorecard
-- 16 trades: 6 expired worthless, 6 closed for profit, 3 closed at a loss, 1 assigned, 0 called away | win rate 38% (75% counting profitable closes)
-- Avg put premium: 1.33% of collateral
-- Avg call premium: 0.51% of share value at sale
+- 18 trades: 8 expired worthless, 6 closed for profit, 3 closed at a loss, 1 assigned, 0 called away | win rate 44% (78% counting profitable closes)
+- Avg put premium: 1.31% of collateral
+- Avg call premium: 0.36% of share value at sale
 - Wheel cycles completed (shares called away): 0
 - Account value at week 26 (comparison metric): pending
