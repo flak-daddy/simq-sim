@@ -187,3 +187,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W50 fri**: C10.5 expired worthless (+$10.00); SimQ 9.81
 - **W50 fri**: P8.5 expired worthless (+$8.00); SimQ 9.81
 - **W50 fri**: P9 expired worthless (+$22.00); SimQ 9.81
+- **W51 open**: sold C10.5 at 0.13 (SimQ 9.81)
+- **W51 open**: sold P9 at 0.13 (SimQ 9.81)
+- **W51 mid**: bought to close P9 at 0.01 (+$12.00)
+- **W51 fri**: C10.5 expired worthless (+$13.00); SimQ 10.04
