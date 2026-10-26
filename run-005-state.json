@@ -6,7 +6,7 @@
  "pricing": "v3",
  "headlines": "v3",
  "market": "v2",
- "week": 42,
+ "week": 43,
  "phase": "open",
  "events": [
   {
@@ -1978,6 +1978,28 @@
     [
      10776.04,
      4
+    ]
+   ]
+  },
+  {
+   "w": 42,
+   "ph": "open",
+   "t": "pass"
+  },
+  {
+   "w": 42,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 42,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 8.27,
+   "segs": [
+    [
+     10784.4,
+     7
     ]
    ]
   }
