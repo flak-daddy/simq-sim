@@ -45,25 +45,27 @@ def wheel(P, pricing, otm=0.10, call_otm=0.05, cash=7500.0):
 
 def summ(v): return v[-1] / v[0] - 1
 
+def run_path(n, pricing):
+    st = json.load(open(f"./run-{n:03d}-state.json"))
+    setp(pricing)
+    weeks = 26 if n == 1 else 52
+    return path(st["seed"], {int(k): v for k, v in st.get("reseed", {}).items()}, st.get("market", "v1"), weeks)
+
 if __name__ == "__main__":
-    st1 = json.load(open('./run-001-state.json'))
-    st5 = json.load(open('./run-005-state.json'))
-    def paths(pr):
-        setp(pr)
-        return (path(st1["seed"], {int(k): v for k, v in st1["reseed"].items()}, "v1", 26), path(st5["seed"], {}, "v2", 52))
+    # Usage: python3 tools/pricing-review/wheel_compare.py [RUN RUN ...]   (default: 1 2 5)
+    runs = [int(a) for a in sys.argv[1:]] or [1, 2, 5]
     for otm in (0.10, 0.15):
         for pr in ("v1", "v2", "v3"):
-            P1, P5 = paths(pr)
-            a = summ(wheel(P1, pr, otm)[0]); b = summ(wheel(P5[:26], pr, otm)[0]); c = summ(wheel(P5, pr, otm)[0])
-            print(f"wheel {otm:.0%} pricing {pr}: run1 path 26w {a:+.1%} | run5 path 26w {b:+.1%} | run5 path 52w {c:+.1%}")
-    # Monte Carlo: blind wheel, 52 weeks, random seeds
-    rng = random.Random(5); setp("v3")
-    for mk in ("v1", "v2", "v3"):
+            cells = []
+            for n in runs:
+                v = wheel(run_path(n, pr), pr, otm)[0]
+                cells.append(f"run {n}: 26w {v[26]/v[0]-1:+.1%}" + (f", 52w {v[52]/v[0]-1:+.1%}, H2 {v[52]/v[26]-1:+.1%}" if len(v) > 27 else ""))
+            print(f"blind wheel {otm:.0%} pricing {pr} | " + " | ".join(cells))
+    rng = random.Random(9)
+    for mk, pr in (("v1", "v2"), ("v2", "v3"), ("v3", "v3")):
         for otm in (0.10, 0.15):
-            r26 = []; r52 = []; bh = []
+            r = []
             for _ in range(600):
-                P = path(rng.randrange(10**8, 10**9), {}, mk, 52)
-                v = wheel(P, "v3", otm)[0]; r26.append(v[26] / v[0] - 1); r52.append(v[52] / v[0] - 1); bh.append(P[51][2][4] / simq.S_START - 1)
-            r52s = sorted(r52); N = len(r52s)
-            pct = sum(x < 0.5213 for x in r52) / N
-            print(f"MC market {mk} wheel {otm:.0%} pricing v3: 26w median {stt.median(r26):+.1%} | 52w median {stt.median(r52):+.1%} p10 {r52s[N//10]:+.1%} p90 {r52s[9*N//10]:+.1%}, P(>cash +4%) {sum(x>0.04 for x in r52)/N:.0%}; +52.1% sits at {pct:.0%} pctile; SimQ median {stt.median(bh):+.1%}")
+                setp(pr); v = wheel(path(rng.randrange(10**8, 10**9), {}, mk, 52), pr, otm)[0]; r.append(v[52] / v[0] - 1)
+            r.sort(); N = len(r)
+            print(f"MC market {mk}, pricing {pr}, blind {otm:.0%} wheel, 52w: median {r[N//2]:+.1%}, p10 {r[N//10]:+.1%}, p90 {r[9*N//10]:+.1%}, beats cash {sum(x > 0.04 for x in r)/N:.0%}")

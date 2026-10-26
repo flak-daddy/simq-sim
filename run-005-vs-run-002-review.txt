@@ -1,0 +1,149 @@
+SIMQ REVIEW: RUN 5 VS RUN 2 (AND VS A BLIND BASELINE)
+=====================================================
+Written: Mon 2026-10-26, after Run 5 closed (replaces the Run 1 comparison as the one
+the user asked for; run-005-vs-run-001-review.txt is kept for reference)
+Question: how do Run 2 and Run 5 compare, what drove each result (path, pricing or
+your decisions), and is the model tilted toward profit?
+Tool: tools/pricing-review/wheel_compare.py 2 5 (reproduces the blind-wheel numbers)
+
+
+1. THE HEADLINE NUMBERS
+-----------------------
+                          Run 2                     Run 5
+  Week 26 account         $9,189.18  (+22.52%)      $9,410.86  (+25.48%)
+  Week 52 account         $11,924.36 (+58.99%)      $11,409.90 (+52.13%)
+  Second half             +29.77%                   +21.24%
+  Buy-and-hold SimQ, 52w  +1.36% ($63.80 -> 64.67)  +21.97% ($63.80 -> 77.82)
+    at Week 26            +44.4% (-> $92.15)        -21.1% (-> $50.32)
+  Deepest drawdown        -12.3% (W0 -> W3)         -23.1% (W1 -> W5)
+  Up weeks                46 of 52                  43 of 52
+  Market model            v1 (downward drift)       v2 (upward drift)
+  Pricing                 v2                        v3
+  Regimes (52w)           chop 14, selloff 13,      calm_up 26, chop 8, rebound 8,
+                          calm_up 10, rebound 8,    selloff 5, crash 5
+                          crash 7
+
+The two results are close: Run 2 finished 6.9 points ahead for the year, Run 5 was 3.0
+points ahead at Week 26. Run 2 was the smoother year (smaller drawdown, more up weeks).
+
+
+2. METHOD: A BLIND BASELINE
+---------------------------
+The same mechanical wheel was run on both runs' exact price paths under each pricing
+version: every Monday sell a put 10% (or 15%) below spot with all free cash, hold to
+Friday, and if assigned sell a covered call each Monday at the higher of the lot's cost
+or 5% above spot. Cash earns 4%. It never reads headlines and never manages midweek.
+What it earns is what the path and pricing hand out; the gap to your result is your
+contribution.
+
+Blind wheel results (account % change):
+
+                           Run 2 path                      Run 5 path
+                       26w      52w      H2           26w      52w      H2
+  10% put, pricing v2  +48.6%  +121.6%  +49.1%       +17.4%   +61.3%   +37.4%
+  10% put, pricing v3  +44.4%  +100.7%  +39.0%       +14.9%   +54.2%   +34.1%
+  15% put, pricing v2  +28.9%   +64.5%  +27.6%       +21.3%   +51.0%   +24.5%
+  15% put, pricing v3  +25.4%   +51.8%  +21.1%       +17.8%   +43.8%   +22.0%
+  Your actual          +22.5%   +59.0%  +29.8%       +25.5%   +52.1%   +21.2%
+  (Run 2 was played on pricing v2, Run 5 on pricing v3.)
+
+
+3. THE PATH: RUN 2'S WAS FAR BETTER FOR A PUT SELLER
+---------------------------------------------------
+On the same pricing (v3), a blind 10% wheel made +100.7% on Run 2's path and +54.2% on
+Run 5's; a blind 15% wheel made +51.8% against +43.8%.
+
+That is surprising given Run 2 used the harsher market v1, under which a blind wheel
+loses about 21% in a typical year. Run 2's path was an outlier in a good way for sellers:
+  - SimQ rose 44% in the first half (to $92), then gave it back to finish flat. Big
+    swings that end where they started pay put sellers repeatedly without leaving them
+    holding losing shares at the end.
+  - 42 of 52 weeks were chop, selloff, crash or rebound. Those regimes carry higher
+    implied vol, so premiums were richer: a Monday put 10% below spot averaged 1.75% of
+    strike on Run 2's path against 1.33% on Run 5's (same pricing v3).
+  - Run 5's path started with a W2-W5 selloff and crash sequence (SimQ $63.80 to $24.37,
+    -62%, by W5),
+    which no put seller escapes cleanly, and its second half was a steady climb, where
+    puts expire but premiums are thin (calm_up implied vol is the lowest).
+
+Under market v1 with pricing v2, Run 2's +59% sits around the 91st percentile of 600
+random years for a blind wheel. Under market v2 with pricing v3, Run 5's +52% sits around
+the 83rd (10% wheel) to 98th (15% wheel) percentile. Both were good years, Run 2's more
+unusually so for its model.
+
+
+4. PRICING: IT FAVORED RUN 2, NOT RUN 5
+---------------------------------------
+Pricing v3 (Run 5) pays about 15% less than pricing v2 (Run 2) for the same put:
+  Monday put 10% below, Run 2 path: v2 2.04% vs v3 1.75% of strike
+  Monday put 10% below, Run 5 path: v2 1.58% vs v3 1.33% of strike
+On Run 2's path that difference is worth 13-21 points of blind-wheel return over the
+year; on Run 5's path, 7 points. So Run 2 had both the better path and the richer
+pricing.
+
+
+5. YOUR DECISIONS: RUN 5 WAS THE BETTER-PLAYED RUN
+---------------------------------------------------
+Your result minus the blind wheel on the same path and pricing (positive = you added):
+
+                       vs 10% wheel            vs 15% wheel
+                   26w    52w    H2         26w    52w    H2
+  Run 2 (v2)      -26    -63    -19          -6     -6     +2
+  Run 5 (v3)      +11     -2    -13          +8     +8     -1
+
+Run 2: you trailed both blind rules in the first half and finished well behind the
+blind 10% wheel (+59% against +122%). Your Monday puts sat further out (median about 16%
+below spot in the second half) and the W1 P56 (-$656) and W45 P65 (-$410) closes were
+large. On a path that rewarded selling close to spot every week, caution cost a lot.
+
+Run 5: you beat both blind rules in the first half, mainly by cutting the W2 and W3
+puts at midweek during the crash sequence, and ended level with the 10% wheel and 8
+points ahead of the 15% wheel. Your largest single loss was -$313 (Run 2: -$656).
+
+In both runs you lagged the aggressive blind rule in the second half. Both second halves
+were good stretches for sellers, and your habit of closing at midweek and passing some
+Mondays traded premium for safety the market didn't demand.
+
+What carried over from Run 2 to Run 5:
+  - Midweek close-and-roll routine (Run 2: 34 midweek opens; Run 5: 21).
+  - Calls at or above cost; all four lots called away at a stock profit in both runs.
+  - Cutting losing puts at Wednesday instead of riding into assignment.
+What changed:
+  - Calls: Run 2's calls were closer to the money (2.02% of share value on average,
+    +$1,687 of call premium); Run 5's were further out (0.86%, +$551).
+  - Puts sat a little closer in Run 5's late weeks than Run 2's second-half Mondays
+    (Run 5 average 13% below spot; Run 2 second-half Monday median about 16%).
+
+
+6. IS THE MODEL TILTED TOWARD PROFIT?
+-------------------------------------
+Under the current model (market v2/v3, pricing v3) yes: a blind 10% wheel makes a median
+of about +21-24% a year and beats cash about 70% of the time. Under Run 2's model
+(market v1, pricing v2) it was the opposite: median about -21%, beating cash about a
+third of the time. Run 2's +59% therefore came from an unusually seller-friendly path in
+a model that was hostile on average, while Run 5's +52% came from a good path in a model
+that is friendly on average.
+
+
+7. ANSWERS
+----------
+Which run was better? Run 2 by result (+59.0% vs +52.1%, smaller drawdown). Run 5 by
+play: relative to what a mechanical rule earned on each path, you were roughly even to
++8 points in Run 5, and 6 to 63 points behind in Run 2.
+
+Was it the seed? For both runs, the path explains most of the result. Run 2's path was
+exceptionally good for put sellers (a 44% rise and full round trip with lots of high-vol
+weeks); Run 5's path was good but front-loaded with a crash sequence.
+
+Was it the pricing? Pricing helped Run 2, not Run 5: v2 premiums were about 15% higher
+than v3.
+
+Did you make better moves? Yes, in Run 5 relative to its environment, mainly through
+first-half damage control. The full-year +52% still matched a blind rule on the same path,
+so the honest read is: good process, average-to-good result for this model and path.
+
+A fair yardstick for future runs is your result against the blind 10% and 15% wheels
+on the same path (wheel_compare.py RUN computes both).
+
+Caveats: one path per run is a small sample; the blind wheel puts all free cash into
+one strike each Monday, which is more aggressive than your sizing.
