@@ -15,8 +15,8 @@ Commands (run from the folder holding simq.py, simbook.py and the state file):
   pass                      record a pass (or a hold if a position is open)
   note "text"               attach the user's comment to the latest move
   quote P|C STRIKE          bid/ask for one strike at the current phase
-  chain [--half] [--n 15] [--all]   re-show the current chain (open/mid/chain also list every
-                            lower put strike below the trimmed chain, down to the chain bottom)
+  chain [--all]             re-show the current chain: every strike (incl. .5) from the first
+                            no-bid put below spot to the first no-bid call above spot
   status                    one-line account summary
   weekpnl W                 week W P&L breakdown (also printed automatically at Friday close)
   render                    rewrite run-NNN-ledger.md and run-NNN-journal.md
@@ -239,22 +239,35 @@ def fq(b):
     return "no bid" if b <= 0 else f"{b:.2f}"
 
 
+def chain_window(rows, S):
+    """Every listed strike (incl. .5 and $2.50 steps) from the first put with no bid below spot
+    up to the first call with no bid above spot, both no-bid strikes included."""
+    ks = sorted(r[0] for r in rows)
+    by = {r[0]: r for r in rows}
+    keep = set()
+    for K in sorted((k for k in ks if k < S), reverse=True):   # down: puts until first no bid
+        keep.add(K)
+        if by[K][1] <= 0:
+            break
+    for K in (k for k in ks if k >= S):                         # up: calls until first no bid
+        keep.add(K)
+        if by[K][3] <= 0:
+            break
+    return keep
+
+
 def print_chain(rows, S, always=(), n=15, half=False, all_=False, marks=None):
+    # Standard output (Oct 25, 2026): one table, calls left / strike / puts right, every listed
+    # strike from the first no-bid put below spot to the first no-bid call above spot.
     marks = marks or {}
-    disp = [r for r in rows if all_ or half or abs(r[0] - round(r[0])) < 1e-9 or r[0] in always]
-    if not all_:
-        idx = min(range(len(disp)), key=lambda i: abs(disp[i][0] - S))
-        lo = max(0, idx - n // 2)
-        hi = min(len(disp), lo + n)
-        lo = max(0, hi - n)
-        keep = set(range(lo, hi))
-        for i, r in enumerate(disp):
-            if r[0] in always:
-                keep.add(i)
-        gaps = {disp[i][0] for j, i in enumerate(sorted(keep)) if j and i - sorted(keep)[j - 1] > 1}
-        disp = [disp[i] for i in sorted(keep)]
+    rows = sorted(rows, key=lambda r: r[0])
+    if all_:
+        disp, gaps = rows, set()
     else:
-        gaps = set()
+        keep = chain_window(rows, S) | set(always)
+        disp = [r for r in rows if r[0] in keep]
+        idx = [rows.index(r) for r in disp]
+        gaps = {disp[j][0] for j in range(1, len(disp)) if idx[j] - idx[j - 1] > 1}
     print("| Call bid / ask | Strike | Put bid / ask |")
     print("|---|:---:|---|")
     marked = False
@@ -270,20 +283,6 @@ def print_chain(rows, S, always=(), n=15, half=False, all_=False, marks=None):
     if not marked:
         print(f"| ITM calls ▲ | **\\* SimQ {S:.2f} \\*** | ▼ ITM puts |")
     return disp
-
-
-def print_lower_puts(rows, S, below):
-    # Standard output: every listed put strike (incl. .5 and $2.50 steps) below the
-    # trimmed chain, highest first, down to the bottom of the chain (no-bid strikes included).
-    low = sorted((r for r in rows if r[0] < below), key=lambda r: -r[0])
-    if not low:
-        return
-    print("")
-    print("Lower puts")
-    print("| Strike | Put bid / ask | % below spot |")
-    print("|:---:|---|---|")
-    for K, pb, pa, cb, ca in low:
-        print(f"| **{K:g}** | {fq(pb)} / {pa:.2f} | {(1 - K / S) * 100:.1f}% |")
 
 
 def contract(tr):
@@ -352,8 +351,6 @@ def show_chain(st, w, ph, r, **kw):
                 where = "" if k in listed else ", above the listed chain"
                 parts.append(f"lot {l['id']} assigned at ${k:g} (basis ${basis(l):.2f}{where})")
         print(f"◆ = held lot's assigned strike: " + "; ".join(parts))
-    if not kw.get("all_"):
-        print_lower_puts(rows, S, min(x[0] for x in disp if x[0] not in always or x[0] >= S))
 
 
 def cmd_open(st, **kw):
