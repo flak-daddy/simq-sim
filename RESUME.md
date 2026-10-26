@@ -3,8 +3,9 @@
 Rules: claude/csp-ledger-branch-cc.md. Index: claude/run-index.md. Calibration: claude/market-calibration.md. Books are kept by script; do not hand-edit ledgers.
 
 ## Active run
-**Run 5** (market v2, started Oct 26, 2026), working folder /home/claude/simq-run5/. Seed hidden until Week 52. `python3 simbook.py status` shows where it stands.
-Last closed: Run 4 after Week 52 (Sun 2026-10-25): $5,995.09 (-20.07%), holding 500 shares in five lots (costs $25, $12, $13, $10.50, $9.50; marked $8.78); buy-and-hold SimQ $1,032.13 (-86.24%); cash-only $7,799.18 (+3.99%). Week 26 comparison figure $8,255.14 (+10.07%). Seed 867728425. Review: claude/run-004-summary.txt.
+**None.** Run 5 closed after Week 52 (Mon 2026-10-26). Before starting Run 6, settle the two pending items below with the user; then start Run 6 with the steps below, using /home/claude/simq-run6/ as the working folder.
+Last closed: Run 5 after Week 52 (Mon 2026-10-26): $11,409.90 (+52.13%), all cash; buy-and-hold SimQ $9,148.12 (+21.97%); cash-only $7,799.18 (+3.99%). Week 26 comparison figure $9,410.86 (+25.48%). Seed 526270675. First run on market v2. Review: claude/run-005-summary.txt.
+Previous: Run 4 after Week 52 (Sun 2026-10-25): $5,995.09 (-20.07%), holding 500 shares in five lots (costs $25, $12, $13, $10.50, $9.50; marked $8.78); buy-and-hold SimQ $1,032.13 (-86.24%); cash-only $7,799.18 (+3.99%). Week 26 comparison figure $8,255.14 (+10.07%). Seed 867728425. Review: claude/run-004-summary.txt.
 Previous: Run 3 closed after Week 52: $8,974.05 (+19.65%); Week 26 figure $9,779.00 (+30.39%). Seed 943118079. Review: claude/run-003-summary.txt.
 To start a new run: `python3 simq.py newseed` (keep the seed hidden), then `python3 simbook.py new --run N --seed S`, and follow the same setup and weekly flow below with run-NNN files. (The regime-vs-direction question from run-003-summary.txt section 6 was checked: by design, see market-calibration.md.)
 At Week 52 of any run: reveal the seed, write claude/run-NNN-summary.txt (full-year review), set the closed status_note, update run-index.md.
