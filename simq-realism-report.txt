@@ -1,0 +1,175 @@
+SIMQ REALISM REPORT: HOW CLOSE IS SIMQ TO SELLING PUTS ON REAL TQQQ?
+====================================================================
+Written: Mon 2026-10-26, after Run 5. Model checked: market v3, pricing v3 (the Run 6 standard).
+Scripts: tools/pricing-review/realism_internal.py (sections 1-3); blind-wheel Sharpe in
+section 4 uses the wheel from tools/pricing-review/wheel_compare.py (600 years).
+No user-supplied data; outside figures come from the public pages listed at the end.
+
+
+SUMMARY
+-------
+- Option prices: realistic in calm weeks; a little generous to put sellers in selloff and
+  crash weeks (SimQ's crash-week implied vol sits closer to realized vol than real TQQQ's
+  did in May 2022).
+- Price path: harsher than real TQQQ history. SimQ's typical year is +8% (real TQQQ
+  2010-2025: about +57%), and deep drawdowns (worse than -50% in a year) are about twice as frequent.
+- Payoff from selling puts: in line with real-world evidence. A blind put seller's
+  risk-adjusted return in SimQ (Sharpe about 0.4) is a bit below the long-run S&P 500
+  put-write indexes (0.5-0.67), and its advantage over buy-and-hold is about the same
+  as theirs.
+- Bottom line: the sim's profit tilt for put sellers is not an artifact. Real index
+  put-writing has earned a similar risk-adjusted premium for decades. The main places
+  SimQ is kinder than reality are execution (perfect fills, no costs) and crash-week
+  option prices; the main place it is harsher is the price path itself.
+
+
+1. PRICE BEHAVIOR (3,000 simulated years, market v3)
+---------------------------------------------------
+                                 SimQ (market v3)            Real TQQQ / QQQ
+  Typical (median) year          +8%                         TQQQ 2010-2025: +57%
+                                                             (13 of 16 years up)
+  Years finishing up             54%                         TQQQ: 81%
+  Bad year (10th pct / worst)    -59% (10th pct)             TQQQ worst: -79% (2022);
+                                                             other down years -20%, -8%
+  Good year (90th pct / best)    +168% (90th pct)            TQQQ best: +198% (2023)
+  Unleveraged index, median      +10%                        QQQ 1999-2025: about +19%
+  Annualized volatility          64% (p10 54%, p90 76%)      TQQQ HV: about 50% calm
+                                                             (Aug 2023), 94-138% stressed
+                                                             (May 2022, avg 125%)
+  Drawdowns of 40% or worse      most years (median in-year  7 episodes in 16 years
+                                 drawdown -52%)              (2010, 2011, 2015-16, 2018,
+                                                             2020, 2021-22, 2025)
+  Years with a drawdown < -50%   54%                         about 25% (2018, 2020, 2022,
+                                                             2025)
+  Years with a drawdown < -70%   16%                         about 6% (2022 only; 2020
+                                                             just missed at -69.9%)
+  Weekly moves                   sd 10.1%; 5.8 weeks a year  (not checked; no free
+                                 below -10%, 1.5 below -20%  weekly data)
+
+Leverage mechanics check: in simulated years when the unleveraged index ended within
++/-3%, SimQ ended a median -20%. That is volatility decay plus the 0.03%/day cost
+(about 7.6%/yr, close to TQQQ's expense ratio plus its cost of leverage). Real 3x funds
+behave this way.
+
+Verdict: SimQ's typical year is deliberately pessimistic. Real TQQQ's history happened
+during one of the strongest Nasdaq runs on record (QQQ +19%/yr since 2010), and the
+calibration notes set SimQ well below it on purpose. SimQ also has deep drawdowns about
+twice as often as real TQQQ did. For a put seller that is a tougher environment than
+history, not an easier one.
+
+
+2. OPTION PRICES: IMPLIED VS. REALIZED VOLATILITY
+------------------------------------------------
+                  SimQ realized   SimQ implied (v3)   Ratio     Real TQQQ ratio
+  calm_up               43%             54%           1.25x     1.12x (Aug 2023, 30-day IV
+                                                                vs 20-day HV); about 1.3x
+                                                                (Oct 2026 weekly chain)
+  chop                  62%             75%           1.21x
+  rebound               87%             95%           1.09x
+  selloff               95%             92%           0.96x     0.81x (May 2022, 30-day IV
+  crash                113%            105%           0.93x     101% vs 20-day HV 125%)
+
+Calm weeks: SimQ's 1.25x sits between real 30-day options (1.12x) and real weekly
+options (about 1.3x). Realistic.
+Stress weeks: SimQ prices crash and selloff options at 0.93-0.96x their realized vol;
+real TQQQ options in May 2022 traded at about 0.81x (30-day IV against a trailing 20-day
+realized vol, so this is an approximate comparison). SimQ therefore pays sellers somewhat
+more in bad weeks than the real market did in that episode.
+Calm-week realized vol is also lower in SimQ (43%) than in the real calm stretch checked
+(Aug 2023 20-day HV averaged 51%).
+
+Internal consistency: put-call parity holds on all 1,647 mid prices tested, and put prices
+rise and stay convex across strikes (no arbitrage).
+
+
+3. HOW FRAGILE IS THE PUT-SELLER EDGE?
+-------------------------------------
+Blind Monday put 10% below spot, held to Friday (premium at the bid minus payout, % of
+collateral per week, 300 simulated years):
+  Pricing v3 as is ................. +0.37%/week (about +19%/yr)
+    by regime: calm_up +0.84%, chop +0.74%, rebound +1.79%, selloff -2.51%, crash -4.58%
+  All implied vols x0.95 ........... +0.22%
+  All implied vols x0.90 ........... +0.08%
+  All implied vols x0.85 ........... -0.05%
+  Calm/chop implied vols only x0.80  -0.01%
+
+So the whole edge disappears if SimQ's option prices are about 13% too high across the
+board, or about 20% too high in calm and chop weeks alone. The real-data checks in
+section 2 suggest calm weeks are about right and stress weeks are a bit rich; correcting
+only the stress weeks to the May 2022 ratio would trim the edge but not erase it, since
+most of it is earned in calm, chop and rebound weeks.
+
+
+4. DOES SELLING PUTS PAY IN THE REAL WORLD?
+------------------------------------------
+Real cash-secured put-writing indexes on the S&P 500 (gross of costs):
+  PUT (monthly, at the money), Jul 1986-Dec 2015: 10.1%/yr vs S&P 500 9.8%, with
+    volatility 10.1% vs 15.3%; Sharpe 0.67 vs 0.47.
+  PUT, Feb 2006-Dec 2015: 6.6%/yr, Sharpe 0.52, max drawdown -33% (S&P 7.1%, 0.46, -51%).
+  WPUT (weekly), Feb 2006-Dec 2015: 5.6%/yr, Sharpe 0.50, max drawdown -24%.
+  PUT since Jan 2007: 7.2%/yr, volatility 10.7%, max drawdown -32.7% (S&P 11.0%, 15.4%,
+    -50.9%).
+  Bondarenko's study for Cboe: S&P 500 options were richly priced in every year since
+    1990 except 2008.
+
+The same comparison in SimQ (blind wheel, 600 simulated years, market v3, pricing v3):
+                          Mean year   Volatility   Sharpe (vs 4% cash)
+  Blind 10% put wheel      +18.5%       34.3%        0.42
+  Blind 15% put wheel      +13.9%       26.8%        0.37
+  SimQ buy-and-hold        +38-42%     113%          0.30-0.34
+
+Two things line up with the real record:
+  - Put writing beats buy-and-hold on a risk-adjusted basis by a similar margin
+    (SimQ 0.37-0.42 vs 0.30-0.34; S&P 0.50-0.67 vs 0.46-0.47).
+  - The put writer's Sharpe in SimQ (about 0.4) is a little lower than real index
+    put-writing (0.5-0.67), not higher.
+So the profit you see from selling puts in SimQ is the same volatility risk premium that
+real put writers have collected for decades, sized for a 3x product. It is not something
+the model invents.
+
+What this can't tell you: no free source publishes a long backtest of weekly puts on TQQQ
+itself, so the TQQQ-specific premium is inferred from TQQQ's implied/realized vol figures
+(section 2) and from S&P put-writing, not measured directly.
+
+
+5. WHAT SIMQ SIMPLIFIES
+-----------------------
+Kinder than reality:
+  - Fills always at the quoted bid/ask; no stale, missing or erratic quotes.
+  - No commissions or fees. At about $0.65 per contract, a $20-$50 premium loses 1-3%.
+  - No early assignment, taxes, or margin rules.
+  - Headlines are honest by construction (reported data is always true and regimes
+    exist). Real news has no hidden regime behind it.
+Harsher than reality:
+  - Lower typical return and more frequent deep drawdowns than TQQQ's actual history
+    (section 1).
+  - The biggest single days look heavier than real TQQQ in a typical year (SimQ median
+    worst day -17.3%; 38 days a year move more than 5%). Not verified, because no free
+    source lists TQQQ's worst day per year.
+Neutral:
+  - Volatility decay and leverage cost behave like a real 3x fund (section 1).
+
+
+6. WHAT WOULD SETTLE IT
+-----------------------
+1. A weekly backtest on real TQQQ prices with implied vol from VXN x 3 (needs TQQQ and
+   ^VXN daily history as CSV files).
+2. Live paper-trading: record the real TQQQ weekly chain each Monday for a few months
+   and compare outcomes with SimQ weeks of the same type.
+3. A real weekly chain from a stressed day, to check the crash-week ratio in section 2
+   (the open item in market-calibration.md).
+
+
+SOURCES
+-------
+TQQQ and QQQ annual returns, TQQQ annualized return and max drawdown:
+  https://totalrealreturns.com/n/TQQQ,QQQ
+TQQQ drawdown episodes since 2010: https://chartrow.com/quote/tqqq/drawdown
+TQQQ implied and realized vol, May 2022: https://www.optionsanalysissuite.com/etf/tqqq/history/2022-05
+TQQQ implied and realized vol, Aug 2023: https://www.optionsanalysissuite.com/etf/tqqq/history/2023-08
+Cboe PUT index factsheet: https://cdn.cboe.com/resources/indices/factsheet/CboeGlobalIndices_PUT-Index.pdf
+PUT and WPUT performance 2006-2015 and 1986-2015:
+  https://www.cxoadvisory.com/equity-options/performance-of-cboe-putwrite-indexes
+Bondarenko study summary (Cboe):
+  https://www.indexologyblog.com/2016/02/18/paper-by-professor-bondarenko-has-intriguing-new-analysis-of-put-and-wput-indexes/
+Earlier real-chain calibration (Oct 2026 weekly chains, Mar 2026 selloff): market-calibration.md

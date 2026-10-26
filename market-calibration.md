@@ -140,3 +140,8 @@ Monte Carlo (tools/pricing-review/market_v3.py; 8,000 years for the distribution
 The two rows only apply in the week after a crash or selloff (about 14% of weeks), so the annual statistics barely move; the differences above are within simulation noise. The effect is on the shape of recoveries: after a crash, chop is now more likely and an immediate rebound less likely; after a selloff, a rebound is a little more likely.
 
 Versioning: state field `market` = "v3" is written by `simbook.py new` from Run 6. Run 5 keeps "v2" and Runs 1-4 have no field (v1); replays of Runs 2-5 were verified byte-for-byte on ledgers and journals after the change. (Run 1's stored ledger already differed from a fresh render before this change, in the midweek ask shown for held positions, because Run 1 predates the pricing fields; fills are stored and unaffected.)
+
+
+## Realism check (Oct 26, 2026, after Run 5)
+
+Full write-up: simq-realism-report.txt (internal stats from tools/pricing-review/realism_internal.py, market v3 + pricing v3, against published TQQQ, QQQ and Cboe put-write figures). Findings: calm-week IV/realized ratio 1.25x is in line with real TQQQ (1.12x on 30-day options, about 1.3x on weeklies); crash/selloff ratios 0.93-0.96x are richer for sellers than real TQQQ in May 2022 (about 0.81x). The price path is harsher than TQQQ history (median year +8% vs +57% in 2010-2025; drawdowns worse than -50% in 54% of years vs about 25%). Blind-wheel Sharpe about 0.4 vs real S&P put-write indexes 0.5-0.67. The blind edge vanishes if all IVs fall about 13%, or calm/chop IVs about 20%.
