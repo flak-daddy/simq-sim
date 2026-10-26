@@ -1,0 +1,83 @@
+SIMQ RUN 5: WEEK 26 RESULTS (COMPARISON WINDOW)
+================================================
+Logged: Mon 2026-10-26, after sim Week 26
+Status: Run 5 CONTINUES to Week 52 ("full year"). These Week 26 figures are Run 5's
+official comparison result against other runs. Seed stays hidden until the run ends.
+Start: $7,500 paper cash, 4.00% APY on cash, SimQ at $63.80, pricing v3, headlines v3,
+market v2 (first run on market v2: upward drift, less sticky selloffs, fewer stacked crashes)
+Rules: claude/csp-ledger-branch-cc.md | Full books: run-005-ledger.md, run-005-journal.md
+
+
+1. THE RESULT
+-------------
+Account value (Week 26 Friday):  $9,410.86   (+25.48%)   all cash, no shares, no open positions
+
+Benchmarks over the same 26 weeks:
+  Buy and hold SimQ ($63.80 -> $50.32):   $5,915.36   (-21.13%)
+  Leave it all in cash at 4.00%:           $7,649.59   (+1.99%)
+  Run 4 at Week 26 (pricing v3, headlines v3, market v1): $8,255.14   (+10.07%)
+  Run 3 at Week 26 (pricing v3, headlines v2, market v1): $9,779.00   (+30.39%)
+  Run 2 at Week 26 (pricing v2, market v1):               $9,189.18   (+22.52%)
+  Run 1 at Week 26 (pricing v1, market v1):               $6,575.78   (-12.32%)
+Runs 1-4 used market v1 (and Runs 1-3 older pricing and/or headline rules), so they are
+not strictly like-for-like with Run 5.
+
+Where the $1,910.86 gain came from:
+  Option premium collected (gross) ...... +$1,495.00  (puts $1,326, calls $169)
+  Buy-to-close costs .....................   -$703.00  (incl. -$313 net on W2 P55, -$152 net on W3 P42)
+  Options net ............................   +$792.00
+  Stock, lot 1 (bought $40.00 W3, sold $45.00 W15) .. +$500.00
+  Stock, lot 2 (bought $34.50 W12, sold $35.00 W13) . +$50.00
+  Stock, lot 3 (bought $45.00 W20, sold $49.50 W21) . +$450.00
+  Interest on cash .......................   +$118.86
+                                           ----------
+                                           +$1,910.86
+
+Market regimes over the 26 weeks:
+  calm_up 12, chop 4, crash 4, rebound 3, selloff 3.
+  A W2 selloff and three straight crash weeks (W3-W5) took SimQ from $63.80 to $24.37.
+  A W6-W7 rebound and a long calm_up stretch (W8-W13) brought it back to the mid 30s,
+  then W14-W15 chop ran it to $48.96. It held roughly $48-$53 from W16 on, apart from a
+  W20 crash to $44.14 that rebounded the next week, and finished Week 26 at $50.32.
+
+
+2. THE TRADES
+-------------
+47 trades (39 puts, 8 covered calls). 39 opened Monday, 8 opened midweek. No weeks passed at
+Monday open; positions were held through midweek 7 times.
+  Expired worthless .............. 17
+  Closed for a profit ............ 20
+  Closed at a loss ...............  4  (W2 P55 -$313, W3 P42 -$152, W4 P26 -$19, W20 P40 -$16)
+  Puts assigned ..................  3  (W3 P40, W12 P34.5, W20 P45)
+  Calls called away ..............  3  (W13 C35, W15 C45, W21 C49.5)
+Win rate 36% (79% counting profitable closes).
+Avg put premium 0.90% of collateral; avg call premium 0.57% of share value.
+Max drawdown -23.1% (Week 1 peak $7,528.77 to Week 5 low $5,786.38).
+
+Wheel cycles completed: 3, all closed at a stock profit.
+  Lot 1: assigned $40 (W3 crash week, SimQ $31.30), held through the W4-W5 lows with
+         small far-out calls, called away $45 (W15). Net incl. put and call premiums +$663.
+  Lot 2: assigned $34.50 (W12), covered by the W13 C35 after a mid-week relot from lot 1,
+         called away $35 (W13). Net incl. premiums +$128.
+  Lot 3: assigned $45 (W20 crash week), called away $49.50 the next week on the W21
+         rebound. Net incl. premiums +$547.
+
+Notable weeks:
+  W2  (selloff, -11.5%): P55 bought back for -$313, rolled to P51 which expired (+$135).
+  W3  (crash, -40%): P42 bought back for -$152; the midweek P40 was assigned with SimQ
+      closing $31.30. Account fell to -14.13%.
+  W4-W5 (crash): account low of -22.85% at W5 with lot 1 marked near $24.
+  W6-W7 (rebound): +2.5% and +13.1% weeks as SimQ recovered to $32.55.
+  W13: call moved from lot 1 to lot 2 midweek; lot 2 called away at a profit instead
+      of lot 1 at a loss. Account back to -0.86%.
+  W15: lot 1 called away at $45; account all cash at +11.39%.
+  W16-W26: mostly all cash, one or two puts a week 8-24% out, often closed midweek for
+      a cent or two; steady +0.2% to +0.8% weeks plus interest. One assignment (W20)
+      was called away at a profit the following week.
+
+
+3. NEXT
+-------
+Run 5 continues from Week 27 Monday open, same rules, same seed.
+Pending at Week 52 close-out (see RESUME.md): ask about pricing v4, and remind the user
+to consider adjusting the market v2 selloff / crash / rebound transition rates.
