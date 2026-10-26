@@ -168,3 +168,8 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W46 fri**: C12 expired worthless (+$48.00); SimQ 9.87
 - **W46 fri**: C13 expired worthless (+$12.00); SimQ 9.87
 - **W46 fri**: P10.5 assigned, bought 100 at $10.50; SimQ 9.87
+- **W47 open**: sold C10.5 at 0.15 (SimQ 9.87)
+- **W47 open**: sold P9 at 0.13 (SimQ 9.87)
+- **W47 mid**: held C10.5, P9
+- **W47 fri**: C10.5 expired worthless (+$15.00); SimQ 9.51
+- **W47 fri**: P9 expired worthless (+$13.00); SimQ 9.51
