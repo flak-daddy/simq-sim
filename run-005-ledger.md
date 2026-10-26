@@ -3,15 +3,14 @@
 - Seed: 526270675 | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-005-journal.md
 
-## Current state (Week 13, Monday open)
-- SimQ spot: $32.93
-- Cash: $197.51 | locked collateral: $0.00 | free: $197.51
+## Current state (Week 14, Monday open)
+- SimQ spot: $36.94
+- Cash: $3,741.46 | locked collateral: $0.00 | free: $3,741.46
 - Shares: 100 SimQ bought at $40.00 in Week 3; effective basis $38.60 after option premiums
-- Shares: 100 SimQ bought at $34.50 in Week 12; effective basis $34.15 after option premiums
 - Open positions: none
-- Premium collected (gross): $747.00 | buy-to-close costs: $639.00 | interest: $39.51
-- Realized P&L (options net of buy-backs + stock sales): +$108.00 (options +$108.00, stock +$0.00)
-- Account value: $6,783.51 (-9.55% vs start)
+- Premium collected (gross): $790.00 | buy-to-close costs: $639.00 | interest: $40.46
+- Realized P&L (options net of buy-backs + stock sales): +$201.00 (options +$151.00, stock +$50.00)
+- Account value: $7,435.46 (-0.86% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -36,6 +35,12 @@
 | 18 | SIMQ-W11-P33 | W11 open | $33 | 0.32 / 0.35 | $32.00 | $3,300.00 cash | Expired worthless (Fri SimQ 36.91) | premium 0.97% of collateral; held at midweek (ask 0.05) |
 | 19 | SIMQ-W12-C41 | W12 open | $41 | 0.06 / 0.07 | $6.00 | lot 1 | Expired worthless (Fri SimQ 32.93) | premium 0.16% of share value; held at midweek (ask 0.01) |
 | 20 | SIMQ-W12-P34.5 | W12 open | $34.5 | 0.35 / 0.37 | $35.00 | $3,450.00 cash | ASSIGNED: bought 100 at $34.50 (Fri SimQ 32.93) | premium 1.01% of collateral; held at midweek (ask 0.60) |
+| 21 | SIMQ-W13-C35 | W13 open | $35 | 0.43 / 0.46 | $43.00 | lot 2 | CALLED AWAY: sold 100 at $35.00 (Fri SimQ 36.94) | premium 1.31% of share value; held at midweek (ask 0.91) |
+
+## Closed share lots
+| Bought | Sold | Stock P&L | Net after option premiums |
+|---|---|---|---|
+| W12 at $34.50 | W13 at $35.00 | +$50.00 | +$128.00 |
 
 ## Weeks
 | Week | Regime | Open | Mon | Tue | Wed | Thu | Fri | Week % | Interest |
@@ -52,10 +57,11 @@
 | 10 | calm_up | 35.70 | 35.60 | 35.87 | 36.25 | 36.04 | 35.63 | -0.2% | 2.73 (3,564.98 x 7d) |
 | 11 | calm_up | 35.63 | 36.16 | 36.27 | 36.06 | 36.68 | 36.91 | +3.6% | 2.76 (3,601.71 x 7d) |
 | 12 | calm_up | 36.91 | 37.39 | 36.90 | 35.07 | 35.07 | 32.93 | -10.8% | 2.04 (3,645.47 x 5d; 195.47 x 2d) |
+| 13 | calm_up | 32.93 | 34.03 | 33.85 | 35.36 | 36.95 | 36.94 | +12.2% | 0.95 (240.51 x 5d; 3,740.51 x 2d) |
 
 ## Scorecard
-- 20 trades: 9 expired worthless, 6 closed for profit, 3 closed at a loss, 2 assigned, 0 called away | win rate 45% (75% counting profitable closes)
+- 21 trades: 9 expired worthless, 6 closed for profit, 3 closed at a loss, 2 assigned, 1 called away | win rate 43% (71% counting profitable closes)
 - Avg put premium: 1.29% of collateral
-- Avg call premium: 0.31% of share value at sale
-- Wheel cycles completed (shares called away): 0
+- Avg call premium: 0.51% of share value at sale
+- Wheel cycles completed (shares called away): 1
 - Account value at week 26 (comparison metric): pending

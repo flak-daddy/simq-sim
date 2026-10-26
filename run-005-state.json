@@ -6,7 +6,7 @@
  "pricing": "v3",
  "headlines": "v3",
  "market": "v2",
- "week": 13,
+ "week": 14,
  "phase": "open",
  "events": [
   {
@@ -560,6 +560,52 @@
     ],
     [
      195.47,
+     2
+    ]
+   ]
+  },
+  {
+   "w": 13,
+   "ph": "open",
+   "t": "sell",
+   "kind": "C",
+   "k": 35.0,
+   "fill": 0.43,
+   "ask": 0.46,
+   "spot": 32.93
+  },
+  {
+   "w": 13,
+   "ph": "mid",
+   "t": "relot",
+   "id": 21,
+   "lot": 2
+  },
+  {
+   "w": 13,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 13,
+   "ph": "fri",
+   "t": "called",
+   "id": 21,
+   "k": 35.0,
+   "spot": 36.94
+  },
+  {
+   "w": 13,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 0.95,
+   "segs": [
+    [
+     240.51,
+     5
+    ],
+    [
+     3740.51,
      2
     ]
    ]
