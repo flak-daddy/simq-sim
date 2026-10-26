@@ -154,3 +154,10 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W44 mid**: bought to close P9 at 0.01 (+$6.00)
 - **W44 mid**: bought to close P10 at 0.01 (+$17.00)
 - **W44 mid**: bought to close P10.5 at 0.02 (+$24.00)
+- **W45 open**: sold P11 at 0.09 (SimQ 13.67)
+- **W45 open**: sold P12 at 0.21 (SimQ 13.67)
+- **W45 open**: sold P13 at 0.45 (SimQ 13.67)
+- **W45 mid**: held P11, P12, P13
+- **W45 fri**: P11 expired worthless (+$9.00); SimQ 11.94
+- **W45 fri**: P12 assigned, bought 100 at $12.00; SimQ 11.94
+- **W45 fri**: P13 assigned, bought 100 at $13.00; SimQ 11.94
