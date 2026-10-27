@@ -1,0 +1,178 @@
+SIMQ SPREAD AND FAR-OTM PREMIUM REVIEW, PLUS REALISM RECOMMENDATIONS
+===================================================================
+Written: Mon 2026-10-26, after Run 5. Pricing v3 (skew and spreads from v2), market v3.
+Question (user): "At times I felt the spreads were tough, with little premium left much
+farther off the spot. Am I onto something, or is that just how it works?"
+Script: tools/pricing-review/spread_skew_check.py (sections 1-5 below); the extra
+midweek and stress-week numbers in section 4 came from a one-off run using the same
+functions.
+Real data: the Oct 23, 2026 TQQQ chains already in market-calibration.md (snapshots 1a
+and 1b), plus the Oct 23, 2026 30-day skew readings from thetrading.tools.
+
+
+SHORT ANSWER
+------------
+- Spreads: not supported. SimQ's spreads match the real TQQQ chain within a cent or two
+  at every price level and cost you about 6% of your premium in Run 5. Real chains are
+  worse than SimQ, not better, because SimQ never shows the erratic, much wider quotes
+  real chains often have on .5 strikes and in-the-money options.
+- Little premium far from spot: mostly just how weekly options on a 3x ETF work, with
+  one real but small flaw. SimQ's put skew is a straight line, while real skew curves
+  upward in the far wing, so far-OTM puts are a few vol points too cheap in SimQ. That
+  is worth pennies per contract (about 5-15% more premium at 15-25% below spot), not
+  dollars.
+- What you felt was the spread's minimum width plus the steep drop-off in premium with
+  distance. Both exist in real chains to the same or a greater degree.
+
+
+1. SPREADS
+----------
+Real Oct 23 TQQQ chain (1-day, clean quotes) against SimQ's spread formula at the same
+mid price:
+
+  strike   real bid/ask   real width   SimQ width
+  59P      0.05/0.07      0.02         0.02
+  60P      0.08/0.10      0.02         0.02
+  61P      0.14/0.16      0.02         0.02
+  62P      0.23/0.26      0.03         0.03
+  63P      0.37/0.40      0.03         0.03
+  64P      0.57/0.62      0.05         0.03
+  65P      0.86/0.91      0.05         0.05
+  66P      1.22/1.28      0.06         0.08
+  67C      1.00/1.05      0.05         0.07
+  68C      0.59/0.63      0.04         0.04
+  69C-72C  0.01-0.03 wide, SimQ identical
+  Total width over 14 strikes: real 0.43, SimQ 0.45.
+
+What you actually paid (Run 5): $3,518 of premium collected. About $132 was given up
+selling at the bid instead of the mid and about $63 buying back at the ask, so about
+$195 in total, or 6% of premium.
+
+Why it felt tough far out: the spread has a floor of about $0.02, so it takes a bigger
+share of a cheap option. In your Runs 3-5 put sales, the spread was 6-9% of the mid
+within 20% of spot, 11% at 20-30% below and 17% beyond 30%. The real chain is the
+same or harsher: the real 59P was 0.05/0.07, a spread of 33% of its mid.
+
+
+2. PREMIUM FAR FROM SPOT
+------------------------
+Monday put bid as % of strike in SimQ (5-day, each regime's baseline implied vol):
+
+  regime      5%     10%     15%     20%     25%     30%    first no-bid
+  calm_up   1.26%   0.46%   0.13%   0.03%   0.00%   0.00%    24% below
+  chop      2.35%   1.24%   0.61%   0.27%   0.11%   0.03%    35% below
+  selloff   3.28%   2.06%   1.22%   0.69%   0.36%   0.17%    42% below
+  crash     4.01%   2.72%   1.79%   1.12%   0.68%   0.39%    47% below
+  rebound   3.44%   2.20%   1.34%   0.78%   0.43%   0.21%    44% below
+
+In a calm week, each extra 5% of distance cuts the premium by roughly a factor of
+three. That is the arithmetic of a weekly option, not a SimQ choice: at 54% implied vol,
+a typical (one standard deviation) week moves about 7.6%, so a put 15% below spot is
+two standard deviations away. Real TQQQ behaves the same way. The real 5-day chain on
+Oct 23 had the 60 put (9.5% below) at about 92% vol, and SimQ's skew gives 92.1% for
+that strike: an exact match.
+
+You sold far out often. The median put in Runs 3-5 was 13% below spot, and 40% of
+sales were 15% or more below. Your median bid was 0.85-0.95% of strike at 5-20% below
+spot and 0.56% at 20-30% below. Those are higher than the calm row above because you
+tended to go far out in volatile weeks, when premium is richer.
+
+
+3. WHERE SIMQ IS GENUINELY THIN: THE FAR PUT WING
+--------------------------------------------------
+SimQ's skew is linear: each strike's IV = ATM IV x (1 + 1.3 x % below spot). That is
+calibrated to the real chain out to about 10% below spot and matches it there. Beyond
+that, real skew curves upward:
+  - Real 30-day options, Oct 23: the 10-delta put traded at ATM + 29.9 vol points
+    (at the 91st percentile of its history, so a fairly steep day). SimQ's linear skew
+    gives ATM + 24.7 at the matching strike, about 27% below spot.
+  - Real 1-day options, Oct 23: the gap between real and SimQ IV grows with distance,
+    from 2.9 points at 3.5% below spot to 8.7 points at 11% below. Very short options
+    have steeper skew per 1% of distance than weeklies, and SimQ uses the same slope for
+    a 5-day Monday option and a 2-day Wednesday option.
+
+How much this matters, with a candidate fix (add 1.0 x (% below spot)^2 to the put-side
+skew, which matches the real 30-day 10-delta reading and leaves the 5-day 60 put at
+92.9% vs real 92%):
+  Monday bid % of strike, current -> candidate
+    calm_up   15%: 0.13 -> 0.15    20%: 0.03 -> 0.04
+    chop      15%: 0.61 -> 0.66    20%: 0.27 -> 0.31    25%: 0.11 -> 0.15
+    selloff   15%: 1.22 -> 1.29    20%: 0.69 -> 0.78    25%: 0.36 -> 0.45
+  On a $50 strike in a chop week, the 15% put goes from about $0.31 to $0.33.
+  Blind Monday put edge (300 years): 10% below +0.37 -> +0.40%/week; 15% below
+  +0.22 -> +0.27%; 20% below +0.14 -> +0.18%.
+
+So you are onto something, but it's small. It would make far-out puts slightly better,
+which favors your style.
+
+
+4. RECOMMENDATIONS TO MAKE SIMQ MORE REALISTIC
+----------------------------------------------
+In order of how much they would change what you experience. Items 1-3 make the sim
+harder (closer to real frictions); items 4-5 make far-OTM and midweek puts slightly
+richer; items 6-8 are larger design choices.
+
+1. Commissions. Charge $0.65 per contract on every open and close (assignment and
+   call-away free, as at most brokers). Run 5 had 130 contract trades, so about $85, or
+   2.4% of the premium collected. This is the largest real cost SimQ leaves out, and it
+   hits the cent-or-two buy-backs hardest: a $0.01 buy-back really costs $1.65.
+
+2. Messy quotes. Real weekly chains often show stale or much wider quotes, especially on
+   .5 strikes and in-the-money options (snapshot 1b: 64 put quoted 1.80/2.20; 73.5 call
+   0.16/0.71). Suggestion: each week, give a random
+   ~20% of .5 strikes a spread 3-5x normal, and quote in-the-money options at 3x the
+   normal width. Fills at a fair price would then take strike selection, as they do in
+   real life.
+
+3. Crash and selloff implied vol. SimQ prices stress weeks at 0.93-0.96x the volatility
+   that actually happens; real TQQQ in May 2022 was about 0.81x. Trimming selloff/crash
+   baselines by 8% (92 -> 85%, 105 -> 97%) cuts the blind Monday 10% put edge from
+   +0.37% to +0.32%/week; by 12%, to +0.30%. Evidence is one real episode plus March
+   2026 (where IV about equalled realized vol), so a modest trim (8%) is the defensible
+   step.
+
+4. Convex put wing (section 3). Add C x (% below spot)^2 to the put skew, with C around
+   0.7-1.0. Small effect, real-world shape. Strikes within 10% of spot are unchanged.
+
+5. Steeper skew for short expiries. Real 1-day skew is about 1.7x steeper per 1% than
+   5-day skew. Scaling SimQ's slope by (5 / days left)^0.33 makes the Wednesday chain
+   (2 days) about 1.36x steeper:
+     Wednesday put bid % of strike, current -> steeper
+       chop     10% below: 0.25 -> 0.30     selloff 10%: 0.54 -> 0.61
+       crash    10% below: 0.81 -> 0.91     crash   15%: 0.32 -> 0.41
+     Blind Wednesday put edge: 5% below +0.32 -> +0.37%/week; 10% below +0.10 -> +0.15%.
+   You open about a quarter of your trades at midweek, so this one touches your play
+   more than item 4 does. The 0.33 exponent comes from one 1-day chain; a real 2-day
+   chain would pin it down.
+
+6. Skew that moves with the market. Real skew steepens in stress: the 30-day 25-delta
+   put-call gap went from 11 to 20 points in the month to Oct 23. SimQ uses one slope in
+   every regime. Option: slope 1.1 in calm_up, 1.3 in chop and rebound, 1.5-1.6 in
+   selloff and crash. The magnitudes need a real chain from a stressed day before
+   adopting.
+
+7. Less honest headlines. Today's headlines always describe the true regime. Real news
+   is noisy and often wrong-footed. Option: 1 headline in 5 points the wrong way, or
+   stays neutral during a regime change. This tests reading the market, not the sim.
+
+8. Price path. SimQ is already harsher than TQQQ's 2010-2025 history (median year +8% vs
+   +57%; drawdowns worse than -50% in 54% of years vs about 25%). That is a deliberate
+   conservative choice, and I'd leave it. If you ever want a "bull market" run to
+   compare, it should be a labeled market version, not the default.
+
+Not recommended: widening spreads. The data in section 1 says they're already right.
+
+Suggested bundle for a pricing v4 / chain v2: items 1, 2, 3 (8% trim), 4 (C = 0.8) and
+5. Net effect on the blind Monday put (300 years, items 3 + 4 + commissions): 10% below
++0.37% -> +0.34%/week before commissions, +0.32% after one open and one close per week;
+15% below +0.22% -> +0.22% before, +0.19% after. Easier far-OTM and midweek premium, harder execution
+and crash weeks. That is closer to what real TQQQ put selling feels like.
+
+
+SOURCES
+-------
+Real TQQQ chains, Oct 23, 2026 (1-day and 5-day): market-calibration.md, snapshots 1a/1b
+(the user's screenshots).
+TQQQ 30-day skew readings, Oct 23, 2026 (ATM 71.7%, 10-delta put minus ATM +29.9 points,
+25-delta put minus call +20.5 points): https://www.thetrading.tools/tqqq-options
+TQQQ implied vs realized vol, May 2022: https://www.optionsanalysissuite.com/etf/tqqq/history/2022-05

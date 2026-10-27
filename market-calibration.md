@@ -145,3 +145,8 @@ Versioning: state field `market` = "v3" is written by `simbook.py new` from Run 
 ## Realism check (Oct 26, 2026, after Run 5)
 
 Full write-up: simq-realism-report.txt (internal stats from tools/pricing-review/realism_internal.py, market v3 + pricing v3, against published TQQQ, QQQ and Cboe put-write figures). Findings: calm-week IV/realized ratio 1.25x is in line with real TQQQ (1.12x on 30-day options, about 1.3x on weeklies); crash/selloff ratios 0.93-0.96x are richer for sellers than real TQQQ in May 2022 (about 0.81x). The price path is harsher than TQQQ history (median year +8% vs +57% in 2010-2025; drawdowns worse than -50% in 54% of years vs about 25%). Blind-wheel Sharpe about 0.4 vs real S&P put-write indexes 0.5-0.67. The blind edge vanishes if all IVs fall about 13%, or calm/chop IVs about 20%.
+
+
+## Spread and far-OTM premium review (Oct 26, 2026, after Run 5)
+
+Full write-up: simq-spread-skew-review.txt (tools/pricing-review/spread_skew_check.py). Spreads match the real Oct 23 chain (total width 0.45 vs real 0.43 over 14 strikes) and cost about 6% of premium in Run 5: no change. The linear put skew matches real 5-day quotes to about 10% below spot but is thin beyond (real 30-day 10-delta put ATM + 29.9 pts vs SimQ + 24.7; real 1-day IV up to 8.7 pts above SimQ at -11%). Candidate fixes (not adopted, user to decide): put-wing term + C x (1 - K/S)^2 with C 0.7-1.0, short-expiry skew scaling (5 / days)^0.33, selloff/crash IV trim of 8%, $0.65/contract commissions, and messy quotes on .5 strikes.
