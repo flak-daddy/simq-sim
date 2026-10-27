@@ -150,3 +150,14 @@ Full write-up: simq-realism-report.txt (internal stats from tools/pricing-review
 ## Spread and far-OTM premium review (Oct 26, 2026, after Run 5)
 
 Full write-up: simq-spread-skew-review.txt (tools/pricing-review/spread_skew_check.py). Spreads match the real Oct 23 chain (total width 0.45 vs real 0.43 over 14 strikes) and cost about 6% of premium in Run 5: no change. The linear put skew matches real 5-day quotes to about 10% below spot but is thin beyond (real 30-day 10-delta put ATM + 29.9 pts vs SimQ + 24.7; real 1-day IV up to 8.7 pts above SimQ at -11%). Candidate fixes (not adopted, user to decide): put-wing term + C x (1 - K/S)^2 with C 0.7-1.0, short-expiry skew scaling (5 / days)^0.33, selloff/crash IV trim of 8%, $0.65/contract commissions, and messy quotes on .5 strikes.
+
+
+## Pricing v4: curved put wing + steeper short-expiry skew (Oct 26, 2026; standard from Run 6)
+
+Adopted by the user from simq-spread-skew-review.txt, items 4 and 5. Implied-vol levels (REG3_IV), spreads and the price path are unchanged from v3; only the skew changes:
+- Put wing: IV factor gains + WING_C x (1 - K/S)^2 below spot, WING_C = 0.8. Strikes within 10% of spot move by under 1 vol point; the real 5-day 60 put (Oct 23) prices at 92.7% vs real 92% (v3: 92.1%).
+- Short expiries: skew slope = 1.3 x (5 / days left)^0.33 for options with under 5 trading days (Wednesday chains: 2 days, slope about 1.77). Monday 5-day chains keep slope 1.3.
+
+Blind put edge, market v3, 300 years (% collateral/week): Monday 10% below +0.37 -> +0.39; 15% +0.22 -> +0.26; 20% +0.14 -> +0.17. Wednesday 5% below +0.32 -> +0.37; 10% +0.10 -> +0.15.
+
+Versioning: state field `pricing` = "v4" is written by `simbook.py new` from Run 6. Runs 3-5 keep "v3"; replays of Runs 2-5 verified byte-for-byte on ledgers and journals. Tools that call simq.skew_iv(S, K, iv) without T get the v3 (linear) shape.

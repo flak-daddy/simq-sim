@@ -7,7 +7,7 @@ sys.path.insert(0, '.'); import simq
 def setp(pricing):
     if pricing == "v1": simq.PRICING, simq.PRICING_V2_FROM, simq.SKEW_V2, simq.SPREAD_V2 = "v2", 999, False, False
     elif pricing == "v2": simq.PRICING, simq.PRICING_V2_FROM, simq.SKEW_V2, simq.SPREAD_V2 = "v2", 1, True, True
-    else: simq.PRICING, simq.PRICING_V2_FROM, simq.SKEW_V2, simq.SPREAD_V2 = "v3", 1, True, True
+    else: simq.PRICING, simq.PRICING_V2_FROM, simq.SKEW_V2, simq.SPREAD_V2 = pricing, 1, True, True
 
 def path(seed, reseed, market, weeks):
     simq.BASE_SEED, simq.RESEED, simq.MARKET = seed, reseed, market
@@ -55,14 +55,14 @@ if __name__ == "__main__":
     # Usage: python3 tools/pricing-review/wheel_compare.py [RUN RUN ...]   (default: 1 2 5)
     runs = [int(a) for a in sys.argv[1:]] or [1, 2, 5]
     for otm in (0.10, 0.15):
-        for pr in ("v1", "v2", "v3"):
+        for pr in ("v1", "v2", "v3", "v4"):
             cells = []
             for n in runs:
                 v = wheel(run_path(n, pr), pr, otm)[0]
                 cells.append(f"run {n}: 26w {v[26]/v[0]-1:+.1%}" + (f", 52w {v[52]/v[0]-1:+.1%}, H2 {v[52]/v[26]-1:+.1%}" if len(v) > 27 else ""))
             print(f"blind wheel {otm:.0%} pricing {pr} | " + " | ".join(cells))
     rng = random.Random(9)
-    for mk, pr in (("v1", "v2"), ("v2", "v3"), ("v3", "v3")):
+    for mk, pr in (("v1", "v2"), ("v2", "v3"), ("v3", "v3"), ("v3", "v4")):
         for otm in (0.10, 0.15):
             r = []
             for _ in range(600):

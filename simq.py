@@ -19,7 +19,9 @@ BASE_SEED = 20261022
 SPREAD_V2 = True  # tighter spreads calibrated to real TQQQ chains (Oct 24, 2026); set per week by simbook
 SKEW_V2 = True      # put/call skew calibrated to real TQQQ chains; set per week by simbook
 PRICING_V2_FROM = 1  # weeks >= this use the v2 implied-vol level (REG2) and skew
-PRICING = "v3"      # implied-vol level: "v3" (standard for new runs since Oct 24, 2026) or "v2"
+PRICING = "v3"      # implied-vol level: "v4" (standard from Run 6: v3 IVs + skew v3), "v3" (Runs 3-5) or "v2"
+WING_C = 0.8        # pricing v4: put-wing curvature, IV factor + WING_C * (1 - K/S)^2 below spot
+SHORT_EXP = 0.33    # pricing v4: skew slope x (5 / days left)^SHORT_EXP for expiries under 5 days
                     # (Run 1 W13-26 and Run 2). simbook sets this from the state file; v3 keeps v2 skew/spreads
 RESEED = {}  # {first_week: seed}: from that week on, a different random stream is used
 S_START = 63.80
@@ -102,7 +104,7 @@ def gen_week(w):
             ivs3.append(iv3)
         S = closes[-1]
         iv_prev, iv_prev2, iv_prev3 = ivs[-1], ivs2[-1], ivs3[-1]
-    if PRICING == "v3":
+    if PRICING in ("v3", "v4"):
         return reg, s_open, closes, ivs3
     return reg, s_open, closes, (ivs2 if w >= PRICING_V2_FROM else ivs)
 
@@ -121,14 +123,21 @@ def bs(S, K, T, iv, kind):
     return K * math.exp(-RATE * T) * ncdf(-d2) - S * ncdf(-d1)
 
 
-def skew_iv(S, K, iv):
+def skew_iv(S, K, iv, T=None):
     # real chains: IV falls ~1.1 vol pts per +1% strike at 82% ATM (puts rich, calls cheap)
+    if PRICING == "v4" and T is not None:
+        # skew v3 (Oct 26, 2026): steeper slope for short expiries (real 1-day skew ~1.7x the
+        # 5-day slope) and an upward-curving put wing (real 10-delta put richer than linear)
+        days = max(1.0, T * 252)
+        slope = 1.3 * (5.0 / days) ** SHORT_EXP if days < 5 else 1.3
+        m = max(0.0, 1.0 - K / S)
+        return iv * min(1.5, max(0.6, 1.0 - slope * (K / S - 1.0) + WING_C * m * m))
     return iv * min(1.5, max(0.6, 1.0 - 1.3 * (K / S - 1.0)))
 
 
 def quote(S, K, T, iv, kind):
     if SKEW_V2:
-        iv = skew_iv(S, K, iv)
+        iv = skew_iv(S, K, iv, T)
     mid = bs(S, K, T, iv, kind)
     if SPREAD_V2:
         # fit to two real TQQQ chains (1-day and 5-day): ~0.02 wide when cheap, ~0.05 near $0.9, ~0.08 near $1.4, ~0.15 near $3

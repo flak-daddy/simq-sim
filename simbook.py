@@ -42,7 +42,7 @@ def default_state_path():
 
 def new_state(run, seed):
     return {"run": run, "seed": seed, "start_cash": 7500.0, "apy": 0.04,
-            "pricing": "v3", "headlines": "v3", "market": "v3", "week": 1, "phase": "open", "events": []}
+            "pricing": "v4", "headlines": "v3", "market": "v3", "week": 1, "phase": "open", "events": []}
 
 
 def load(path):
