@@ -787,10 +787,13 @@ def main(argv):
         run = int(a[a.index("--run") + 1])
         seed = int(a[a.index("--seed") + 1])
         hv = a[a.index("--headlines") + 1] if "--headlines" in a else None
+        a_all = a
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)), f"run-{run:03d}-state.json")
         st = new_state(run, seed)
         if hv:
             st["headlines"] = hv
+        if "--commission" in a_all:
+            st["commission"] = float(a_all[a_all.index("--commission") + 1])
         save(st, path)
         render(st, path)
         print(f"Created {path}")
