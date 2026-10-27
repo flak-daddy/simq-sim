@@ -152,12 +152,14 @@ Full write-up: simq-realism-report.txt (internal stats from tools/pricing-review
 Full write-up: simq-spread-skew-review.txt (tools/pricing-review/spread_skew_check.py). Spreads match the real Oct 23 chain (total width 0.45 vs real 0.43 over 14 strikes) and cost about 6% of premium in Run 5: no change. The linear put skew matches real 5-day quotes to about 10% below spot but is thin beyond (real 30-day 10-delta put ATM + 29.9 pts vs SimQ + 24.7; real 1-day IV up to 8.7 pts above SimQ at -11%). Candidate fixes (not adopted, user to decide): put-wing term + C x (1 - K/S)^2 with C 0.7-1.0, short-expiry skew scaling (5 / days)^0.33, selloff/crash IV trim of 8%, $0.65/contract commissions, and messy quotes on .5 strikes.
 
 
-## Pricing v4: curved put wing + steeper short-expiry skew (Oct 26, 2026; standard from Run 6)
+## Pricing v4 (Oct 26-27, 2026; standard from Run 6)
 
-Adopted by the user from simq-spread-skew-review.txt, items 4 and 5. Implied-vol levels (REG3_IV), spreads and the price path are unchanged from v3; only the skew changes:
-- Put wing: IV factor gains + WING_C x (1 - K/S)^2 below spot, WING_C = 0.8. Strikes within 10% of spot move by under 1 vol point; the real 5-day 60 put (Oct 23) prices at 92.7% vs real 92% (v3: 92.1%).
-- Short expiries: skew slope = 1.3 x (5 / days left)^0.33 for options with under 5 trading days (Wednesday chains: 2 days, slope about 1.77). Monday 5-day chains keep slope 1.3.
+Adopted by the user from simq-spread-skew-review.txt. Final content (Oct 27): items 1, 2, 3 and 5. Item 4 (curved put wing, WING_C 0.8) was added on Oct 26 and removed on Oct 27 at the user's request; WING_C stays in simq.py set to 0.0. Spread formula, calm/chop/rebound IV and the price path are unchanged.
+- Short-expiry skew (item 5): skew slope = 1.3 x (5 / days left)^0.33 for options with under 5 trading days (Wednesday chains: 2 days, slope about 1.77). Monday chains keep 1.3.
+- Stress-week IV (item 3): REG4_IV selloff 0.85 (was 0.92), crash 0.97 (was 1.05), about 8% lower, toward real stress-week IV/realized ratios. Same down-day bump and noise as v3, so the price path is identical.
+- Messy quotes (item 2): in-the-money options quote 3x the normal spread; each week and phase a random ~20% of .5 strikes quote 3-5x wider (both sides). Seeded by (seed, week, phase, strike), so chain display, fills and buy-backs agree and replays are exact.
+- Commissions (item 1): state field `commission` = 0.65, charged per contract on every sell and buy-to-close (stored as `fee` on the event; assignment and call-away free). Shown in fill messages and in the Week P&L rows; cash, interest and the scorecard include it.
 
-Blind put edge, market v3, 300 years (% collateral/week): Monday 10% below +0.37 -> +0.39; 15% +0.22 -> +0.26; 20% +0.14 -> +0.17. Wednesday 5% below +0.32 -> +0.37; 10% +0.10 -> +0.15.
+Blind put edge, market v3, 300 years (% collateral/week; commission on the open only, messy quotes not included): Monday 10% below +0.37 (v3) -> +0.32; 15% +0.22 -> +0.18. Wednesday 5% below +0.32 -> +0.33; 10% +0.10 -> +0.11.
 
-Versioning: state field `pricing` = "v4" is written by `simbook.py new` from Run 6. Runs 3-5 keep "v3"; replays of Runs 2-5 verified byte-for-byte on ledgers and journals. Tools that call simq.skew_iv(S, K, iv) without T get the v3 (linear) shape.
+Versioning: `simbook.py new` writes pricing "v4" and commission 0.65 from Run 6. Runs 3-5 keep "v3" with no commission; replays of Runs 2-5 verified byte-for-byte on ledgers and journals. Tools that call simq.skew_iv(S, K, iv) without T get the v3 (linear) shape.

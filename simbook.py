@@ -42,7 +42,7 @@ def default_state_path():
 
 def new_state(run, seed):
     return {"run": run, "seed": seed, "start_cash": 7500.0, "apy": 0.04,
-            "pricing": "v4", "headlines": "v3", "market": "v3", "week": 1, "phase": "open", "events": []}
+            "pricing": "v4", "headlines": "v3", "market": "v3", "commission": 0.65, "week": 1, "phase": "open", "events": []}
 
 
 def load(path):
@@ -75,6 +75,7 @@ def wk(st, w):
 
 def view(st, w, ph):
     simq.SPREAD_V2 = w >= st.get("spread_v2_from", 1)
+    simq.MESSY_KEY = (st["seed"], w, ph) if st.get("pricing") == "v4" else None
     reg, s_open, closes, ivs = wk(st, w)
     if ph == "open":
         return s_open, 5, ivs[0]
@@ -120,11 +121,13 @@ def replay(st, upto_week=None, upto_index=None):
                         lot["credit"] += e["fill"] * 100
                         break
             trades[nid] = tr
-            cash += e["fill"] * 100
+            tr["fees"] = e.get("fee", 0.0)
+            cash += e["fill"] * 100 - e.get("fee", 0.0)
         elif t == "btc":
             tr = trades[e["id"]]
             tr["status"], tr["close"], tr["end_w"], tr["end_ph"] = "btc", e["price"], e["w"], e["ph"]
-            cash -= e["price"] * 100
+            cash -= e["price"] * 100 + e.get("fee", 0.0)
+            tr["fees"] = tr.get("fees", 0.0) + e.get("fee", 0.0)
             if tr["kind"] == "C" and tr["lot"] in lots:
                 lots[tr["lot"]]["credit"] -= e["price"] * 100
         elif t == "relot":
@@ -173,9 +176,9 @@ def week_interest(st, w):
             continue
         t, d = e["t"], DAY.get(e.get("ph", "open"), 0)
         if t == "sell":
-            deltas.append((d, e["fill"] * 100))
+            deltas.append((d, e["fill"] * 100 - e.get("fee", 0.0)))
         elif t == "btc":
-            deltas.append((d, -e["price"] * 100))
+            deltas.append((d, -e["price"] * 100 - e.get("fee", 0.0)))
         elif t == "assign":
             deltas.append((5, -e["k"] * 100))
         elif t == "called":
@@ -218,7 +221,7 @@ def scorecard(st, r):
     cp = [x["fill"] / x["spot"] * 100 for x in calls]
     stock = sum((l["sold"] - l["cost"]) * 100 for l in r["closed_lots"])
     done = [x for x in tr if x["status"] != "open"]
-    opt_net = sum(x["fill"] * 100 for x in done) - cost
+    opt_net = sum(x["fill"] * 100 - x.get("fees", 0.0) for x in done) - cost
     return dict(n=n, exp=len(exp), btc_win=len(btc_win), btc_loss=len(btc_loss), asg=len(asg),
                 cld=len(cld), prem=prem, cost=cost, put_avg=(sum(pp) / len(pp) if pp else None),
                 call_avg=(sum(cp) / len(cp) if cp else None), stock=stock, opt_net=opt_net,
@@ -402,13 +405,16 @@ def week_pnl(st, w):
             continue
         prem = tr["fill"] * 100
         cost = (tr["close"] or 0) * 100 if tr["status"] == "btc" else 0.0
-        net = prem - cost
+        fees = tr.get("fees", 0.0)
+        net = prem - cost - fees
         opt += net
         if tr["status"] == "btc":
             how = f"sold {tr['fill']:.2f}, bought back {tr['close']:.2f}"
         else:
             how = f"sold {tr['fill']:.2f}, " + {"expired": "expired", "assigned": "assigned",
                                                   "called": "called away"}.get(tr["status"], "open")
+        if fees:
+            how += f", fees {money(fees)}"
         rows.append((f"#{tr['id']} {contract(tr)} ({SHORT[tr['ph']]})", how, net))
     interest = sum(e["amount"] for e in st["events"] if e["t"] == "interest" and e["w"] == w)
     stock = round(v_now - v_prev - opt - interest, 2)
@@ -523,6 +529,8 @@ def cmd_sell(st, kind, k, lot=None):
     if kind == "C" and free_calls(r) < 1:
         sys.exit("No uncovered shares: a call must be covered by 100 shares you hold (no naked calls).")
     ev = {"w": w, "ph": ph, "t": "sell", "kind": kind, "k": k, "fill": bid, "ask": ask, "spot": S}
+    if st.get("commission"):
+        ev["fee"] = st["commission"]
     if kind == "C" and lot is not None:
         if not lot_is_free(r, lot):
             sys.exit(f"Lot {lot} is not held or already covers an open call.")
@@ -532,7 +540,8 @@ def cmd_sell(st, kind, k, lot=None):
     tr = max(r["trades"].values(), key=lambda x: x["id"])
     extra = f"collateral {money(k * 100)}, free cash {money(r['free'])}" if kind == "P" else \
         f"covered by {tr['lot'] and 'lot ' + str(tr['lot'])}"
-    print(f"Sold #{tr['id']} {contract(tr)} at the bid {bid:.2f} (ask {ask:.2f}) for +{money(bid * 100)}; {extra}")
+    fee = f" less {money(ev['fee'])} commission" if ev.get("fee") else ""
+    print(f"Sold #{tr['id']} {contract(tr)} at the bid {bid:.2f} (ask {ask:.2f}) for +{money(bid * 100)}{fee}; {extra}")
 
 
 def cmd_btc(st, tid):
@@ -544,9 +553,14 @@ def cmd_btc(st, tid):
     if not tr or tr["status"] != "open":
         sys.exit(f"#{tid} is not an open position.")
     b, a = quote_k(st, w, ph, tr["kind"], tr["k"])
-    st["events"].append({"w": w, "ph": ph, "t": "btc", "id": tid, "price": a})
+    ev = {"w": w, "ph": ph, "t": "btc", "id": tid, "price": a}
+    if st.get("commission"):
+        ev["fee"] = st["commission"]
+    st["events"].append(ev)
+    fee = ev.get("fee", 0.0) + tr.get("fees", 0.0)
+    fee_txt = f" incl. {money(fee)} commissions" if fee else ""
     print(f"Bought to close #{tid} {contract(tr)} at the ask {a:.2f} for {money(a * 100)}; "
-          f"net {money(tr['fill'] * 100 - a * 100, True)} on the trade")
+          f"net {money(tr['fill'] * 100 - a * 100 - fee, True)} on the trade{fee_txt}")
 
 
 def cmd_pass(st):

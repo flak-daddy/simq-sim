@@ -20,7 +20,8 @@ SPREAD_V2 = True  # tighter spreads calibrated to real TQQQ chains (Oct 24, 2026
 SKEW_V2 = True      # put/call skew calibrated to real TQQQ chains; set per week by simbook
 PRICING_V2_FROM = 1  # weeks >= this use the v2 implied-vol level (REG2) and skew
 PRICING = "v3"      # implied-vol level: "v4" (standard from Run 6: v3 IVs + skew v3), "v3" (Runs 3-5) or "v2"
-WING_C = 0.8        # pricing v4: put-wing curvature, IV factor + WING_C * (1 - K/S)^2 below spot
+WING_C = 0.0        # put-wing curvature, IV factor + WING_C * (1 - K/S)^2 below spot (tried 0.8; user removed it Oct 27, 2026)
+MESSY_KEY = None    # pricing v4: (seed, week, phase) set by simbook; seeds which strikes get messy quotes
 SHORT_EXP = 0.33    # pricing v4: skew slope x (5 / days left)^SHORT_EXP for expiries under 5 days
                     # (Run 1 W13-26 and Run 2). simbook sets this from the state file; v3 keeps v2 skew/spreads
 RESEED = {}  # {first_week: seed}: from that week on, a different random stream is used
@@ -40,6 +41,8 @@ REG2_IV = {"calm_up": 0.62, "chop": 0.75, "selloff": 1.02, "crash": 1.25, "rebou
 # implied vol set relative to each regime's own realized vol, using real TQQQ ratios:
 # ~1.3x in calm weeks (weekly options, Oct 2026 chain) and ~1.05x in a sharp selloff (Mar 2026).
 REG3_IV = {"calm_up": 0.54, "chop": 0.75, "selloff": 0.92, "crash": 1.05, "rebound": 0.95}
+# pricing v4: selloff/crash trimmed 8% toward real stress-week IV/realized ratios
+REG4_IV = {"calm_up": 0.54, "chop": 0.75, "selloff": 0.85, "crash": 0.97, "rebound": 0.95}
 TRANS = {
     "calm_up": {"calm_up": .55, "chop": .25, "selloff": .15, "crash": .03, "rebound": .02},
     "chop":    {"calm_up": .30, "chop": .35, "selloff": .25, "crash": .05, "rebound": .05},
@@ -79,7 +82,7 @@ def t_draw(rng, df=4):
 
 
 def gen_week(w):
-    S, reg, iv_prev, iv_prev2, iv_prev3 = S_START, "chop", 0.58, 0.76, 0.76
+    S, reg, iv_prev, iv_prev2, iv_prev3, iv_prev4 = S_START, "chop", 0.58, 0.76, 0.76, 0.76
     for k in range(1, w + 1):
         seed_k = BASE_SEED
         for w0, s0 in sorted(RESEED.items()):
@@ -89,7 +92,7 @@ def gen_week(w):
         probs = TRANS_BY_MARKET[MARKET][reg]
         reg = rng.choices(list(probs), weights=list(probs.values()))[0]
         p = REG[reg]
-        s_open, closes, ivs, ivs2, ivs3 = S, [], [iv_prev], [iv_prev2], [iv_prev3]
+        s_open, closes, ivs, ivs2, ivs3, ivs4 = S, [], [iv_prev], [iv_prev2], [iv_prev3], [iv_prev4]
         for _ in range(5):
             u = p["mu"] + p["sig"] * t_draw(rng)
             r = LEV * u - DRAG
@@ -102,9 +105,12 @@ def gen_week(w):
             ivs.append(iv)
             ivs2.append(iv2)
             ivs3.append(iv3)
+            ivs4.append(min(1.7, max(0.4, REG4_IV[reg] + 3.0 * max(0.0, -r) + g)))
         S = closes[-1]
-        iv_prev, iv_prev2, iv_prev3 = ivs[-1], ivs2[-1], ivs3[-1]
-    if PRICING in ("v3", "v4"):
+        iv_prev, iv_prev2, iv_prev3, iv_prev4 = ivs[-1], ivs2[-1], ivs3[-1], ivs4[-1]
+    if PRICING == "v4":
+        return reg, s_open, closes, ivs4
+    if PRICING == "v3":
         return reg, s_open, closes, ivs3
     return reg, s_open, closes, (ivs2 if w >= PRICING_V2_FROM else ivs)
 
@@ -135,6 +141,17 @@ def skew_iv(S, K, iv, T=None):
     return iv * min(1.5, max(0.6, 1.0 - 1.3 * (K / S - 1.0)))
 
 
+def messy_mult(S, K, kind):
+    # pricing v4: real chains show erratic quotes. In-the-money options quote 3x wider; each
+    # week/phase a random ~20% of .5 strikes quote 3-5x wider (same strike, both sides).
+    m = 3.0 if (kind == "P" and K > S) or (kind == "C" and K < S) else 1.0
+    if K % 1:
+        rr = random.Random(f"{MESSY_KEY}-{K:g}")
+        if rr.random() < 0.20:
+            m = max(m, rr.uniform(3.0, 5.0))
+    return m
+
+
 def quote(S, K, T, iv, kind):
     if SKEW_V2:
         iv = skew_iv(S, K, iv, T)
@@ -142,6 +159,8 @@ def quote(S, K, T, iv, kind):
     if SPREAD_V2:
         # fit to two real TQQQ chains (1-day and 5-day): ~0.02 wide when cheap, ~0.05 near $0.9, ~0.08 near $1.4, ~0.15 near $3
         half = max(0.01, 0.01 + 0.05 * mid) / 2
+        if PRICING == "v4" and MESSY_KEY is not None:
+            half *= messy_mult(S, K, kind)
     else:
         half = max(0.01, 0.03 * mid + 0.01)  # v1, used by Run 1 weeks 1-12
     bid = round(max(0.0, mid - half), 2)
