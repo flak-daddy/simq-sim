@@ -51,3 +51,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W15 mid**: bought to close P78 at 0.03 (+$46.00)
 - **W16 open**: sold P79 at 0.20 (SimQ 98.86)
 - **W16 mid**: bought to close P79 at 0.01 (+$19.00)
+- **W17 open**: passed
+- **W17 mid**: passed
