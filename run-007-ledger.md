@@ -3,15 +3,14 @@
 - Seed: 104391084 | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-007-journal.md
 
-## Current state (Week 25, Monday open)
-- SimQ spot: $32.36
-- Cash: $535.01 | locked collateral: $0.00 | free: $535.01
+## Current state (Week 26, Monday open)
+- SimQ spot: $32.84
+- Cash: $3,877.20 | locked collateral: $0.00 | free: $3,877.20
 - Shares: 100 SimQ bought at $46.00 in Week 4; effective basis $44.49 after option premiums
-- Shares: 100 SimQ bought at $32.50 in Week 24; effective basis $32.15 after option premiums
 - Open positions: none
-- Premium collected (gross): $845.00 | buy-to-close costs: $35.00 | interest: $75.01
-- Realized P&L (options net of buy-backs + stock sales): +$810.00 (options +$810.00, stock +$0.00)
-- Account value: $7,007.01 (-6.57% vs start)
+- Premium collected (gross): $936.00 | buy-to-close costs: $35.00 | interest: $76.20
+- Realized P&L (options net of buy-backs + stock sales): +$901.00 (options +$901.00, stock +$0.00)
+- Account value: $7,161.20 (-4.52% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -42,6 +41,12 @@
 | 24 | SIMQ-W22-P30 | W22 open | $30 | 0.35 / 0.38 | $35.00 | $3,000.00 cash | Bought to close at 0.01 ($1.00), net +$34.00 | premium 1.17% of collateral |
 | 25 | SIMQ-W23-P32 | W23 open | $32 | 0.50 / 0.54 | $50.00 | $3,200.00 cash | Bought to close at 0.10 ($10.00), net +$40.00 | premium 1.56% of collateral |
 | 26 | SIMQ-W24-P32.5 | W24 open | $32.5 | 0.35 / 0.38 | $35.00 | $3,250.00 cash | ASSIGNED: bought 100 at $32.50 (Fri SimQ 32.36) | premium 1.08% of collateral; held at midweek (ask 0.25) |
+| 27 | SIMQ-W25-C32.5 | W25 open | $32.5 | 0.91 / 0.97 | $91.00 | lot 2 | CALLED AWAY: sold 100 at $32.50 (Fri SimQ 32.84) | premium 2.81% of share value; held at midweek (ask 2.17) |
+
+## Closed share lots
+| Bought | Sold | Stock P&L | Net after option premiums |
+|---|---|---|---|
+| W24 at $32.50 | W25 at $32.50 | +$0.00 | +$126.00 |
 
 ## Weeks
 | Week | Regime | Open | Mon | Tue | Wed | Thu | Fri | Week % | Interest |
@@ -70,10 +75,11 @@
 | 22 | calm_up | 33.75 | 34.16 | 34.49 | 34.18 | 32.71 | 33.46 | -0.9% | 2.84 (3,703.10 x 3d; 3,702.10 x 4d) |
 | 23 | calm_up | 33.46 | 33.97 | 34.12 | 34.25 | 34.89 | 34.57 | +3.3% | 2.88 (3,754.94 x 3d; 3,744.94 x 4d) |
 | 24 | calm_up | 34.57 | 34.24 | 34.34 | 33.88 | 32.40 | 32.36 | -6.4% | 2.19 (3,782.82 x 5d; 532.82 x 2d) |
+| 25 | crash | 32.36 | 32.65 | 34.29 | 33.79 | 33.95 | 32.84 | +1.5% | 1.19 (626.01 x 5d; 3,876.01 x 2d) |
 
 ## Scorecard
-- 26 trades: 14 expired worthless, 10 closed for profit, 0 closed at a loss, 2 assigned, 0 called away | win rate 54% (92% counting profitable closes)
+- 27 trades: 14 expired worthless, 10 closed for profit, 0 closed at a loss, 2 assigned, 1 called away | win rate 52% (89% counting profitable closes)
 - Avg put premium: 0.98% of collateral
-- Avg call premium: 0.75% of share value at sale
-- Wheel cycles completed (shares called away): 0
+- Avg call premium: 1.26% of share value at sale
+- Wheel cycles completed (shares called away): 1
 - Account value at week 26 (comparison metric): pending

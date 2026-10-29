@@ -71,3 +71,6 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W24 open**: sold P32.5 at 0.35 (SimQ 34.57)
 - **W24 mid**: held P32.5
 - **W24 fri**: P32.5 assigned, bought 100 at $32.50; SimQ 32.36
+- **W25 open**: sold C32.5 at 0.91 (SimQ 32.36)
+- **W25 mid**: held C32.5
+- **W25 fri**: C32.5 called away, sold 100 at $32.50; SimQ 32.84
