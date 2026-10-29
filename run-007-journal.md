@@ -23,3 +23,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W6 fri**: P30 expired worthless (+$3.00); SimQ 40.92
 - **W7 open**: passed
 - **W7 mid**: passed
+- **W8 open**: passed
+- **W8 mid**: passed
