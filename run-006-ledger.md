@@ -3,14 +3,14 @@
 - Seed: 892542713 | Start: $7,500, 4.00% APY | Rules: claude/csp-ledger-branch-cc.md
 - Status: in progress | Comparison window: 26 sim weeks | Journal: claude/run-006-journal.md
 
-## Current state (Week 26, Monday open)
-- SimQ spot: $230.71
-- Cash: $8,341.44 | locked collateral: $0.00 | free: $8,341.44
+## Current state (Week 27, Monday open)
+- SimQ spot: $266.22
+- Cash: $8,347.84 | locked collateral: $0.00 | free: $8,347.84
 - Shares: 0
 - Open positions: none
-- Premium collected (gross): $913.00 | buy-to-close costs: $226.00 | interest: $154.44
+- Premium collected (gross): $913.00 | buy-to-close costs: $226.00 | interest: $160.84
 - Realized P&L (options net of buy-backs + stock sales): +$687.00 (options +$687.00, stock +$0.00)
-- Account value: $8,341.44 (+11.22% vs start)
+- Account value: $8,347.84 (+11.30% vs start)
 
 ## Trade log
 | # | Contract | Opened | Strike | Fill (bid/ask) | Premium | Collateral/Cover | Result | Notes |
@@ -65,9 +65,10 @@
 | 23 | crash | 171.89 | 165.87 | 171.46 | 164.64 | 168.45 | 169.28 | -1.5% | 6.38 (8,322.28 x 7d) |
 | 24 | rebound | 169.28 | 177.16 | 177.40 | 180.00 | 185.65 | 183.07 | +8.1% | 6.39 (8,328.66 x 7d) |
 | 25 | selloff | 183.07 | 171.67 | 177.59 | 191.52 | 214.22 | 230.71 | +26.0% | 6.39 (8,335.05 x 7d) |
+| 26 | rebound | 230.71 | 231.90 | 247.49 | 269.09 | 266.22 | 266.22 | +15.4% | 6.40 (8,341.44 x 7d) |
 
 ## Scorecard
 - 21 trades: 11 expired worthless, 9 closed for profit, 1 closed at a loss, 0 assigned, 0 called away | win rate 52% (95% counting profitable closes)
 - Avg put premium: 0.69% of collateral
 - Wheel cycles completed (shares called away): 0
-- Account value at week 26 (comparison metric): pending
+- Account value at week 26 (comparison metric): $8,347.84 (+11.30%) | buy-and-hold SimQ $31,295.45 (+317.27%) | cash only $7,649.59 (+1.99%)
