@@ -7,7 +7,7 @@
  "headlines": "v3",
  "market": "v4",
  "commission": 0.0,
- "week": 20,
+ "week": 21,
  "phase": "open",
  "events": [
   {
@@ -723,6 +723,41 @@
    "segs": [
     [
      3641.69,
+     7
+    ]
+   ]
+  },
+  {
+   "w": 20,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 30.5,
+   "fill": 0.18,
+   "ask": 0.2,
+   "spot": 34.35
+  },
+  {
+   "w": 20,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 20,
+   "ph": "fri",
+   "t": "expire",
+   "id": 23,
+   "k": 30.5,
+   "spot": 34.49
+  },
+  {
+   "w": 20,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 2.81,
+   "segs": [
+    [
+     3662.48,
      7
     ]
    ]
