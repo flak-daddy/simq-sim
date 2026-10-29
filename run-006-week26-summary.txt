@@ -1,0 +1,83 @@
+SIMQ RUN 6: WEEK 26 RESULTS (COMPARISON WINDOW)
+================================================
+Logged: Wed 2026-10-28, after sim Week 26
+Status: Run 6 CONTINUES to Week 52 ("full year"). These Week 26 figures are Run 6's
+official comparison result against other runs. Seed stays hidden until the run ends.
+Start: $7,500 paper cash, 4.00% APY on cash, SimQ at $63.80, pricing v4 WITHOUT commissions
+(messy quotes, stress-week IV trim, short-expiry skew), headlines v3, market v3 (first run on
+market v3 and on pricing v4).
+Rules: claude/csp-ledger-branch-cc.md | Full books: run-006-ledger.md, run-006-journal.md
+
+
+1. THE RESULT
+-------------
+Account value (Week 26 Friday):  $8,347.84   (+11.30%)   all cash, no shares, no open positions
+
+Benchmarks over the same 26 weeks:
+  Buy and hold SimQ ($63.80 -> $266.22):  $31,295.45   (+317.27%)
+  Leave it all in cash at 4.00%:           $7,649.59   (+1.99%)
+  Run 5 at Week 26 (pricing v3, headlines v3, market v2): $9,410.86   (+25.48%)
+  Run 4 at Week 26 (pricing v3, headlines v3, market v1): $8,255.14   (+10.07%)
+  Run 3 at Week 26 (pricing v3, headlines v2, market v1): $9,779.00   (+30.39%)
+  Run 2 at Week 26 (pricing v2, market v1):               $9,189.18   (+22.52%)
+  Run 1 at Week 26 (pricing v1, market v1):               $6,575.78   (-12.32%)
+No earlier run used market v3 or pricing v4, so none is strictly like-for-like with Run 6.
+
+Where the $847.84 gain came from:
+  Option premium collected (gross) ...... +$913.00  (21 puts, no calls)
+  Buy-to-close costs .....................  -$226.00  (incl. -$195 on W9 P61, closed for -$128 net)
+  Options net ............................  +$687.00
+  Stock ..................................    $0.00  (no assignments)
+  Interest on cash .......................  +$160.84
+                                           ---------
+                                           +$847.84
+
+
+2. THE MARKET: A TAIL SEED
+--------------------------
+Regimes over the 26 weeks: calm_up 12, chop 6, rebound 5, crash 2, selloff 1.
+SimQ went from $63.80 to $266.22 (+317%). Weeks 1-13 were mostly flat to firm ($58-$84);
+W14-W19 ran it from $83.57 to $179.58 (chop +10.5%/+7.1%, two rebounds +16.9%/+16.3%, calm_up
++19.3%, rebound +12.0%). W22-W23 were two crash weeks that barely dented it (-2.6%, -1.5%), then
+W24 rebound +8.1%, a W25 "selloff" week that closed +26.0% (three big up days; a +2.3 standard
+deviation draw for that regime) and a W26 rebound +15.4%.
+
+How rare: in 20,000 random seeds on the same model (market v3), the median SimQ at Week 26 is
+$66, the 99th percentile $204 and the 99.9th $290. Only 0.16% of seeds (about 1 in 600) reach
+$266 or more. Checked on Oct 28 (Week 17 scan and again here): the engine replays correctly;
+this is luck in the draws, not a bug. Three of the five rebound weeks (W16, W17, W19) had no
+selloff or crash in the 3 weeks before; W24 and W26 followed the W22-23 crashes and the W25
+selloff. That pattern led to the opt-in market v4 rebound rule (claude/market-v4-rebound-rule.txt),
+which would have blocked W16, W17 and W19.
+Note the W26 Thursday and Friday closes are both $266.22: Friday moved +0.002%, which rounds to
+the same cent. Not a bug.
+
+
+3. THE TRADES
+-------------
+21 trades, all cash-secured puts. 12 opened Monday, 9 opened midweek. No puts assigned.
+  Expired worthless .............. 11
+  Closed for a profit ............  9
+  Closed at a loss ...............  1  (W9 P61: sold 0.67, bought back 1.95 in an -11.5% midweek
+                                        drop, net -$128; replaced with W9 P59, +$99, expired)
+Win rate 52% (95% counting profitable closes). Avg put premium 0.69% of collateral.
+Max drawdown: -0.29% Friday to Friday (W8 $7,931.37 to W9 $7,908.46); lowest mark -1.6%
+(W9 Wednesday).
+
+The squeeze: SimQ outran the account. From W17 on, SimQ was above about $115, so the lowest
+strikes with a bid needed more collateral than the account held ($8,284-$8,348). The last
+trade was W16. Weeks 17-26 earned interest only ($6.35-$6.40 a week); Weeks 21-26 were
+fast-forwarded at the user's request with no tradable put on any Monday or midweek chain.
+One contract per $7,500-$8,300 account is a real constraint on a single high-priced name; it
+is not a sim artifact (real brokers require the full strike in cash for a cash-secured put).
+
+
+4. TAKEAWAYS FOR THE SECOND HALF
+-------------------------------
+- Until SimQ falls back to roughly $83 or lower (so a strike near $82-$83 is listed with a
+  bid), no put fits and the account earns only cash interest.
+- The comparison against buy-and-hold is lopsided by construction in a tail bull year: a put
+  seller caps upside at the premium. Runs 3-5 showed the opposite case (puts far ahead of a
+  falling SimQ).
+- Model change during the first half (user, Oct 28): market v4 rebound rule built as opt-in for
+  future runs; not applied to Run 6.
