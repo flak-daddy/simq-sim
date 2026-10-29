@@ -35,6 +35,11 @@ same random numbers: the paths are deterministic and replays are exact.
 
 3. HOW TO USE IT IN A FUTURE RUN
 -------------------------------
+To use it: start a run with `simbook.py new --run N --seed S --market v4`. Add
+`--rebound-split calmchop` (or `prop`) to choose where the blocked rebound odds go; without it
+they're split evenly, as you specified. New runs still default to market v3 unless you add the
+flag. Run 6 is unaffected, and Runs 2-6 replay exactly as before.
+
   python3 simq.py newseed                          (keep the seed hidden)
   python3 simbook.py new --run N --seed S --market v4                          (split = even)
   python3 simbook.py new --run N --seed S --market v4 --rebound-split calmchop (or prop)
