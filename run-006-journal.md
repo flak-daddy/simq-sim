@@ -83,3 +83,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W31 mid**: passed
 - **W32 open**: passed
 - **W32 mid**: passed
+- **W33 open**: passed
+- **W33 mid**: passed
