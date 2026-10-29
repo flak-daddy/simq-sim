@@ -7,7 +7,7 @@
  "headlines": "v3",
  "market": "v4",
  "commission": 0.0,
- "week": 7,
+ "week": 8,
  "phase": "open",
  "events": [
   {
@@ -251,6 +251,28 @@
     [
      3227.94,
      4
+    ]
+   ]
+  },
+  {
+   "w": 7,
+   "ph": "open",
+   "t": "pass"
+  },
+  {
+   "w": 7,
+   "ph": "mid",
+   "t": "pass"
+  },
+  {
+   "w": 7,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 2.48,
+   "segs": [
+    [
+     3230.42,
+     7
     ]
    ]
   }
