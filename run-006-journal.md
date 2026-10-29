@@ -65,3 +65,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W22 mid**: passed
 - **W23 open**: passed
 - **W23 mid**: passed
+- **W24 open**: passed
+- **W24 mid**: passed
