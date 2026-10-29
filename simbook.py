@@ -366,6 +366,9 @@ def cmd_open(st, **kw):
     r = replay(st)
     S = view(st, w, "open")[0]
     print(f"SimQ Week {w}, Monday open | spot ${S:.2f} | 5 trading days to Friday close")
+    sh_val = r["shares"] * S
+    print(f"Shares {r['shares']} x ${S:.2f} = {money(sh_val)} | Cash available {money(r['free'])}"
+          f" | Total {money(sh_val + r['cash'])}")
     if st.get("headlines") == "v3":
         headlines.print_monday(st["seed"], w, wk(st, w)[0])
     print(acct_line(st, r, w, "open"))
