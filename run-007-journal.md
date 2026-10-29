@@ -78,3 +78,7 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W26 mid**: bought to close P27 at 0.01 (+$40.00)
 - **W26 mid**: sold P32.5 at 0.15 (SimQ 36.01)
 - **W26 fri**: P32.5 expired worthless (+$15.00); SimQ 42.34
+- **W27 open**: sold P37 at 0.47 (SimQ 42.34)
+- **W27 open**: sold C48 at 0.21 (SimQ 42.34)
+- **W27 mid**: bought to close C48 at 0.01 (+$20.00)
+- **W27 fri**: P37 expired worthless (+$47.00); SimQ 39.30

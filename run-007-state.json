@@ -7,7 +7,7 @@
  "headlines": "v3",
  "market": "v4",
  "commission": 0.0,
- "week": 27,
+ "week": 28,
  "phase": "open",
  "events": [
   {
@@ -976,6 +976,57 @@
     ],
     [
      3932.2,
+     4
+    ]
+   ]
+  },
+  {
+   "w": 27,
+   "ph": "open",
+   "t": "sell",
+   "kind": "P",
+   "k": 37.0,
+   "fill": 0.47,
+   "ask": 0.51,
+   "spot": 42.34
+  },
+  {
+   "w": 27,
+   "ph": "open",
+   "t": "sell",
+   "kind": "C",
+   "k": 48.0,
+   "fill": 0.21,
+   "ask": 0.24,
+   "spot": 42.34
+  },
+  {
+   "w": 27,
+   "ph": "mid",
+   "t": "btc",
+   "id": 31,
+   "price": 0.01
+  },
+  {
+   "w": 27,
+   "ph": "fri",
+   "t": "expire",
+   "id": 30,
+   "k": 37.0,
+   "spot": 39.3
+  },
+  {
+   "w": 27,
+   "ph": "fri",
+   "t": "interest",
+   "amount": 3.07,
+   "segs": [
+    [
+     4003.21,
+     3
+    ],
+    [
+     4002.21,
      4
     ]
    ]
