@@ -89,3 +89,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W29 open**: sold P30 at 0.30 (SimQ 37.49)
 - **W29 mid**: held P30
 - **W29 fri**: P30 assigned, bought 100 at $30.00; SimQ 28.14
+- **W30 open**: sold C30 at 0.88 (SimQ 28.14)
+- **W30 mid**: bought to close C30 at 0.01 (+$87.00)
