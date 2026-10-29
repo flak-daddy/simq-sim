@@ -66,3 +66,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W21 mid**: passed
 - **W22 open**: sold P30 at 0.35 (SimQ 33.75)
 - **W22 mid**: bought to close P30 at 0.01 (+$34.00)
+- **W23 open**: sold P32 at 0.50 (SimQ 33.46)
+- **W23 mid**: bought to close P32 at 0.10 (+$40.00)
