@@ -34,3 +34,8 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W11 open**: sold P31.5 at 0.35 (SimQ 35.00)
 - **W11 mid**: held P31.5
 - **W11 fri**: P31.5 expired worthless (+$35.00); SimQ 39.30
+- **W12 open**: sold C47 at 0.01 (SimQ 39.30)
+- **W12 open**: sold P33 at 0.19 (SimQ 39.30)
+- **W12 mid**: held C47, P33
+- **W12 fri**: C47 expired worthless (+$1.00); SimQ 35.92
+- **W12 fri**: P33 expired worthless (+$19.00); SimQ 35.92
