@@ -93,3 +93,5 @@ One line per move, appended as the run goes. Your own comments are added only wh
 - **W30 mid**: bought to close C30 at 0.01 (+$87.00)
 - **W31 open**: passed
 - **W31 mid**: passed
+- **W32 open**: passed
+- **W32 mid**: passed
