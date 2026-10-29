@@ -3,7 +3,7 @@
 Rules: claude/csp-ledger-branch-cc.md. Index: claude/run-index.md. Calibration: claude/market-calibration.md. Books are kept by script; do not hand-edit ledgers.
 
 ## Active run
-**Run 7** (market v4 rebound rule, split even; pricing v4 without commissions; headlines v3), started Wed 2026-10-28, working folder /home/claude/simq-run7/. Seed hidden until Week 52. Run 6 also remains open (Week 45 Monday open).
+**Run 7** (market v4 rebound rule, split even; pricing v4 without commissions; headlines v3), started Wed 2026-10-28, working folder /home/claude/simq-run7/. Seed hidden until Week 52. Week 26 logged (claude/run-007-week26-summary.txt): $8,169.21 (+8.92%), holding 100 shares (lot 1, basis $44.49). Run 6 also remains open (Week 45 Monday open).
 **Run 6** (market v3, pricing v4 without commissions, headlines v3), working folder /home/claude/simq-run6/. Week 26 logged (claude/run-006-week26-summary.txt): $8,347.84 (+11.30%), all cash; SimQ $266.22 is above what the account can secure, so no put fits until it falls back to about $83.
 Last closed: Run 5 after Week 52 (Mon 2026-10-26): $11,409.90 (+52.13%), all cash; buy-and-hold SimQ $9,148.12 (+21.97%); cash-only $7,799.18 (+3.99%). Week 26 comparison figure $9,410.86 (+25.48%). Seed 526270675. First run on market v2. Review: claude/run-005-summary.txt.
 Previous: Run 4 after Week 52 (Sun 2026-10-25): $5,995.09 (-20.07%), holding 500 shares in five lots (costs $25, $12, $13, $10.50, $9.50; marked $8.78); buy-and-hold SimQ $1,032.13 (-86.24%); cash-only $7,799.18 (+3.99%). Week 26 comparison figure $8,255.14 (+10.07%). Seed 867728425. Review: claude/run-004-summary.txt.

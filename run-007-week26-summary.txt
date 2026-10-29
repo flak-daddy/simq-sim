@@ -1,0 +1,68 @@
+SIMQ RUN 7: WEEK 26 RESULTS (COMPARISON WINDOW)
+================================================
+Logged: Thu 2026-10-29, after sim Week 26
+Status: Run 7 continues past Week 26 unless the user says otherwise. These Week 26 figures are
+Run 7's official comparison result against other runs. Seed stays hidden until the run ends.
+Start: $7,500 paper cash, 4.00% APY on cash, SimQ at $63.80, pricing v4 WITHOUT commissions,
+headlines v3, market v4 (rebound rule, even split). First run on market v4.
+Rules: claude/csp-ledger-branch-cc.md | Full books: run-007-ledger.md, run-007-journal.md
+
+
+1. THE RESULT
+-------------
+Account value (Week 26 Friday):  $8,169.21   (+8.92%)
+  Cash $3,935.21 + 100 shares (lot 1, assigned W4 at $46, basis $44.49) marked at $42.34
+
+Benchmarks over the same 26 weeks:
+  Buy and hold SimQ ($63.80 -> $42.34):   $4,977.27   (-33.64%)
+  Leave it all in cash at 4.00%:          $7,649.59   (+1.99%)
+  Run 6 at Week 26 (market v3, pricing v4 no commissions): $8,347.84  (+11.30%)
+  Run 5 at Week 26 (market v2, pricing v3):                $9,410.86  (+25.48%)
+  Run 4 at Week 26 (market v1, pricing v3):                $8,255.14  (+10.07%)
+  Run 3 at Week 26 (market v1, pricing v3, headlines v2):  $9,779.00  (+30.39%)
+  Run 2 at Week 26 (market v1, pricing v2):                $9,189.18  (+22.52%)
+  Run 1 at Week 26 (market v1, pricing v1):                $6,575.78  (-12.32%)
+No earlier run used market v4, so none is strictly like-for-like with Run 7.
+
+Where the $669.21 gain came from:
+  Option premium collected (gross) ...... +$992.00  (25 puts, 4 calls)
+  Buy-to-close costs .....................  -$36.00
+  Options net ............................  +$956.00
+  Stock ..................................  -$366.00  (lot 1 marked $46.00 -> $42.34; lot 2 in and out at $32.50)
+  Interest on cash .......................   +$79.21
+                                           ---------
+                                           +$669.21
+
+
+2. THE MARKET
+-------------
+Regimes over the 26 weeks: calm_up 10, chop 6, selloff 6, rebound 3, crash 1.
+SimQ fell from $63.80 to a low of $28.03 (W15 close, -56%), spent W9-W25 between $28 and $39, then
+jumped +28.9% in W26 to $42.34. W26 was labeled a selloff week but closed sharply up (big Thursday
+and Friday); W25 was a crash week that closed +1.5%. Regime labels describe the odds, not a promise.
+Rebound rule (market v4) check: all three rebound weeks (W9, W14, W16) came within 3 weeks of a
+selloff (W8, W12-13, W15), so every rebound drawn was one the rule allows.
+
+
+3. THE TRADES
+-------------
+29 trades: 25 cash-secured puts, 4 covered calls. 22 opened Monday, 7 midweek.
+  Expired worthless .............. 15
+  Closed for a profit ............ 11  (most bought back at 0.01-0.10 at midweek)
+  Closed at a loss ...............  0
+  Assigned .......................  2  (W4 P46 in a -17.7% selloff week; W24 P32.5, $0.14 in the money)
+  Called away ....................  1  (W25 C32.5 on lot 2: in and out at $32.50, +$126 in premiums)
+Win rate 52% (90% counting profitable closes).
+Max drawdown: -19.8% Friday to Friday (W3 $7,667.55 to W8 $6,148.38), almost all of it lot 1's
+shares in the W4-W8 slide.
+Lot 1 (100 shares, basis $44.49) is still held; SimQ at $42.34 is $2.15 under its basis.
+
+
+4. TAKEAWAYS FOR THE SECOND HALF
+-------------------------------
+- Calls on lot 1 above its basis had little or no bid for most of W8-W25; W26's jump puts SimQ
+  back near the $44-$46 strikes.
+- With lot 1 tying up about half the account, puts were limited to about $33-$38 strikes for
+  most of the run, and one contract at a time.
+- Formatting change during the run (user, Oct 28): the Monday open prints share value, cash
+  available and total under the spot line.
