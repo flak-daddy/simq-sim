@@ -1,0 +1,14 @@
+{
+ "run": 7,
+ "seed": 104391084,
+ "start_cash": 7500.0,
+ "apy": 0.04,
+ "pricing": "v4",
+ "headlines": "v3",
+ "market": "v4",
+ "commission": 0.0,
+ "week": 1,
+ "phase": "open",
+ "events": [],
+ "rebound_split": "even"
+}
