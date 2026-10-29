@@ -71,8 +71,43 @@ TRANS_V3 = {
     "crash":   {"calm_up": .00, "chop": .25, "selloff": .20, "crash": .10, "rebound": .45},
     "rebound": {"calm_up": .50, "chop": .25, "selloff": .10, "crash": .02, "rebound": .13},
 }
-TRANS_BY_MARKET = {"v1": TRANS, "v2": TRANS_V2, "v3": TRANS_V3}
-MARKET = "v1"  # regime-transition table: "v1" (Runs 1-4), "v2" (Run 5) or "v3" (standard from Run 6); set by simbook
+# Market v4 (Oct 28, 2026, after Run 6 Week 17; OPT-IN, not the default): the v3 table plus a rebound rule.
+# A rebound week is only possible if one of the previous REBOUND_WINDOW weeks was a selloff or crash, or
+# if SimQ is below REBOUND_FLOOR x its start price ($31.90) at the moment of the draw (the week's open).
+# When blocked, the rebound probability goes elsewhere per REBOUND_SPLIT: "even" (equal shares to the other
+# four regimes, as the user specified), "prop" (in proportion to their odds) or "calmchop" (calm_up and chop
+# only, in proportion). Full spec and test results: market-v4-rebound-rule.txt.
+REBOUND_WINDOW = 3
+REBOUND_FLOOR = 0.5
+REBOUND_SPLIT = "even"  # set by simbook from the state's rebound_split
+TRANS_BY_MARKET = {"v1": TRANS, "v2": TRANS_V2, "v3": TRANS_V3, "v4": TRANS_V3}
+MARKET = "v1"  # regime-transition table: "v1" (Runs 1-4), "v2" (Run 5), "v3" (Run 6) or "v4" (from Run 7); set by simbook
+
+
+def trans_probs(reg, hist, S, market=None, split=None):
+    """Odds for next week's regime. hist = regimes of all earlier weeks; S = SimQ at the draw."""
+    market = market or MARKET
+    split = split or REBOUND_SPLIT
+    probs = dict(TRANS_BY_MARKET[market][reg])
+    if market == "v4":
+        recent = hist[-REBOUND_WINDOW:]
+        allowed = any(h in ("selloff", "crash") for h in recent) or S < REBOUND_FLOOR * S_START
+        if not allowed and probs["rebound"] > 0:
+            x = probs["rebound"]
+            others = [r for r in probs if r != "rebound"]
+            if split == "even":
+                w = {r: 1.0 for r in others}
+            elif split == "prop":
+                w = {r: probs[r] for r in others}
+            elif split == "calmchop":
+                w = {r: probs[r] for r in ("calm_up", "chop")}
+            else:
+                raise ValueError(f"unknown REBOUND_SPLIT {split}")
+            tot = sum(w.values())
+            for r in w:
+                probs[r] += x * w[r] / tot
+            probs["rebound"] = 0.0
+    return probs
 
 
 def t_draw(rng, df=4):
@@ -83,14 +118,16 @@ def t_draw(rng, df=4):
 
 def gen_week(w):
     S, reg, iv_prev, iv_prev2, iv_prev3, iv_prev4 = S_START, "chop", 0.58, 0.76, 0.76, 0.76
+    hist = []
     for k in range(1, w + 1):
         seed_k = BASE_SEED
         for w0, s0 in sorted(RESEED.items()):
             if k >= w0:
                 seed_k = s0
         rng = random.Random(seed_k * 1000 + k)
-        probs = TRANS_BY_MARKET[MARKET][reg]
+        probs = trans_probs(reg, hist, S)
         reg = rng.choices(list(probs), weights=list(probs.values()))[0]
+        hist.append(reg)
         p = REG[reg]
         s_open, closes, ivs, ivs2, ivs3, ivs4 = S, [], [iv_prev], [iv_prev2], [iv_prev3], [iv_prev4]
         for _ in range(5):

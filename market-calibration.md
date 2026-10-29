@@ -163,3 +163,8 @@ Adopted by the user from simq-spread-skew-review.txt. Final content (Oct 27): it
 Blind put edge, market v3, 300 years (% collateral/week; commission on the open only, messy quotes not included): Monday 10% below +0.37 (v3) -> +0.32; 15% +0.22 -> +0.18. Wednesday 5% below +0.32 -> +0.33; 10% +0.10 -> +0.11.
 
 Versioning: `simbook.py new` writes pricing "v4" and commission 0.65 from Run 6. Runs 3-5 keep "v3" with no commission; replays of Runs 2-5 verified byte-for-byte on ledgers and journals. Tools that call simq.skew_iv(S, K, iv) without T get the v3 (linear) shape.
+
+
+## Market v4: rebound rule (Oct 28, 2026, during Run 6; OPT-IN, default stays v3)
+
+Rebound weeks are allowed only within 3 weeks after a selloff or crash, or while SimQ is below half its start price ($31.90) at the draw. Blocked rebound odds go to the other regimes per `rebound_split`: even (user's choice), prop, or calmchop. Start a run on it with `simbook.py new ... --market v4 [--rebound-split even|prop|calmchop]`. Effect (8,000 years): median SimQ year +7.7% (v3) -> -9.1% (even) / -4.6% (prop) / -3.2% (calmchop); share of seeds at Run 6's Week 17 level 3.0% -> 1.9%; blind Monday 10% put edge +0.33% -> +0.23-0.25%/week. Replays of Runs 2-6 verified identical. Full spec, results and the price-aware headline proposal: market-v4-rebound-rule.txt (tools/pricing-review/market_v4.py).

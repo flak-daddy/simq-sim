@@ -5,7 +5,8 @@ All state is an append-only event log in run-NNN-state.json. Cash, positions, in
 scorecard, ledger and journal are derived by replaying that log, so nothing is retyped.
 
 Commands (run from the folder holding simq.py, simbook.py and the state file):
-  new --run N --seed S [--headlines v2]   create a fresh run (seed from `simq.py newseed`);
+  new --run N --seed S [--headlines v2] [--commission C] [--market v4 [--rebound-split even|prop|calmchop]]
+                                        create a fresh run (seed from `simq.py newseed`);
                             default headlines v3 = scripted, printed by `open` (opinion can mislead, data never does)
   open                      show the current week's Monday-open package (account + chain)
   mid                       advance to midweek: Mon-Wed path, buy-to-close prices, new chain
@@ -68,7 +69,8 @@ def wk(st, w):
     simq.RESEED = {int(a): int(c) for a, c in st.get("reseed", {}).items()}
     simq.PRICING_V2_FROM = st.get("pricing_v2_from", 1)
     simq.PRICING = st.get("pricing", "v2")  # states written before Oct 24, 2026 (Runs 1-2) use v1/v2
-    simq.MARKET = st.get("market", "v1")  # regime transitions; absent = v1 (Runs 1-4), v2 (Run 5), v3 (new runs)
+    simq.MARKET = st.get("market", "v1")  # regime transitions; absent = v1 (Runs 1-4), v2 (Run 5), v3 (Run 6, default for new runs), v4 = opt-in rebound rule
+    simq.REBOUND_SPLIT = st.get("rebound_split", "even")  # market v4 only: where blocked rebound odds go
     simq.SKEW_V2 = w >= simq.PRICING_V2_FROM
     return simq.gen_week(w)  # regime, s_open, closes, ivs
 
@@ -794,6 +796,16 @@ def main(argv):
             st["headlines"] = hv
         if "--commission" in a_all:
             st["commission"] = float(a_all[a_all.index("--commission") + 1])
+        if "--market" in a_all:
+            st["market"] = a_all[a_all.index("--market") + 1]
+        if "--rebound-split" in a_all:
+            st["rebound_split"] = a_all[a_all.index("--rebound-split") + 1]
+        if st["market"] not in simq.TRANS_BY_MARKET:
+            sys.exit(f"Unknown market {st['market']}")
+        if st["market"] == "v4":
+            st.setdefault("rebound_split", "even")
+            if st["rebound_split"] not in ("even", "prop", "calmchop"):
+                sys.exit("--rebound-split must be even, prop or calmchop")
         save(st, path)
         render(st, path)
         print(f"Created {path}")

@@ -1,0 +1,93 @@
+SIMQ MARKET V4: THE REBOUND RULE (OPT-IN)
+=========================================
+Written: Wed 2026-10-28, during Run 6 (after Week 17). Status: built and tested, OPT-IN.
+New runs still default to market v3. Run 6 stays on market v3 and is unaffected.
+Code: simq.py (trans_probs, REBOUND_WINDOW, REBOUND_FLOOR, REBOUND_SPLIT); simbook.py (new --market,
+--rebound-split). Test script: tools/pricing-review/market_v4.py.
+
+
+1. WHY
+------
+Run 6 reached SimQ $134.30 (+110%) by Week 17, the 97th percentile of the model (only 3% of seeds get
+there). No bug: the regime draws were lucky (no selloff or crash in 17 weeks, about 1 seed in 10) and
+the moves inside each week were close to normal (average +0.3 standard deviations).
+One part of the model was judged unrealistic: a "rebound" regime (the strongest, about +10% a week)
+could start with nothing to rebound from. About 28% of rebound weeks had no selloff or crash in the
+three weeks before. Run 6 Weeks 16-17 were two such weeks (+16.9%, +16.3%) on top of a rally.
+Real TQQQ's biggest 4-month runs (Apr-Jul 2020 about +151%, Jan-Jun 2023 about +139%, Apr-May 2026
+about +103%) all started from a deep low.
+
+
+2. THE RULE (user, Oct 28, 2026)
+-------------------------------
+Each week, before the regime is drawn:
+  - A rebound is allowed if any of the previous 3 weeks was a selloff or crash, OR
+  - SimQ is below half its start price at that moment (below $31.90; the week's opening price).
+  - Otherwise rebound odds are set to zero and given to the other four regimes.
+Where the blocked odds go (state field rebound_split):
+  even      equal shares to calm_up, chop, selloff and crash (the user's choice on Oct 28)
+  prop      in proportion to those four regimes' own odds
+  calmchop  to calm_up and chop only, in proportion
+Everything else is market v3: same transition table, same drift, volatility, implied vol, skew,
+spreads. The rule only changes which regime gets drawn, never how a regime behaves. Same seed,
+same random numbers: the paths are deterministic and replays are exact.
+
+
+3. HOW TO USE IT IN A FUTURE RUN
+-------------------------------
+  python3 simq.py newseed                          (keep the seed hidden)
+  python3 simbook.py new --run N --seed S --market v4                          (split = even)
+  python3 simbook.py new --run N --seed S --market v4 --rebound-split calmchop (or prop)
+Add --commission 0 as before if wanted. The state file records market "v4" and rebound_split, so
+the run replays the same way forever. Without --market, a new run uses market v3.
+To re-run the comparison below: python3 tools/pricing-review/market_v4.py (about 45 seconds).
+
+
+4. WHAT IT DOES (8,000 simulated years each; put edge from 300 years)
+---------------------------------------------------------------------
+                                v3 (default)   v4 even    v4 prop    v4 calmchop
+  Median SimQ year                 +7.7%        -9.1%      -4.6%       -3.2%
+  10th / 90th percentile year   -60% / +165%  -64% / +116% -63% / +123% -62% / +125%
+  Years finishing up                54%          45%        47%         48%
+  Rebound weeks                    9.4%         7.6%       7.1%        6.9%
+  Crash weeks                      3.2%         3.9%       3.3%        3.2%
+  Selloff weeks                   11.4%        12.1%      11.7%       11.4%
+  Years with a drawdown < -50%      54%          60%        57%         56%
+  Doubled by Week 17               4.3%         2.5%       2.5%        2.5%
+  At or above Run 6's 134.30 by W17 3.0%        1.9%       1.9%        1.9%
+  Blind Monday put 10% below,
+    edge (% collateral per week)  +0.33%       +0.23%     +0.24%      +0.25%
+  Blind Monday put 15% below      +0.19%       +0.12%     +0.12%      +0.12%
+(Pricing v4 IVs, no commission, messy quotes not included in the edge.)
+
+Reading it:
+  - The rule trims the runaway-rally tail by about a third (3.0% -> 1.9% of seeds reach Run 6's
+    level) but does not remove it. Big rallies are still possible: calm_up streaks and real
+    rebounds after drops are untouched. That is the "truth can be stranger than fiction" part.
+  - The cost: the orphan rebounds were carrying much of SimQ's upward drift, so every version
+    lowers the typical year. SimQ was already harsher than real TQQQ (median year +8% vs +57%
+    for TQQQ in 2010-2025), so the rule makes the ORDER of events more realistic and the overall
+    YEAR less realistic.
+  - "even" also adds crash and selloff weeks (half the blocked odds go there; from chop, crash
+    odds rise from 3% to about 4.75%). "calmchop" keeps crash and selloff frequency exactly as
+    in v3 and changes the least.
+  - Not built: a small calm_up drift increase to bring the median year back near +8% under v4.
+    Held back to avoid stacking another change.
+
+
+5. PROPOSAL, NOT BUILT: PRICE-AWARE HEADLINES (user idea, Oct 28, 2026)
+-----------------------------------------------------------------------
+Idea: headlines should notice where SimQ has been. In a Run 6-style surge they would discuss the
+spike and whether it can hold; after a collapse, whether the bottom is in.
+Design notes for whoever builds it (would be headlines v4, opt-in, versioned like the others):
+  - Trigger on past prices only (things the player has already seen): e.g. SimQ's change over the
+    last 4-8 weeks, distance from its run high or low, level vs. the start price. Never on the
+    hidden current regime, so nothing leaks.
+  - Reported facts stay true (v3 rule): "SimQ has more than doubled since the start of the run",
+    "SimQ is up 35% in four weeks, its fastest run of the year".
+  - Opinions about whether the move lasts ("rally looks stretched", "momentum funds still
+    buying") would be split or regime-neutral by default (NOISE). If some are tied to the next
+    regime (TRUE/MISLEADING), they must follow v3's credibility-cue rules so they never decide.
+  - One price-context headline at most per week, replacing a NOISE slot, so the TRUE/MISLEADING
+    mix and the odds of reading the market stay as in v3.
+  - Seeded from its own random stream, so it never touches the price path, and replays stay exact.
