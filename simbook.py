@@ -536,7 +536,12 @@ def cmd_sell(st, kind, k, lot=None):
     ev = {"w": w, "ph": ph, "t": "sell", "kind": kind, "k": k, "fill": bid, "ask": ask, "spot": S}
     if st.get("commission"):
         ev["fee"] = st["commission"]
-    if kind == "C" and lot is not None:
+    if kind == "C" and lot is None:
+        # Default lot (since Oct 30, 2026): the free lot whose effective basis is closest to the
+        # call strike; ties go to the oldest lot. Recorded explicitly so replays never depend on it.
+        free = [lid for lid in sorted(r["lots"]) if lot_is_free(r, lid)]
+        lot = min(free, key=lambda lid: (abs(basis(r["lots"][lid]) - k), lid))
+    if kind == "C":
         if not lot_is_free(r, lot):
             sys.exit(f"Lot {lot} is not held or already covers an open call.")
         ev["lot"] = lot
