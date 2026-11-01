@@ -804,6 +804,8 @@ def main(argv):
             st["headlines"] = hv
         if "--commission" in a_all:
             st["commission"] = float(a_all[a_all.index("--commission") + 1])
+        if "--pricing" in a_all:
+            st["pricing"] = a_all[a_all.index("--pricing") + 1]
         if "--market" in a_all:
             st["market"] = a_all[a_all.index("--market") + 1]
         if "--rebound-split" in a_all:
