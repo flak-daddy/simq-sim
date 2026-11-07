@@ -142,18 +142,24 @@ def wednesday(run, show_all=False):
          "| vs Mon open | " + " | ".join(pct(x["close"] / mon_open - 1) for x in bars) + " |",
          "| High / low | " + " | ".join(f"{x['high']:.2f} / {x['low']:.2f}" for x in bars) + " |", ""]
     L += indicators_block(run, st["ref"], "Wednesday close")
-    L += ["**Open positions** (buy to close at the ask)", ""]
+    L += ["**Buy to close** (at the ask)", ""]
     ops = b.open_trades()
     rows = run.chain()
     if not ops:
-        L.append("- None.")
-    for t in ops:
-        r = ch.find(rows, t["K"])
-        ask = r["pa"] if t["side"] == "P" else r["ca"]
-        frees = (f" · frees {money(t['K'] * CONTRACT * t['open_n'])} collateral" if t["side"] == "P"
-                 else f" · frees Lot {t['lot']}")
-        L.append(f"- [{t['tid']}] {t['cid']} ×{t['open_n']}, sold {t['price']:.2f} → **BTC {ask:.2f}** "
-                 f"({money(ask * CONTRACT * t['open_n'])}){frees}")
+        L.append("- No open positions.")
+    else:
+        L += ["| Position | Sold | Bid / ask now | Cost to close | P/L if closed | Frees |",
+              "|---|---:|---:|---:|---:|---|"]
+        for t in ops:
+            r = ch.find(rows, t["K"])
+            bid, ask = (r["pb"], r["pa"]) if t["side"] == "P" else (r["cb"], r["ca"])
+            n = t["open_n"]
+            cost = ask * CONTRACT * n
+            pl = (t["price"] - ask) * CONTRACT * n
+            frees = (f"{money(t['K'] * CONTRACT * n)} collateral" if t["side"] == "P" else f"Lot {t['lot']}")
+            bq = f"{bid:.2f}" if bid > 0 else "no bid"
+            L.append(f"| [{t['tid']}] {t['cid']} ×{n} | {t['price']:.2f} | {bq} / {ask:.2f} | {money(cost)} | "
+                     f"**{money(pl, True)}** | {frees} |")
     L += ["", f"**Cash {money(b.cash)} · collateral locked {money(b.collateral())} · free {money(b.free_cash())}**"]
     if b.free_cash() < st["spot"] * 0.7 * CONTRACT and any(t["side"] == "P" for t in ops):
         tot = b.free_cash() + sum(t["K"] * CONTRACT * t["open_n"] - ch.find(rows, t["K"])["pa"] * CONTRACT * t["open_n"]
