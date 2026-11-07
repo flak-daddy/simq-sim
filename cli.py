@@ -9,14 +9,16 @@
   python3 cli.py relot ID LOT          move a covered call to another lot
   python3 cli.py go                    advance (auto-advance rules, SPEC §5.2)
   python3 cli.py status
-  python3 cli.py close|abandon "note"
+  python3 cli.py close|abandon "note"   (writes the run-close one-pager and workbook)
+  python3 cli.py report [label]        one-pager PDF on demand
+  python3 cli.py compare RUN RUN ...   cross-run table with ruleset differences
 """
 import argparse
 import os
 import secrets
 import sys
 
-from simq import display, ruleset
+from simq import display, report, ruleset
 from simq.play import ROOT, ActionError, Run
 
 RULESET = os.path.join(os.path.dirname(os.path.abspath(__file__)), "rulesets", "ruleset-v2.0.json")
@@ -75,6 +77,9 @@ def main(argv):
         out(display.package(r, 1, "mon"))
         return
 
+    if a.cmd == "compare":
+        print("\n".join(report.compare([Run.load(int(x)) for x in a.args])))
+        return
     r = active()
     try:
         if a.cmd == "show":
@@ -113,10 +118,22 @@ def main(argv):
             shown = r.go()
             parts = [display.package(r, w, p) for w, p in shown]
             print(("\n" + display.BREAK + "\n").join("\n".join(x) for x in parts))
+            for w, p in shown:
+                if p == "fri" and w in (26, 52):
+                    print(f"CHECKPOINT Week {w}: mentor one-pager → {report.one_pager(r, f'week-{w}-checkpoint')}")
+            if any(p == "fri" for w, p in shown):
+                print(f"PUSH DUE: Friday close of Week {max(w for w, p in shown if p == 'fri')}")
         elif a.cmd in ("close", "abandon"):
             note = " ".join(a.args)
             r.close_run("closed" if a.cmd == "close" else "abandoned", note)
             print(f"Run {r.save['run']['id']} {r.save['run']['status']}. Seed revealed: {r.seed}")
+            print(f"Run-close one-pager → {report.one_pager(r, 'run-close')}")
+            print(f"Week-by-week workbook → {report.workbook(r)}")
+        elif a.cmd == "report":
+            print(f"One-pager → {report.one_pager(r, a.args[0] if a.args else f'week-{report.completed_weeks(r)}')}")
+        elif a.cmd == "compare":
+            runs = [Run.load(int(x)) for x in a.args]
+            print("\n".join(report.compare(runs)))
         else:
             sys.exit(f"Unknown command {a.cmd}")
     except ActionError as ex:

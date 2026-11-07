@@ -82,7 +82,11 @@ class Run:
     def chain(self, week=None, phase=None):
         key = (week or self.week, phase or self.phase)
         if key not in self._chains:
-            self._chains[key] = ch.build(self.rs, self.seed, self.path.state(*key))
+            keep = ()
+            if key[1] == "wed":   # Monday's strikes stay listed until Friday expiry
+                from simq import pricing
+                keep = pricing.list_strikes(self.path.state(key[0], "mon")["spot"])
+            self._chains[key] = ch.build(self.rs, self.seed, self.path.state(*key), keep)
         return self._chains[key]
 
     def _add(self, e):

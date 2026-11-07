@@ -7,4 +7,20 @@ Weekly options practice simulator on a synthetic TQQQ-like index. `SPEC.md` is t
 - `calibration/` gate: `python3 -m calibration.run` (tests), `python3 -m calibration.report v2.0` (report + freeze).
 - `data/` reference data: TQQQ daily OHLC (2020, 2022, Aug 2023 – Nov 2026), CNN Fear & Greed 2021–2026.
 
-Status: Milestone 1 (engine + calibration) passed. Next: playable layers (account, clock, chain display, headlines, bookkeeping, runs, reports).
+Status: Milestone 1 (engine + calibration) passed; playable layers built and play-tested (52 weeks, books reconcile).
+
+## Playing (Claude runs these and relays the output)
+
+```
+python3 cli.py new --cash 25000          # start a run (seed hidden); prints Week 1 Monday open
+python3 cli.py sell P 48 2               # sell 2 puts at the 48 strike (bid)
+python3 cli.py sell C 55 1 [--lot 3]     # covered call; default lot = basis closest to strike
+python3 cli.py btc 4                     # buy to close trade 4 (Wednesday, at the ask)
+python3 cli.py buy 100 | sellsh 3 [100]  # share trades, round lots
+python3 cli.py go                        # advance: Mon -> Wed -> Fri (+ next Mon unless shares held)
+python3 cli.py show [--all]              # current decision point; --all = full chain
+python3 cli.py report | compare 1 2      # one-pager on demand; cross-run table
+python3 cli.py close|abandon "note"      # reveals seed; writes run-close one-pager + workbook
+```
+
+Weekly rhythm: after each Friday close (`PUSH DUE`), commit `runs/` as "Run N Week W" and push the v2 branch; copy the run's save and reports to the project. Headlines print as drafts; Claude polishes the wording into ALL-CAPS headlines without changing any fact. Claude never picks or suggests strikes.

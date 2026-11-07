@@ -103,7 +103,7 @@ Positive edge with painful drawdowns, as real weekly TQQQ puts imply when real I
 
 ## 3. Chain builder and display
 
-- **Strikes:** $1 steps, plus .5 strikes near the money, spacing scaled with price (like the real chain).
+- **Strikes:** $1 steps, plus .5 strikes within ±10% of spot (all .5 steps under $15; $2.50 steps over $150), spacing scaled with price (like the real chain). A strike listed at Monday open stays listed until that Friday's expiry.
 - **Expiry:** this Friday only.
 - **Default window:** from spot outward on each side until the OTM option's bid falls below $0.10; that edge strike is shown (confirmed Nov 6 over v1's first-no-bid edge). Full chain on request (`show --all`).
 - **Columns:** call bid / ask / delta | strike | put bid / ask / delta / premium % of collateral (put bid ÷ strike).
@@ -207,6 +207,7 @@ Open-ended; the user closes a run when they choose. Checkpoints at Weeks 26 and 
 - **Checkpoints:** Week 26, Week 52, and run close.
 - **Charts:** account value vs. benchmarks; weekly premium %.
 - **Mentor format:** one-page summary at each checkpoint; at run end, a one-page summary plus a week-by-week workbook.
+  - **Decided Nov 6:** the one-pager is a one-page PDF with charts (key numbers, account vs. buy-and-hold vs. cash, weekly premium % with the 1% line), written automatically at the Week 26 and Week 52 Friday closes and at run close. The workbook is an Excel .xlsx (Summary, Weekly and Trades sheets, live formulas), written at run close. Both live in `runs/run-NNN/reports/`.
 - **Cross-run:** any runs can be compared, with ruleset differences listed.
 
 ---

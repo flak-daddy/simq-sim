@@ -14,12 +14,13 @@ def contract_id(week, side, K):
     return f"SIMQ-W{week:02d}-{side}{k}"
 
 
-def build(rs, seed, st):
-    """All strikes for the decision point `st` (from Path.state). Returns list of rows."""
+def build(rs, seed, st, keep=()):
+    """All strikes for the decision point `st` (from Path.state). `keep` adds strikes listed
+    earlier this week, which stay listed until expiry. Returns list of rows."""
     pp = rs["pricing"]
     spot, days, rate, iv, fg = st["spot"], st["days"], st["rate"], st["iv"], st["fg"]
     key = f"{seed}|{st['week']}|{st['phase']}"
-    ks = pricing.list_strikes(spot)
+    ks = np.union1d(pricing.list_strikes(spot), np.asarray(list(keep), float))
     T = days / pricing.YEAR_DAYS
     rows = []
     for K in ks:
