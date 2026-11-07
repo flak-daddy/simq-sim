@@ -43,7 +43,8 @@ SimQ is modeled on **TQQQ** (3× daily Nasdaq-100) at the scale of days and week
 - Weekday opens equal the prior close. High/low are generated around the open→close move with intraday range scaled by that day's volatility [fit].
 - **Weekend gaps only:** Monday's open may differ from Friday's close. Average absolute Monday gap about 2%, larger in fear.
 - Down-moves cluster: fear raises volatility and pulls price down in steps with relief bounces.
-- Every sim week has 5 trading days; holidays are ignored.
+- Every sim week has 5 trading days; holidays are ignored for trading.
+- **Labels (decided Nov 6):** week + day only, e.g. "Week 47 (Year 1, week 47) · Monday open". Week 1 is the first week of January; holiday weeks are marked: week 1 New Year's, 27 Independence Day, 36 Labor Day, 47 Thanksgiving, 52 Christmas.
 - A sim year is 52 weeks (260 trading days); the calibration report scores calendar sim years.
 
 ### 1.3 Start price
@@ -104,7 +105,7 @@ Positive edge with painful drawdowns, as real weekly TQQQ puts imply when real I
 
 - **Strikes:** $1 steps, plus .5 strikes near the money, spacing scaled with price (like the real chain).
 - **Expiry:** this Friday only.
-- **Default window:** from spot outward on each side until the OTM option's bid falls below $0.10; that edge strike is shown. Full chain on request (`chain --all`).
+- **Default window:** from spot outward on each side until the OTM option's bid falls below $0.10; that edge strike is shown (confirmed Nov 6 over v1's first-no-bid edge). Full chain on request (`show --all`).
 - **Columns:** call bid / ask / delta | strike | put bid / ask / delta / premium % of collateral (put bid ÷ strike).
 - **Layout:** calls left, strike middle, puts right.
 - **Spot marker row** at the in-the-money boundary: `| ITM calls ▲ | ** * SimQ <spot> * ** | ▼ ITM puts |`.
@@ -167,6 +168,10 @@ Open-ended; the user closes a run when they choose. Checkpoints at Weeks 26 and 
 - **Names:** real companies and institutions (the Fed etc.), invented events. Invented events stay ordinary market news (earnings, guidance, products, deals, data, rate decisions), never fabricated scandals or wrongdoing.
 - Headlines never name the backdrop or sentiment state and never comment on their own reliability.
 - **Reveal:** none. Price and Fear & Greed history are the record.
+- **Truth target (decided Nov 6):** opinions are about either the near-term mood (~70%: where hidden sentiment is heading over the next 1–2 weeks, i.e. recovery vs. further slide toward its resting level) or the backdrop (~30%: bull / neutral / bear over the coming months). TRUE opinions point the right way, MISLEADING ones the wrong way. Measured: when the mood is set to recover, the index rose over the next two weeks 73% of the time vs. 36% when it is set to slide; backdrop opinions carry much less near-term information (they speak mostly to crash risk).
+- **Signal mix (decided Nov 6):** per set, 0–2 TRUE opinions (25/50/25%) and 0–2 MISLEADING (30/45/25%), with at least one reported item; the rest is reported news, scheduled events and noise.
+- **Monthly macro cycle (decided Nov 6):** every 4 sim weeks, a jobs report (Friday of week 1) and a CPI report (Friday of week 3). Prints follow the hidden inflation pressure (which also sets rate odds) and the backdrop, so reading them helps anticipate rate meetings. Rate meetings: the week before, a heads-up; meeting-week Monday, the market's hike/cut odds; meeting Friday, the decision vs. those odds.
+- **Monday vs. Friday:** Friday reports the week (weekly move, big days, data, decision); Monday leads with the weekend futures move and anything from last week Friday didn't run.
 - Friday results name nothing beyond the headlines and settlement (no regime recap; there is no regime label to reveal).
 
 ---
@@ -275,12 +280,12 @@ cli.py                  play commands
   5. Breadth
 - Score = average of the 5, smoothed asymmetrically: it falls fast (weight 0.80 on a lower reading) and recovers slowly (0.25), like the real index on crash days. **Close but noisy:** tracks the true mood with lag and measurement noise and can mislead at turning points (e.g. extreme fear near bottoms).
 - Labels: extreme fear < 25, fear 25–44, neutral 45–55, greed 56–75, extreme greed > 75.
-- **Display:** today's reading plus the last 10 days, with each component, at every decision point.
+- **Display:** today's reading with a text bar, plus the last 10 days as a number row, with each component, at every decision point (decided Nov 6: both).
 
 ### 12.2 Sim-tastic Oscillator (lite stochastic)
 - %K over 14 days from daily highs, lows, closes; %D = 3-day average of %K.
 - Zones: oversold < 20, overbought > 80, otherwise neutral.
-- **Display:** %K, %D and zone label, today plus the last 10 days, at every decision point.
+- **Display:** %K (with a text bar), %D and zone label today, plus %K and %D number rows for the last 10 days, at every decision point.
 
 ---
 

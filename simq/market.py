@@ -43,7 +43,7 @@ def generate(rs, seed, n_days, n_paths=1, start_price=None, rate_reset_day=None)
 
     out = {key: np.zeros((N, T)) for key in
            ("open", "high", "low", "close", "S", "iv_atm", "rate", "u", "gap", "u_shock",
-            "drift_backdrop", "drift_sent", "p_hike", "p_cut")}
+            "drift_backdrop", "drift_sent", "p_hike", "p_cut", "infl", "L")}
     out["backdrop"] = np.zeros((N, T), dtype=np.int8)
     out["split"] = np.zeros((N, T), dtype=bool)
     out["meeting"] = np.zeros((N, T), dtype=bool)
@@ -152,5 +152,6 @@ def generate(rs, seed, n_days, n_paths=1, start_price=None, rate_reset_day=None)
         o["iv_atm"][:, t], o["rate"][:, t] = iv, rate
         o["u"][:, t], o["gap"][:, t] = u + gap, gap
         o["u_shock"][:, t] = shock
+        o["infl"][:, t], o["L"][:, t] = infl, L
         close_prev = cls
     return out
