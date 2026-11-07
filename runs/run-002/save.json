@@ -238,7 +238,7 @@
   }
  },
  "clock": {
-  "week": 9,
+  "week": 10,
   "phase": "mon"
  },
  "events": [
@@ -694,9 +694,60 @@
    "rate": 0.037500000000000006,
    "week": 8,
    "phase": "fri"
+  },
+  {
+   "type": "sell",
+   "tid": 17,
+   "cid": "SIMQ-W09-P26",
+   "side": "P",
+   "K": 26.0,
+   "n": 1,
+   "price": 0.07,
+   "spot": 30.72,
+   "week": 9,
+   "phase": "mon"
+  },
+  {
+   "type": "sell",
+   "tid": 18,
+   "cid": "SIMQ-W09-P28",
+   "side": "P",
+   "K": 28.0,
+   "n": 1,
+   "price": 0.28,
+   "spot": 30.72,
+   "week": 9,
+   "phase": "mon"
+  },
+  {
+   "type": "pass",
+   "explicit": true,
+   "week": 9,
+   "phase": "wed"
+  },
+  {
+   "type": "expire",
+   "tid": 17,
+   "close": 29.75,
+   "week": 9,
+   "phase": "fri"
+  },
+  {
+   "type": "expire",
+   "tid": 18,
+   "close": 29.75,
+   "week": 9,
+   "phase": "fri"
+  },
+  {
+   "type": "interest",
+   "amount": 4.7,
+   "rate": 0.037500000000000006,
+   "week": 9,
+   "phase": "fri"
   }
  ],
- "next_tid": 17,
+ "next_tid": 19,
  "next_lot": 2,
  "cash_marks": {
   "1": {
@@ -730,6 +781,10 @@
   "8": {
    "mon": 3397.84,
    "wed": 3397.84
+  },
+  "9": {
+   "mon": 6536.01,
+   "wed": 6536.01
   }
  }
 }
