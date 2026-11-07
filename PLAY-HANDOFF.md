@@ -2,6 +2,14 @@
 
 Start here to play a v2 run. The build is done; ruleset `v2.0` passed the calibration gate and is frozen.
 
+## Current state (Nov 6, 2026, end of build chat)
+- Branch `v2` is clean and verified from a fresh clone: `new` → guard blocks `go` → `pass` → Wednesday → `hold` → Friday settles → next Monday.
+- Run 1: abandoned (operator error), kept in `runs/run-001/`. The next run is **Run 2**.
+- Output is rendered chat markdown (v1 style). Wednesday includes the buy-to-close table (cost to close, P/L if closed).
+
+## Opening message for a new play chat
+> Read `claude/V2-PLAY-HANDOFF.md`, clone `flak-daddy/simq-sim` branch `v2`, and start Run 2 with `python3 cli.py new --cash N`. Relay Week 1 Monday open as rendered markdown, polish the headlines, then stop and wait for my orders.
+
 ## Setup each chat
 1. Clone `flak-daddy/simq-sim`, check out branch `v2`.
 2. `python3 cli.py status` shows the active run (if any) and where it stands. No active run: `python3 cli.py new --cash N` (the user picks N).
