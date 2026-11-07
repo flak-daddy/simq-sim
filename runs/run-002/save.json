@@ -238,7 +238,7 @@
   }
  },
  "clock": {
-  "week": 13,
+  "week": 14,
   "phase": "mon"
  },
  "events": [
@@ -875,9 +875,41 @@
    "rate": 0.037500000000000006,
    "week": 12,
    "phase": "fri"
+  },
+  {
+   "type": "sell",
+   "tid": 24,
+   "cid": "SIMQ-W13-P26",
+   "side": "P",
+   "K": 26.0,
+   "n": 1,
+   "price": 0.26,
+   "spot": 30.1,
+   "week": 13,
+   "phase": "mon"
+  },
+  {
+   "type": "pass",
+   "explicit": true,
+   "week": 13,
+   "phase": "wed"
+  },
+  {
+   "type": "expire",
+   "tid": 24,
+   "close": 30.2,
+   "week": 13,
+   "phase": "fri"
+  },
+  {
+   "type": "interest",
+   "amount": 4.85,
+   "rate": 0.037500000000000006,
+   "week": 13,
+   "phase": "fri"
   }
  ],
- "next_tid": 24,
+ "next_tid": 25,
  "next_lot": 2,
  "cash_marks": {
   "1": {
@@ -927,6 +959,10 @@
   "12": {
    "mon": 6717.28,
    "wed": 6717.28
+  },
+  "13": {
+   "mon": 6748.11,
+   "wed": 6748.11
   }
  }
 }
