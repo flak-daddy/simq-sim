@@ -239,7 +239,7 @@
  },
  "clock": {
   "week": 2,
-  "phase": "mon"
+  "phase": "fri"
  },
  "events": [
   {
@@ -288,14 +288,79 @@
    "rate": 0.035,
    "week": 1,
    "phase": "fri"
+  },
+  {
+   "type": "buy_shares",
+   "lot": 1,
+   "n": 100,
+   "price": 30.96,
+   "week": 2,
+   "phase": "mon"
+  },
+  {
+   "type": "sell",
+   "tid": 3,
+   "cid": "SIMQ-W02-C32.5",
+   "side": "C",
+   "K": 32.5,
+   "n": 1,
+   "price": 0.4,
+   "spot": 30.94,
+   "lot": 1,
+   "week": 2,
+   "phase": "mon"
+  },
+  {
+   "type": "sell",
+   "tid": 4,
+   "cid": "SIMQ-W02-P26",
+   "side": "P",
+   "K": 26.0,
+   "n": 1,
+   "price": 0.15,
+   "spot": 28.24,
+   "week": 2,
+   "phase": "wed"
+  },
+  {
+   "type": "expire",
+   "tid": 3,
+   "close": 30.46,
+   "week": 2,
+   "phase": "fri"
+  },
+  {
+   "type": "expire",
+   "tid": 4,
+   "close": 30.46,
+   "week": 2,
+   "phase": "fri"
+  },
+  {
+   "type": "interest",
+   "amount": 1.99,
+   "rate": 0.035,
+   "week": 2,
+   "phase": "fri"
+  },
+  {
+   "type": "rate",
+   "decision": 0,
+   "rate": 0.035,
+   "week": 2,
+   "phase": "fri"
   }
  ],
- "next_tid": 3,
- "next_lot": 1,
+ "next_tid": 5,
+ "next_lot": 2,
  "cash_marks": {
   "1": {
    "mon": 6010.0,
    "wed": 6013.0
+  },
+  "2": {
+   "mon": 2961.04,
+   "wed": 2976.04
   }
  }
 }
