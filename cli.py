@@ -79,7 +79,7 @@ def main(argv):
               f"{display.money(a.cash)} · SimQ start {r.save['run']['start_price']:.2f}"
               + (f" · REPLAY of Run {replay_of}" if replay_of else "") + " · seed hidden")
         out(display.package(r, 1, "mon"))
-        print("WAITING for your Week 1 Monday orders (or `pass`).")
+        print("\nWAITING for your Week 1 Monday orders (or `pass`).")
         return
 
     if a.cmd == "compare":
@@ -140,7 +140,7 @@ def main(argv):
                     print(f"CHECKPOINT Week {w}: mentor one-pager → {report.one_pager(r, f'week-{w}-checkpoint')}")
             nxt = {"mon": "Monday orders (or `pass`)", "wed": "Wednesday orders (or `hold`)",
                    "fri": "Friday share orders (or `hold`)"}[r.phase]
-            print(f"WAITING for your {nxt}.")
+            print(f"\nWAITING for your {nxt}.")
             if any(p == "fri" for w, p in shown):
                 print(f"PUSH DUE: Friday close of Week {max(w for w, p in shown if p == 'fri')}")
         elif a.cmd in ("close", "abandon"):

@@ -106,7 +106,7 @@ Positive edge with painful drawdowns, as real weekly TQQQ puts imply when real I
 - **Strikes:** $1 steps, plus .5 strikes within ±10% of spot (all .5 steps under $15; $2.50 steps over $150), spacing scaled with price (like the real chain). A strike listed at Monday open stays listed until that Friday's expiry.
 - **Expiry:** this Friday only.
 - **Default window:** from spot outward on each side until the OTM option's bid falls below $0.10; that edge strike is shown (confirmed Nov 6 over v1's first-no-bid edge). Full chain on request (`show --all`).
-- **Columns:** call bid / ask / delta | strike | put bid / ask / delta / premium % of collateral (put bid ÷ strike).
+- **Columns:** call bid / ask | strike | put bid / ask | put delta | premium % of collateral (put bid ÷ strike). Call delta dropped (decided Nov 6).
 - **Layout:** calls left, strike middle, puts right.
 - **Spot marker row** at the in-the-money boundary: `| ITM calls ▲ | ** * SimQ <spot> * ** | ▼ ITM puts |`.
 - **Held-lot marker:** `◆` on the strike where each still-held lot was assigned (row always shown, with a `⋮` gap row if outside the window), plus a legend line: lot number, assigned strike, effective basis. Disappears when the lot exits.
@@ -252,6 +252,7 @@ Note: 8–12 big days on average with crises 1 in 6–8 years means normal years
 
 - Played in chat with Claude: code runs the sim; Claude relays output and polishes headlines only.
 - **Verbosity:** script output only; Claude adds no commentary and answers questions only when asked.
+- **Format (decided Nov 6):** chat markdown, v1 style: a header per decision point, bold key lines, numbered headlines, rendered tables for the chain (Call bid / ask · Strike · Put bid / ask · Put Δ · Prem %, every row in the window), indicators (today, reading, last 10 days) and the Week P&L. Relayed outside code blocks so it renders.
 - **Monday open order:** account (share value, cash available, total) → headlines → indicators (Fear & Greed, Sim-tastic Oscillator) → position (available cash, held lots) → chain.
 - **Wednesday close:** Mon–Wed bars, indicators, buy-to-close price per open position, chain.
 - **Friday close:** Thu–Fri bars, settlement, interest, rate decision if a meeting week, headlines, indicators, account, scorecard line, Week P&L table.

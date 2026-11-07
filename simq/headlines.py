@@ -48,7 +48,7 @@ BASIS = {
 }
 BASIS_W = {"true": [0.55, 0.25, 0.20], "misleading": [0.20, 0.45, 0.35]}
 POSITIONED_P = {"true": 0.15, "misleading": 0.40}
-VERBS = ["say", "expect", "argue", "think", "believe", "suggest"]
+VERBS = ["say", "argue", "think", "believe", "suggest"]
 VERBS_S = {"say": "says", "expect": "expects", "argue": "argues", "think": "thinks", "believe": "believes",
            "suggest": "suggests", "warn": "warns"}
 THESES = {
@@ -62,7 +62,7 @@ THESES = {
                        "the near-term path of least resistance is lower"],
     ("mood", "flat"): ["stocks will chop around current levels for the next few weeks",
                        "neither bulls nor bears have the edge in the near term",
-                       "expect a quiet, range-bound stretch before any real move"],
+                       "a quiet, range-bound stretch is likely before any real move"],
     ("backdrop", "up"): ["the economic backdrop supports stocks for months to come",
                          "growth is strong enough to carry tech higher through the next few months",
                          "the macro picture is turning in stocks' favor"],
