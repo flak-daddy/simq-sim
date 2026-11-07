@@ -75,7 +75,7 @@ def quote(pp, spot, K, days, rate, atm_iv, put, fg_score, seed_key=None):
     itm = (K > spot) if put else (K < spot)
     if itm:
         depth = abs(K / spot - 1.0) * 100.0
-        width *= pp["spread_itm_mult"] * (1.0 + pp["spread_deep_itm_per_pct"] * depth)
+        width *= pp["spread_itm_mult"] * (1.0 + pp["spread_deep_itm_per_pct"] * min(depth, pp["spread_deep_itm_cap_pct"]))
     fear = max(0.0, (25.0 - fg_score) / 25.0)
     width *= 1.0 + pp["spread_fear_mult"] * fear
     if seed_key is not None and abs(K - round(K)) > 0.25:

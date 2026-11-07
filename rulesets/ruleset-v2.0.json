@@ -180,6 +180,7 @@
   "spread_per_dollar": 0.05,
   "spread_itm_mult": 3.0,
   "spread_deep_itm_per_pct": 0.08,
+  "spread_deep_itm_cap_pct": 10.0,
   "spread_fear_mult": 0.6,
   "messy_half_strike_frac": 0.1,
   "messy_mult": [

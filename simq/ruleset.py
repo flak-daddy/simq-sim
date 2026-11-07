@@ -88,7 +88,7 @@ DEFAULT = {
         "floor_value": 0.02,         # far OTM mid floor, dollars
         "zero_below": 0.002,         # fair value below this: no bid
         "spread_base": 0.01, "spread_per_dollar": 0.05,
-        "spread_itm_mult": 3.0, "spread_deep_itm_per_pct": 0.08,
+        "spread_itm_mult": 3.0, "spread_deep_itm_per_pct": 0.08, "spread_deep_itm_cap_pct": 10.0,
         "spread_fear_mult": 0.6,     # +60% at F&G 0, fading to 0 at 25
         "messy_half_strike_frac": 0.10, "messy_mult": [3.0, 5.0],
     },

@@ -18,7 +18,7 @@ def _interp(x, xs, ys):
     return np.interp(x, xs, ys)
 
 
-def generate(rs, seed, n_days, n_paths=1, start_price=None):
+def generate(rs, seed, n_days, n_paths=1, start_price=None, rate_reset_day=None):
     rng = np.random.default_rng(seed)
     N, T = n_paths, n_days
     bd, se, rt, pr = rs["backdrop"], rs["sentiment"], rs["returns"], rs["pricing"]
@@ -59,6 +59,8 @@ def generate(rs, seed, n_days, n_paths=1, start_price=None):
 
     for t in range(T):
         wd = t % 5
+        if t == rate_reset_day:          # a run's Week 1 starts at the ruleset's start rate
+            rate = np.full(N, rr["start"], float)
         # backdrop switch
         sw = rng.random(N) < 1.0 / mean_days[b]
         if sw.any():
