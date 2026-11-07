@@ -238,7 +238,7 @@
   }
  },
  "clock": {
-  "week": 14,
+  "week": 15,
   "phase": "mon"
  },
  "events": [
@@ -907,9 +907,48 @@
    "rate": 0.037500000000000006,
    "week": 13,
    "phase": "fri"
+  },
+  {
+   "type": "sell",
+   "tid": 25,
+   "cid": "SIMQ-W14-P27.5",
+   "side": "P",
+   "K": 27.5,
+   "n": 1,
+   "price": 0.42,
+   "spot": 29.92,
+   "week": 14,
+   "phase": "mon"
+  },
+  {
+   "type": "pass",
+   "explicit": true,
+   "week": 14,
+   "phase": "wed"
+  },
+  {
+   "type": "expire",
+   "tid": 25,
+   "close": 33.83,
+   "week": 14,
+   "phase": "fri"
+  },
+  {
+   "type": "interest",
+   "amount": 4.89,
+   "rate": 0.037500000000000006,
+   "week": 14,
+   "phase": "fri"
+  },
+  {
+   "type": "rate",
+   "decision": 1,
+   "rate": 0.04000000000000001,
+   "week": 14,
+   "phase": "fri"
   }
  ],
- "next_tid": 25,
+ "next_tid": 26,
  "next_lot": 2,
  "cash_marks": {
   "1": {
@@ -963,6 +1002,10 @@
   "13": {
    "mon": 6748.11,
    "wed": 6748.11
+  },
+  "14": {
+   "mon": 6794.96,
+   "wed": 6794.96
   }
  }
 }
