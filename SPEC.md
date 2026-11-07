@@ -151,6 +151,7 @@ Positive edge with painful drawdowns, as real weekly TQQQ puts imply when real I
 - "Hold" at Wednesday settles Friday in the same turn; acting at Wednesday executes, then settles Friday.
 - Friday pauses for a decision **only when shares are held after settlement**; otherwise it runs straight into next Monday open in the same turn.
 - Each day's package is separated by a page-break line: `-----------------`.
+- **Advance guard (added Nov 6 after a Run 1 operator error):** the clock advances only after the player has entered orders or an explicit pass (Monday) / hold (Wednesday, paused Friday) at that decision point. An order can be undone before advancing; an advance is never undone, because it reveals new prices. Tooling only; no ruleset change.
 
 ### 5.3 Run length
 Open-ended; the user closes a run when they choose. Checkpoints at Weeks 26 and 52.

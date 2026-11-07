@@ -7,13 +7,17 @@
   python3 cli.py buy N                 buy N shares (round lots)
   python3 cli.py sellsh LOT [N]        sell shares from a lot
   python3 cli.py relot ID LOT          move a covered call to another lot
-  python3 cli.py go                    advance (auto-advance rules, SPEC §5.2)
+  python3 cli.py pass | hold            explicit "no (more) orders" here (pass = Monday, hold = Wed/Fri)
+  python3 cli.py undo                  remove the last order/pass at this decision point (advances can't be undone)
+  python3 cli.py note "text"           add a note to the run's log
+  python3 cli.py go                    advance (auto-advance rules, SPEC §5.2); refuses without orders or pass/hold
   python3 cli.py status
   python3 cli.py close|abandon "note"   (writes the run-close one-pager and workbook)
   python3 cli.py report [label]        one-pager PDF on demand
   python3 cli.py compare RUN RUN ...   cross-run table with ruleset differences
 """
 import argparse
+import json
 import os
 import secrets
 import sys
@@ -75,6 +79,7 @@ def main(argv):
               f"{display.money(a.cash)} · SimQ start {r.save['run']['start_price']:.2f}"
               + (f" · REPLAY of Run {replay_of}" if replay_of else "") + " · seed hidden")
         out(display.package(r, 1, "mon"))
+        print("WAITING for your Week 1 Monday orders (or `pass`).")
         return
 
     if a.cmd == "compare":
@@ -114,6 +119,18 @@ def main(argv):
             r.relot(a.args[0], int(a.args[1]))
             r.write()
             print(f"Call {a.args[0]} now covered by Lot {a.args[1]}")
+        elif a.cmd in ("pass", "hold"):
+            r.pass_()
+            r.write()
+            print(f"{a.cmd.upper()} recorded for {r.path.label(r.week, r.phase)}.")
+        elif a.cmd == "undo":
+            e = r.undo()
+            r.write()
+            print(f"UNDONE: {e['type']} " + json.dumps({k: v for k, v in e.items() if k not in ('week', 'phase')}))
+        elif a.cmd == "note":
+            r.note(" ".join(a.args))
+            r.write()
+            print("Note added.")
         elif a.cmd == "go":
             shown = r.go()
             parts = [display.package(r, w, p) for w, p in shown]
@@ -121,6 +138,9 @@ def main(argv):
             for w, p in shown:
                 if p == "fri" and w in (26, 52):
                     print(f"CHECKPOINT Week {w}: mentor one-pager → {report.one_pager(r, f'week-{w}-checkpoint')}")
+            nxt = {"mon": "Monday orders (or `pass`)", "wed": "Wednesday orders (or `hold`)",
+                   "fri": "Friday share orders (or `hold`)"}[r.phase]
+            print(f"WAITING for your {nxt}.")
             if any(p == "fri" for w, p in shown):
                 print(f"PUSH DUE: Friday close of Week {max(w for w, p in shown if p == 'fri')}")
         elif a.cmd in ("close", "abandon"):

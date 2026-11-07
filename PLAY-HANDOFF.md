@@ -8,7 +8,9 @@ Start here to play a v2 run. The build is done; ruleset `v2.0` passed the calibr
 3. Rules live in `SPEC.md`. Calibration evidence: `calibration/report-v2.0.md`.
 
 ## Each decision point
-- Run the user's orders with the CLI, then `python3 cli.py go`. Auto-advance: Monday → Wednesday → Friday → next Monday, pausing on Friday only when shares are held. Separate days with `-----------------`.
+- **Never run `go` unless the user's latest message contains orders or says pass/hold.** After `new`, and after every `go`, stop and wait: the CLI prints `WAITING for ...`. (`go` also refuses on its own until orders or an explicit `pass`/`hold` are entered.)
+- Run the user's orders with the CLI, then `python3 cli.py go`. If the user says pass (Monday) or hold (Wednesday, or Friday when shares are held), run `pass`/`hold` first.
+- A wrong order entered at the current decision point can be removed with `undo` before advancing. Advances can't be undone: they reveal new prices. If an advance happens by mistake, add a `note "..."` to the log explaining it and ask the user whether to continue or abandon. Auto-advance: Monday → Wednesday → Friday → next Monday, pausing on Friday only when shares are held. Separate days with `-----------------`.
 - Relay script output only, in a code block; no commentary unless the user asks. Monday order: account → headlines → indicators → position → chain.
 - Headlines print as drafts. Rewrite each into an ALL-CAPS newspaper headline: wording only, never a fact, number or direction; never hint which opinions are true.
 - Claude never picks, suggests or recommends strikes.
@@ -18,6 +20,9 @@ Start here to play a v2 run. The build is done; ruleset `v2.0` passed the calibr
 - After each Friday close (`PUSH DUE`): commit `runs/` as "Run N Week W", push `v2`, and copy the run's `save.json` and any new reports to the project (`claude/v2-runs/run-NNN/`).
 - Weeks 26 and 52: the CLI writes the mentor one-pager PDF to `runs/run-NNN/reports/`; send it to the user.
 - Run close (`close` / `abandon`): seed revealed; one-pager + workbook written.
+
+## Incident log
+- Nov 6, 2026: Run 1 (first chat) — `go` was run right after `new` without the user's orders, skipping Week 1 Monday. Fix: `go` guard, `pass`/`hold`, `undo`, `note`, and the rule above. Run 1 is abandoned ("operator error at Week 1 Monday"); play resumes with Run 2 on a new seed.
 
 ## Rule 0
 Never change a run's rules mid-run. Bugs get fixed and the run continues. Rule changes go into the next ruleset (`v2.1`) and must pass the gate first.

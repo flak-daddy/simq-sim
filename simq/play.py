@@ -261,20 +261,55 @@ class Run:
         if st["split"]:
             self._add({"type": "split", "ratio": self.rs["reverse_split"]["ratio"], "new_price": st["spot"]})
 
-    def go(self):
-        """Advance to the next decision point that needs the player. Returns the list of
-        (week, phase) packages passed through, in order, for display."""
+    ORDER_TYPES = {"sell", "btc", "buy_shares", "sell_shares", "relot"}
+
+    def _decided(self):
+        """True if the player gave orders or an explicit pass/hold at this decision point."""
+        evs = self.phase_events(self.week, self.phase)
+        return any(e["type"] in self.ORDER_TYPES or (e["type"] == "pass" and e.get("explicit")) for e in evs)
+
+    def pass_(self):
+        """Explicit 'no (more) orders' at this decision point: pass (Monday) / hold (Wednesday, paused Friday)."""
         self._need_active()
+        self._add({"type": "pass", "explicit": True})
+
+    def note(self, text):
+        self._add({"type": "note", "text": text})
+
+    def undo(self):
+        """Remove the last order or pass entered at the current decision point. Advances are
+        never undone: they reveal new prices."""
+        self._need_active()
+        evs = self.save["events"]
+        for i in range(len(evs) - 1, -1, -1):
+            e = evs[i]
+            if e.get("week") != self.week or e.get("phase") != self.phase:
+                break
+            if e["type"] in self.ORDER_TYPES or e["type"] == "pass":
+                evs.pop(i)
+                if e["type"] == "sell" and e["tid"] == self.save["next_tid"] - 1:
+                    self.save["next_tid"] -= 1
+                if e["type"] == "buy_shares" and e["lot"] == self.save["next_lot"] - 1:
+                    self.save["next_lot"] -= 1
+                self._book = None
+                return e
+        raise ActionError("Nothing to undo at this decision point (advances can't be undone).")
+
+    def go(self):
+        """Advance to the next decision point that needs the player. Refuses unless the player
+        entered orders or an explicit pass/hold here. Returns the (week, phase) packages passed
+        through, in order, for display."""
+        self._need_active()
+        if not self._decided():
+            what = {"mon": "Monday open orders (or `pass`)", "wed": "Wednesday orders (or `hold`)",
+                    "fri": "Friday share orders (or `hold` to keep the shares)"}[self.phase]
+            raise ActionError(f"Waiting for {what}. Nothing advanced.")
         shown = []
         if self.phase == "mon":
-            if not self.phase_events(self.week, "mon", {"sell", "buy_shares", "sell_shares"}):
-                self._add({"type": "pass"})
             self._record_cash("mon")
             self.save["clock"]["phase"] = "wed"
             shown.append((self.week, "wed"))
         elif self.phase == "wed":
-            if not self.phase_events(self.week, "wed", {"sell", "btc", "buy_shares", "sell_shares"}):
-                self._add({"type": "pass"})
             self._record_cash("wed")
             self.save["clock"]["phase"] = "fri"
             self._settle_friday()

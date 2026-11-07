@@ -17,7 +17,10 @@ python3 cli.py sell P 48 2               # sell 2 puts at the 48 strike (bid)
 python3 cli.py sell C 55 1 [--lot 3]     # covered call; default lot = basis closest to strike
 python3 cli.py btc 4                     # buy to close trade 4 (Wednesday, at the ask)
 python3 cli.py buy 100 | sellsh 3 [100]  # share trades, round lots
-python3 cli.py go                        # advance: Mon -> Wed -> Fri (+ next Mon unless shares held)
+python3 cli.py pass | hold               # explicit no-orders (pass = Monday, hold = Wed / paused Fri)
+python3 cli.py undo                      # remove last order at this decision point (never undoes an advance)
+python3 cli.py note "text"               # explanation in the run's log
+python3 cli.py go                        # advance: Mon -> Wed -> Fri (+ next Mon unless shares held); refuses without orders or pass/hold
 python3 cli.py show [--all]              # current decision point; --all = full chain
 python3 cli.py report | compare 1 2      # one-pager on demand; cross-run table
 python3 cli.py close|abandon "note"      # reveals seed; writes run-close one-pager + workbook
