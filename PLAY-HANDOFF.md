@@ -10,7 +10,8 @@ Start here to play a v2 run. The build is done; ruleset `v2.0` passed the calibr
 ## Each decision point
 - **Never run `go` unless the user's latest message contains orders or says pass/hold.** After `new`, and after every `go`, stop and wait: the CLI prints `WAITING for ...`. (`go` also refuses on its own until orders or an explicit `pass`/`hold` are entered.)
 - Run the user's orders with the CLI, then `python3 cli.py go`. If the user says pass (Monday) or hold (Wednesday, or Friday when shares are held), run `pass`/`hold` first.
-- A wrong order entered at the current decision point can be removed with `undo` before advancing. Advances can't be undone: they reveal new prices. If an advance happens by mistake, add a `note "..."` to the log explaining it and ask the user whether to continue or abandon. Auto-advance: Monday → Wednesday → Friday → next Monday, pausing on Friday only when shares are held. Separate days with `-----------------`.
+- A wrong order entered at the current decision point can be removed with `undo` before advancing. Advances can't be undone: they reveal new prices. If an advance happens by mistake, add a `note "..."` to the log explaining it and ask the user whether to continue or abandon.
+- Auto-advance: Monday → Wednesday → Friday → next Monday, pausing on Friday only when shares are held. Separate days with `-----------------`.
 - Relay script output only, in a code block; no commentary unless the user asks. Monday order: account → headlines → indicators → position → chain.
 - Headlines print as drafts. Rewrite each into an ALL-CAPS newspaper headline: wording only, never a fact, number or direction; never hint which opinions are true.
 - Claude never picks, suggests or recommends strikes.
