@@ -238,7 +238,7 @@
   }
  },
  "clock": {
-  "week": 11,
+  "week": 12,
   "phase": "mon"
  },
  "events": [
@@ -792,9 +792,41 @@
    "rate": 0.037500000000000006,
    "week": 10,
    "phase": "fri"
+  },
+  {
+   "type": "sell",
+   "tid": 21,
+   "cid": "SIMQ-W11-P30",
+   "side": "P",
+   "K": 30.0,
+   "n": 1,
+   "price": 0.31,
+   "spot": 32.45,
+   "week": 11,
+   "phase": "mon"
+  },
+  {
+   "type": "pass",
+   "explicit": true,
+   "week": 11,
+   "phase": "wed"
+  },
+  {
+   "type": "expire",
+   "tid": 21,
+   "close": 32.4,
+   "week": 11,
+   "phase": "fri"
+  },
+  {
+   "type": "interest",
+   "amount": 4.8,
+   "rate": 0.037500000000000006,
+   "week": 11,
+   "phase": "fri"
   }
  ],
- "next_tid": 21,
+ "next_tid": 22,
  "next_lot": 2,
  "cash_marks": {
   "1": {
@@ -836,6 +868,10 @@
   "10": {
    "mon": 6633.71,
    "wed": 6632.71
+  },
+  "11": {
+   "mon": 6668.48,
+   "wed": 6668.48
   }
  }
 }
