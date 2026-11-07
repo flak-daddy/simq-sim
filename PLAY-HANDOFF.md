@@ -6,14 +6,17 @@ Start here to play a v2 run. The build is done; ruleset `v2.0` passed the calibr
 - Branch `v2` is clean and verified from a fresh clone: `new` → guard blocks `go` → `pass` → Wednesday → `hold` → Friday settles → next Monday.
 - Run 1: abandoned (operator error), kept in `runs/run-001/`. The next run is **Run 2**.
 - Output is rendered chat markdown (v1 style). Wednesday includes the buy-to-close table (cost to close, P/L if closed).
+- Opening a new chat: just say "Start SimQ" (new run) or "Resume SimQ" (continue the active run). Claude does setup and asks only for starting cash.
 
-## Opening message for a new play chat
-> Read `claude/V2-PLAY-HANDOFF.md`, clone `flak-daddy/simq-sim` branch `v2`, and start Run 2 with `python3 cli.py new --cash N`. Relay Week 1 Monday open as rendered markdown, polish the headlines, then stop and wait for my orders.
+## Starting a session (standard: Claude does all setup)
+The user's opening message can be as short as **"Start SimQ"** or **"Resume SimQ"**. Claude then, without asking the user to run or read any commands:
+1. Clones `flak-daddy/simq-sim`, checks out branch `v2`, and runs `python3 cli.py status`.
+2. **If a run is active** (only possible within the same chat workspace): shows where it stands and relays the current decision point with `show`.
+3. **If no run is active:** asks the user one question, the starting cash, as a multiple-choice prompt (e.g. $10,000 / $25,000 / $50,000, with "Other" for any amount). Nothing else is asked.
+4. Runs `python3 cli.py new --cash N` with the answer, relays Week 1 Monday open as rendered markdown with polished headlines, then stops and waits for orders.
+5. Resuming in a new chat works from the last push: `status` finds the active run in `runs/` on its own and continues from its last pushed Friday close. Anything played after the last push lived only in the old chat; Claude says so if the run's clock looks behind what the user remembers.
 
-## Setup each chat
-1. Clone `flak-daddy/simq-sim`, check out branch `v2`.
-2. `python3 cli.py status` shows the active run (if any) and where it stands. No active run: `python3 cli.py new --cash N` (the user picks N).
-3. Rules live in `SPEC.md`. Calibration evidence: `calibration/report-v2.0.md`.
+Rules live in `SPEC.md`. Calibration evidence: `calibration/report-v2.0.md`.
 
 ## Each decision point
 - **Never run `go` unless the user's latest message contains orders or says pass/hold.** After `new`, and after every `go`, stop and wait: the CLI prints `WAITING for ...`. (`go` also refuses on its own until orders or an explicit `pass`/`hold` are entered.)

@@ -29,10 +29,33 @@ RULESET = os.path.join(os.path.dirname(os.path.abspath(__file__)), "rulesets", "
 ACTIVE = os.path.join(ROOT, "active.txt")
 
 
+def active_id():
+    """The active run: runs/active.txt in this workspace, else the one run whose save says
+    status 'active' (e.g. pushed from another chat). None if there is none."""
+    if os.path.exists(ACTIVE):
+        rid = int(open(ACTIVE).read().strip())
+        if Run.load(rid).save["run"]["status"] == "active":
+            return rid
+    if not os.path.isdir(ROOT):
+        return None
+    live = []
+    for d in sorted(os.listdir(ROOT)):
+        f = os.path.join(ROOT, d, "save.json")
+        if d.startswith("run-") and os.path.exists(f) and json.load(open(f))["run"]["status"] == "active":
+            live.append(int(d[4:]))
+    if len(live) > 1:
+        sys.exit(f"More than one active run on record: {live}. Close or abandon all but one.")
+    if live:
+        open(ACTIVE, "w").write(str(live[0]))
+        return live[0]
+    return None
+
+
 def active():
-    if not os.path.exists(ACTIVE):
+    rid = active_id()
+    if rid is None:
         sys.exit("No active run. Start one with: python3 cli.py new --cash N")
-    return Run.load(int(open(ACTIVE).read().strip()))
+    return Run.load(rid)
 
 
 def next_id():
@@ -57,10 +80,9 @@ def main(argv):
     a = ap.parse_args(argv)
 
     if a.cmd == "new":
-        if os.path.exists(ACTIVE):
-            r = Run.load(int(open(ACTIVE).read().strip()))
-            if r.save["run"]["status"] == "active":
-                sys.exit(f"Run {r.save['run']['id']} is still active; close or abandon it first.")
+        rid = active_id()
+        if rid is not None:
+            sys.exit(f"Run {rid} is still active; close or abandon it first.")
         if a.cash is None:
             sys.exit("Starting cash is required: --cash N")
         rs = ruleset.load(RULESET)
