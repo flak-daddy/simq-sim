@@ -1,0 +1,28 @@
+# SimQ v2 — Play handoff (Nov 6, 2026)
+
+Start here to play a v2 run. The build is done; ruleset `v2.0` passed the calibration gate and is frozen.
+
+## Setup each chat
+1. Clone `flak-daddy/simq-sim`, check out branch `v2`.
+2. `python3 cli.py status` shows the active run (if any) and where it stands. No active run: `python3 cli.py new --cash N` (the user picks N).
+3. Rules live in `SPEC.md`. Calibration evidence: `calibration/report-v2.0.md`.
+
+## Each decision point
+- Run the user's orders with the CLI, then `python3 cli.py go`. Auto-advance: Monday → Wednesday → Friday → next Monday, pausing on Friday only when shares are held. Separate days with `-----------------`.
+- Relay script output only, in a code block; no commentary unless the user asks. Monday order: account → headlines → indicators → position → chain.
+- Headlines print as drafts. Rewrite each into an ALL-CAPS newspaper headline: wording only, never a fact, number or direction; never hint which opinions are true.
+- Claude never picks, suggests or recommends strikes.
+- Input slips: a call with no shares, or "buy" an option to open → don't execute; ask what was meant.
+
+## Weekly
+- After each Friday close (`PUSH DUE`): commit `runs/` as "Run N Week W", push `v2`, and copy the run's `save.json` and any new reports to the project (`claude/v2-runs/run-NNN/`).
+- Weeks 26 and 52: the CLI writes the mentor one-pager PDF to `runs/run-NNN/reports/`; send it to the user.
+- Run close (`close` / `abandon`): seed revealed; one-pager + workbook written.
+
+## Rule 0
+Never change a run's rules mid-run. Bugs get fixed and the run continues. Rule changes go into the next ruleset (`v2.1`) and must pass the gate first.
+
+## Known characteristics of v2.0 (decided, not bugs)
+- Real-chain IV: a blind Monday put 10% below spot earns about +0.66% of collateral per week; a mechanical sell-8%-below / buy-back-at-80% strategy had a median year of +62% across 30 test years (6 of 30 down, worst −48%). The user kept this as is on Nov 6, 2026 (no IV trim, no blind-seller benchmark).
+- Extreme-fear spells: median 4 days; rare long ones (99th percentile 29 days).
+- Backdrop-topic opinions carry little near-term information; mood-topic opinions carry most of it.
