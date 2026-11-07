@@ -238,7 +238,7 @@
   }
  },
  "clock": {
-  "week": 19,
+  "week": 20,
   "phase": "mon"
  },
  "events": [
@@ -1108,9 +1108,41 @@
    "rate": 0.04000000000000001,
    "week": 18,
    "phase": "fri"
+  },
+  {
+   "type": "sell",
+   "tid": 32,
+   "cid": "SIMQ-W19-P33",
+   "side": "P",
+   "K": 33.0,
+   "n": 1,
+   "price": 0.49,
+   "spot": 36.36,
+   "week": 19,
+   "phase": "mon"
+  },
+  {
+   "type": "pass",
+   "explicit": true,
+   "week": 19,
+   "phase": "wed"
+  },
+  {
+   "type": "expire",
+   "tid": 32,
+   "close": 35.64,
+   "week": 19,
+   "phase": "fri"
+  },
+  {
+   "type": "interest",
+   "amount": 5.4,
+   "rate": 0.04000000000000001,
+   "week": 19,
+   "phase": "fri"
   }
  ],
- "next_tid": 32,
+ "next_tid": 33,
  "next_lot": 2,
  "cash_marks": {
   "1": {
@@ -1184,6 +1216,10 @@
   "18": {
    "mon": 6983.7,
    "wed": 6983.7
+  },
+  "19": {
+   "mon": 7038.06,
+   "wed": 7038.06
   }
  }
 }
