@@ -1,6 +1,6 @@
 # SimQ v2 — Specification
 
-Written Nov 6, 2026, from `claude/v2-design-checklist.md` (design phase complete). This file is the single source of truth for v2. Every decision is stated; there are no open questions. Where this spec and the checklist disagree, this spec wins and the checklist is corrected.
+Written Nov 6, 2026, from `claude/v2-design-checklist.md` (design phase complete). Updated the same day with the Milestone 1 calibration results; ruleset `v2.0` passed the gate (`calibration/report-v2.0.md`). This file is the single source of truth for v2. Every decision is stated; there are no open questions. Where this spec and the checklist disagree, this spec wins and the checklist is corrected.
 
 v1 (`main` branch, `ARCHIVE-v1-RULEBOOK.md`) is reference only. v2 is a ground-up rebuild on the `v2` branch.
 
@@ -38,11 +38,13 @@ SimQ is modeled on **TQQQ** (3× daily Nasdaq-100) at the scale of days and week
 
 ### 1.2 Daily bar
 - Each sim day produces open, high, low, close.
-- SimQ daily return = 3 × underlying return − daily drag, fat-tailed (Student-t, df [fit], start 4).
+- SimQ daily return = 3 × underlying return − daily drag (expense ratio + 2× the sim rate). Shocks are Student-t with tails fattening as sentiment falls (df 8 in greed down to about 3 in extreme fear), so extremes cluster in fear.
+- One day's move, including a Monday gap, is capped near ±35%.
 - Weekday opens equal the prior close. High/low are generated around the open→close move with intraday range scaled by that day's volatility [fit].
 - **Weekend gaps only:** Monday's open may differ from Friday's close. Average absolute Monday gap about 2%, larger in fear.
 - Down-moves cluster: fear raises volatility and pulls price down in steps with relief bounces.
 - Every sim week has 5 trading days; holidays are ignored.
+- A sim year is 52 weeks (260 trading days); the calibration report scores calendar sim years.
 
 ### 1.3 Start price
 Randomized per run, uniform $30–$90, rounded to cents, recorded in the run's save file.
@@ -65,13 +67,13 @@ Randomized per run, uniform $30–$90, rounded to cents, recorded in the run's s
 Black-Scholes with the central-bank rate (§2.6) as the risk-free rate, plus the adjustments below. Time in trading days / 252.
 
 ### 2.2 IV level
-- At-the-money IV is a function of the hidden-sentiment-driven Fear & Greed state: IV rises as sentiment falls (like VIX vs. fear).
+- At-the-money IV is a function of the hidden sentiment: IV rises as sentiment falls (like VIX vs. fear). The curve is set so 5-day ATM IV / forward realized vol runs about **1.05 in extreme fear to 1.30 in greed**, the ratios seen in real chains (v1 notes).
 - Down-day jump: after a down day, IV += **3 × the day's loss** (v1 rule), easing back as Fear & Greed recovers.
 - Response speed is best-effort, set by judgment against the Nov 6 stressed chain and v1's Oct 2026 notes; no dedicated fit.
 - Anchors: calm weekly ATM IV ≈ 1.25–1.3× realized vol (v1 notes, Oct 23 chain: 82% vs. 63% realized); stressed ATM ≈ 100–106% (Nov 6 chain).
 
 ### 2.3 Skew
-- Steep downward slope: IV highest on puts, ~100–106% near the money, falling to ~70% on far calls (Nov 13 chain, spot $52.25).
+- Steep downward slope: strike IV = ATM IV × (1 − slope × (K/S − 1)). Slope **1.3 at calm IV (fits the Oct 23 chain) rising to 1.6 at stressed IV (fits the Nov 13 chain, spot $52.25)**, linear in ATM IV between 82% and 101%. IV highest on puts, ~100–106% near the money in stress, falling to ~70% on far calls.
 - Puts far richer than equidistant calls (reference: 45P ≈ $0.89 vs. 60C ≈ $0.31 on Nov 6).
 - **Price floor:** far strikes bottom out at a few cents; this floor is what makes far-call IV tick up. There is no true smile.
 - **Short-expiry steepening:** the skew slope scales up as expiry nears; the 1-day slope ≈ **1.7×** the 5-day slope (Wednesday chains steeper than Monday's).
@@ -94,7 +96,7 @@ Black-Scholes with the central-bank rate (§2.6) as the risk-free rate, plus the
 - The mechanism is fixed per run; only the rate value moves.
 
 ### 2.7 Blind put seller target
-Small positive edge, like real put-selling indexes: modest premium over time, painful drawdowns. Reading the market should beat it. Tested in §10.
+Positive edge with painful drawdowns, as real weekly TQQQ puts imply when real IV meets real moves: about +0.5% to +1.5% of collateral per week for a blind Monday put 10% below spot (§10 test 6), with worst weeks near −50%. Reading the market should beat it.
 
 ---
 
@@ -215,12 +217,14 @@ Run over **2,500 simulated years**. Thresholds were written before testing and d
 | 3 | Annualized volatility, typical (non-crisis) year | 55–80% |
 | 4 | Median SimQ year | +5% to +15% |
 | 5 | Extreme-fear (F&G < 25) spell length, median | 2–5 days |
-| 6 | Blind put seller: Monday open, strike 10% below spot (nearest listed strike at or below), sold at bid, held to Friday; edge = premium − payout, % of collateral per week | 0% to +0.15% |
+| 6 | Blind put seller: Monday open, strike 10% below spot (nearest listed strike at or below), sold at bid, held to Friday; edge = premium − payout, % of collateral per week | +0.5% to +1.5% |
 | 7 | Simulated F&G mean | 40–55 |
 | 8 | Simulated F&G extreme fear (< 25) share of days | 8–20% |
 | 9 | Simulated F&G extreme greed (> 75) share of days | 3–10% |
-| 10 | Worst single day | down to about −35% allowed, only inside crisis-level fear spells; days worse than −20% outside fear < 25 essentially never |
-| 11 | Monday gap, average absolute | about 2% (1.5–2.5%), larger in fear than in greed |
+| 10a | Worst single day | no worse than about −35% (−36%) |
+| 10b | Days worse than −20% while F&G (at that close) is 25 or above | fewer than 1 per 20 sim years |
+| 11a | Monday gap, average absolute | about 2% (1.5–2.5%) |
+| 11b | Monday gap after a fear Friday vs. a greed Friday | larger in fear |
 
 Reported only (no threshold): sentiment vs. backdrop share of variance; ±5% / ±15% day frequencies vs. TQQQ; spell lengths for fear (< 45) and extreme greed vs. CNN; reverse-split frequency; rate path distribution; option pricing fit vs. the reference chains (ATM IV, skew, put/call richness, spreads).
 
@@ -230,6 +234,8 @@ Reported only (no threshold): sentiment vs. backdrop share of variance; ±5% / �
 - Reference chains as in §2.5.
 
 Note: 8–12 big days on average with crises 1 in 6–8 years means normal years carry about 5–9, a bit rougher than 2024–2025 (2–7).
+
+**Threshold revisions (user, Nov 6, 2026, during calibration):** test 6 was 0% to +0.15%; at real-chain IV with a price path matching real TQQQ weekly moves a blind seller earns far more, so the user kept real IV and moved the band to +0.5% to +1.5%. Test 10 was "essentially never"; the user set the measurable form in 10b.
 
 **Output:** `calibration/report-v2.0.md` (all tests, values, pass/fail, reported-only figures) saved next to the ruleset. No run starts until every test passes.
 
@@ -267,7 +273,7 @@ cli.py                  play commands
   3. Put/call demand
   4. Safe-haven demand
   5. Breadth
-- Score = average of the 5. **Close but noisy:** tracks the true mood with lag and measurement noise and can mislead at turning points (e.g. extreme fear near bottoms).
+- Score = average of the 5, smoothed asymmetrically: it falls fast (weight 0.80 on a lower reading) and recovers slowly (0.25), like the real index on crash days. **Close but noisy:** tracks the true mood with lag and measurement noise and can mislead at turning points (e.g. extreme fear near bottoms).
 - Labels: extreme fear < 25, fear 25–44, neutral 45–55, greed 56–75, extreme greed > 75.
 - **Display:** today's reading plus the last 10 days, with each component, at every decision point.
 
