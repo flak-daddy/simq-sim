@@ -1,0 +1,301 @@
+{
+ "run": {
+  "id": 2,
+  "seed": 137740034102188,
+  "start_cash": 6000.0,
+  "start_price": 32.59,
+  "start_rate": 0.035,
+  "ruleset_id": "v2.0",
+  "status": "active",
+  "status_note": "",
+  "created": "2026-11-06",
+  "replay_of": null
+ },
+ "ruleset": {
+  "ruleset_id": "v2.0",
+  "days_per_week": 5,
+  "weeks_per_year": 52,
+  "backdrop": {
+   "states": [
+    "bull",
+    "neutral",
+    "bear"
+   ],
+   "rest_level": [
+    58.0,
+    47.0,
+    28.0
+   ],
+   "mean_days": [
+    160.0,
+    120.0,
+    110.0
+   ],
+   "next": [
+    [
+     0.0,
+     0.85,
+     0.15
+    ],
+    [
+     0.55,
+     0.0,
+     0.45
+    ],
+    [
+     0.25,
+     0.75,
+     0.0
+    ]
+   ],
+   "start_probs": [
+    0.4,
+    0.4,
+    0.2
+   ]
+  },
+  "sentiment": {
+   "half_life_days": 15.0,
+   "start": 50.0,
+   "price_feedback": 330.0,
+   "noise_sd": 1.5,
+   "noise_df": 4.0,
+   "floor": 1.0,
+   "ceil": 99.0
+  },
+  "vol_curve": {
+   "s": [
+    0.0,
+    10.0,
+    20.0,
+    35.0,
+    50.0,
+    60.0,
+    75.0,
+    100.0
+   ],
+   "sd": [
+    0.0265,
+    0.022,
+    0.0186,
+    0.016,
+    0.013,
+    0.0114,
+    0.01,
+    0.009
+   ]
+  },
+  "drift": {
+   "base_daily": 0.00065,
+   "sentiment_link": 1.0
+  },
+  "returns": {
+   "df_curve": {
+    "s": [
+     0.0,
+     10.0,
+     25.0,
+     45.0,
+     100.0
+    ],
+    "df": [
+     3.2,
+     3.5,
+     4.5,
+     6.5,
+     8.0
+    ]
+   },
+   "leverage": 3.0,
+   "expense_ratio": 0.0095,
+   "financing_mult": 2.0,
+   "max_abs_underlying": 0.117
+  },
+  "weekend_gap": {
+   "scale": 0.7
+  },
+  "intraday": {
+   "range_scale": 0.55
+  },
+  "start_price": {
+   "min": 30.0,
+   "max": 90.0
+  },
+  "reverse_split": {
+   "threshold": 2.5,
+   "ratio": 10
+  },
+  "rates": {
+   "start": 0.035,
+   "min": 0.01,
+   "max": 0.08,
+   "step": 0.0025,
+   "meeting_every_weeks": 6,
+   "infl_persist": 0.995,
+   "infl_sd": 0.07,
+   "w_infl": 1.0,
+   "w_sent": 0.025,
+   "w_backdrop": [
+    0.3,
+    0.0,
+    -0.4
+   ],
+   "w_level": 0.35,
+   "neutral": 0.035,
+   "threshold": 1.0,
+   "steepness": 2.0,
+   "double_step_below_s": 12.0,
+   "double_step_prob": 0.35,
+   "surprise_s_per_step": -8.0,
+   "surprise_u_per_step": -0.008
+  },
+  "pricing": {
+   "iv_curve": {
+    "s": [
+     0.0,
+     10.0,
+     20.0,
+     35.0,
+     50.0,
+     60.0,
+     75.0,
+     100.0
+    ],
+    "iv": [
+     0.914,
+     0.773,
+     0.676,
+     0.649,
+     0.613,
+     0.584,
+     0.528,
+     0.484
+    ]
+   },
+   "jump_per_loss": 3.0,
+   "jump_half_life_days": 1.0,
+   "skew_slope_range": [
+    1.3,
+    1.6
+   ],
+   "skew_iv_range": [
+    0.82,
+    1.01
+   ],
+   "skew_short_exp": 0.33,
+   "skew_clamp": [
+    0.55,
+    1.6
+   ],
+   "floor_value": 0.02,
+   "zero_below": 0.002,
+   "spread_base": 0.01,
+   "spread_per_dollar": 0.05,
+   "spread_itm_mult": 3.0,
+   "spread_deep_itm_per_pct": 0.08,
+   "spread_deep_itm_cap_pct": 10.0,
+   "spread_fear_mult": 0.6,
+   "messy_half_strike_frac": 0.1,
+   "messy_mult": [
+    3.0,
+    5.0
+   ]
+  },
+  "fg": {
+   "mom_ma": 125,
+   "mom_scale": 0.07,
+   "mom_center": 0.02,
+   "vol_ma": 50,
+   "vol_scale": 0.2,
+   "pc_days": 5,
+   "pc_base": 0.9,
+   "pc_per_s": 0.006,
+   "pc_noise": 0.04,
+   "pc_scale": 0.15,
+   "haven_days": 20,
+   "haven_scale": 0.06,
+   "bond_beta": -0.15,
+   "bond_noise": 0.002,
+   "haven_center": 0.01,
+   "breadth_span": 15,
+   "breadth_noise": 0.4,
+   "breadth_scale": 0.35,
+   "noise_sd": 1.0,
+   "smooth_down": 0.8,
+   "smooth_up": 0.25
+  },
+  "osc": {
+   "k": 14,
+   "d": 3,
+   "oversold": 20.0,
+   "overbought": 80.0
+  },
+  "calibration": {
+   "report": "calibration/report-v2.0.md",
+   "seed": 20261106,
+   "years": 2500,
+   "passed": true
+  }
+ },
+ "clock": {
+  "week": 2,
+  "phase": "mon"
+ },
+ "events": [
+  {
+   "type": "sell",
+   "tid": 1,
+   "cid": "SIMQ-W01-P29",
+   "side": "P",
+   "K": 29.0,
+   "n": 1,
+   "price": 0.1,
+   "spot": 32.59,
+   "week": 1,
+   "phase": "mon"
+  },
+  {
+   "type": "btc",
+   "tid": 1,
+   "cid": "SIMQ-W01-P29",
+   "n": 1,
+   "price": 0.09,
+   "week": 1,
+   "phase": "wed"
+  },
+  {
+   "type": "sell",
+   "tid": 2,
+   "cid": "SIMQ-W01-P29.5",
+   "side": "P",
+   "K": 29.5,
+   "n": 1,
+   "price": 0.12,
+   "spot": 31.33,
+   "week": 1,
+   "phase": "wed"
+  },
+  {
+   "type": "expire",
+   "tid": 2,
+   "close": 30.9,
+   "week": 1,
+   "phase": "fri"
+  },
+  {
+   "type": "interest",
+   "amount": 4.04,
+   "rate": 0.035,
+   "week": 1,
+   "phase": "fri"
+  }
+ ],
+ "next_tid": 3,
+ "next_lot": 1,
+ "cash_marks": {
+  "1": {
+   "mon": 6010.0,
+   "wed": 6013.0
+  }
+ }
+}
